@@ -1,2 +1,0 @@
-# GO
-## Seminararbeit - Malte Verhoeff
