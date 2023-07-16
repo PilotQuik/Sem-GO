@@ -2,6 +2,7 @@ from tkinter import *
 from const import *
 from main import *
 from game import Game
+from opt import Opt
 
 class Event:
     def __init__(self, container):
@@ -11,6 +12,8 @@ class Event:
         if isinstance(self.container.frame, Menu):
             self.container.switchFrame(Game)
         elif isinstance(self.container.frame, Game):
+            self.container.switchFrame(Opt)
+        elif isinstance(self.container.frame, Opt):
             self.container.switchFrame(Menu)
 
 

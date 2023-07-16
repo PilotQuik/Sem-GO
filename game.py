@@ -13,7 +13,7 @@ class Game(ttk.Frame):
         gameCanvas = Canvas(self, width=GAME_WIDTH, height=GAME_HEIGHT, bg='white')
         gameCanvas.pack(side=TOP, fill=BOTH, expand=NO)
 
-        text = Label(gameCanvas, text="Game", fg="black", font=("Impact", 50), background="white")
+        text = Label(gameCanvas, text="Game", fg="black", font=("Impact", 50), background="grey")
         text.place(x=50, y=50)
 
         self.pack()
