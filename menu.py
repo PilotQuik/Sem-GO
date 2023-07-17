@@ -11,6 +11,7 @@ class Menu(ttk.Frame):
         self.height = height
 
         container.title("Menu")
+        container.minsize(MENU_WIDTH, MENU_HEIGHT)
         centerPos = container.findCenter(winHeight=self.height, winWidth=self.width)
         container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
         self.menuCanvas = Canvas(self, width=self.width, height=self.height, bg=BACKGROUND)
@@ -22,6 +23,6 @@ class Menu(ttk.Frame):
         self.opt_button = Button_(45, 270, self.menuCanvas, name="load-button", text="LOAD", font=(FONT, 40, "bold"))
         self.quit_button = Button_(45, 330, self.menuCanvas, name="quit-button", text="QUIT", font=(FONT, 40, "bold"))
 
-        self.menuCanvas.create_rectangle(430, 50, self.width - 50, self.height - 50)
+        self.menuCanvas.create_rectangle(430, 50, self.width - 50, self.height - 50, fill=TRANSPARENT)
 
         self.pack()

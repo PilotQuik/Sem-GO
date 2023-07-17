@@ -11,6 +11,7 @@ class Opt(ttk.Frame):
         self.height = height
 
         container.title("Options")
+        container.minsize(OPT_WIDTH, OPT_HEIGHT)
         centerPos = container.findCenter(winHeight=self.height, winWidth=self.width)
         container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
         menuCanvas = Canvas(self, width=self.width, height=self.height, bg='white')

@@ -12,6 +12,7 @@ COLS = 19
 SQSIZE = GAME_WIDTH // COLS
 
 BACKGROUND = "white"
+TRANSPARENT = "#fefefe"
 BUTTON_COL = "black"
 BUTTON_COL_CLICKED = "#ff9e17"
 FONT = ""

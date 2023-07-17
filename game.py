@@ -11,6 +11,7 @@ class Game(ttk.Frame):
         self.height = height
 
         container.title("Menu")
+        container.minsize(GAME_WIDTH//2, GAME_HEIGHT//2)
         centerPos = container.findCenter(winHeight=self.height, winWidth=self.width)
         container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
         gameCanvas = Canvas(self, width=self.width, height=self.height, bg='white')

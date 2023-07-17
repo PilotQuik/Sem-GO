@@ -13,6 +13,7 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
         super().__init__() # initializing tkinter
 
         self.iconbitmap("assets/icon.ico")
+        self.wm_attributes("-transparentcolor", TRANSPARENT)
 
         self.frame = Menu(self)
         self.event = Event(self)
