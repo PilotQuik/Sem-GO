@@ -4,16 +4,19 @@ from const import *
 
 
 class Opt(ttk.Frame):
-    def __init__(self, container):
+    def __init__(self, container, width=OPT_WIDTH, height=OPT_HEIGHT):
         super().__init__(container)
 
+        self.width = width
+        self.height = height
+
         container.title("Options")
-        centerPos = container.findCenter(winHeight=OPT_HEIGHT, winWidth=OPT_WIDTH)
-        container.geometry(f"{OPT_WIDTH}x{OPT_HEIGHT}+{centerPos[0]}+{centerPos[1]}")
-        menuCanvas = Canvas(self, width=OPT_WIDTH, height=OPT_HEIGHT, bg='white')
+        centerPos = container.findCenter(winHeight=self.height, winWidth=self.width)
+        container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
+        menuCanvas = Canvas(self, width=self.width, height=self.height, bg='white')
         menuCanvas.pack(side=TOP, fill=BOTH, expand=NO)
 
-        self.text = Label(menuCanvas, text="Options", fg="black", font=("Impact", 50), background="grey" )
+        self.text = Label(menuCanvas, text="Back", fg="black", font=("Impact", 50), background="grey" )
         self.text.place(x=50, y=50)
 
         self.pack()
