@@ -1,6 +1,7 @@
 from tkinter import ttk
 from tkinter import *
 from const import *
+from main import *
 
 
 class Game(ttk.Frame):
@@ -10,6 +11,7 @@ class Game(ttk.Frame):
         self.container = container
         self.width = width
         self.height = height
+        self.pad = 50
 
         self.container.title("Menu")
         self.container.resizable(True, True)
@@ -24,11 +26,26 @@ class Game(ttk.Frame):
         self.canvas = Canvas(self, width=10000, height=10000, bg='white')
         self.canvas.pack(side=TOP, fill=BOTH, expand=NO)
 
-        text = Label(self.canvas, text="Back", fg="black", font=("Impact", 50), background="grey")
-        text.place(x=50, y=50)
+        text = Label(self.canvas, text="Back", fg="black", font=("Impact", 20), background="grey")
+        text.place(x=0, y=0)
 
         self.pack()
 
     def displayBoard(self):
-        self.canvas.create_rectangle(50, 50, self.container.winfo_width() - 50, self.container.winfo_height() - 50)
+        len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+        self.canvas.create_rectangle(self.pad, self.pad, len - self.pad, len - self.pad, fill="#964b00",
+                                     outline="#964b00")
+        length = int(len - (2 * self.pad))
+        boardPad = length / 20
+        tile = length / 19
+        i = 0
+        # draw board
+        for row in range(19):
+            self.canvas.create_line(self.pad + boardPad, self.pad + boardPad + i * boardPad, len - boardPad - self.pad,
+                                    self.pad + boardPad + i * boardPad)
+            for col in range(19):
+                self.canvas.create_line(self.pad + boardPad + i * boardPad, self.pad + boardPad, self.pad + boardPad + i * boardPad,len - self.pad - boardPad)
+            i += 1
+        #draw stones
+
         print("-----------Board")
