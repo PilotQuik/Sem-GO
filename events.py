@@ -19,7 +19,7 @@ class Event:
             if str(event.widget).split(".")[-1] == "quit-button":
                 self.container.destroy()
         elif isinstance(self.container.frame, Game):
-            if ".!canvas.!label" in str(event.widget):
+            if ".!canvas" in str(event.widget):
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
         elif isinstance(self.container.frame, Opt):
             if ".!canvas.!label" in str(event.widget):
@@ -34,4 +34,11 @@ class Event:
             event.widget.config(fg=BUTTON_COL)
 
     def config(self, event=None):
-        pass
+        print(event.widget, event.width, event.height)
+        print(self.container.winfo_width(), self.container.winfo_height())
+        if isinstance(event.widget, Canvas):
+            if int(self.container.winfo_width()) == int(event.width) and int(self.container.winfo_height()) == int(event.height):
+                self.container.frame.canvas.delete("all")
+                self.container.frame.displayBoard()
+
+
