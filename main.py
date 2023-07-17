@@ -25,11 +25,14 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
         centerY = int(screenHeight / 2 - winHeight / 2)
         return (centerX, centerY)
 
-    def switchFrame(self, newFrame):
+    def switchFrame(self, newFrame, width=10, height=10):
         self.frame.pack_forget()
-        self.frame = newFrame(self)
+        self.frame = newFrame(self, width, height)
 
 if __name__ == "__main__":
     root = Root() # creating instance of Main class
+    root.bind("<Enter>", root.event.onHoverEnter)
+    root.bind("<Leave>", root.event.onHoverLeave)
     root.bind("<Button-1>", root.event.mouse1) # leftclick-event
+    root.bind("<Configure>", root.event.config)
     root.mainloop()
