@@ -1,7 +1,8 @@
 from tkinter import *
+from const import *
 
 class Button_(Label):
-    def __init__(self, x, y, container, name="!label", text="", fg="black", font=("Arial", 10), background="grey", cursor="hand2"):
+    def __init__(self, x, y, container, name="!label", text="", fg=BUTTON_COL, font=("Impact", 10), background=BACKGROUND, cursor="hand2"):
         super().__init__(container)
 
         self.container = container
