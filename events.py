@@ -10,7 +10,7 @@ class Event:
     def __init__(self, container):
         self.container = container
     def mouse1(self, event = NONE):
-        print(int(event.x), int(event.y), event.widget)
+        #print(int(event.x), int(event.y), event.widget)
         if isinstance(self.container.frame, Menu):
             if str(event.widget).split(".")[-1] == "play-button":
                 self.container.switchFrame(Game, width=GAME_WIDTH, height=GAME_HEIGHT)
@@ -34,8 +34,8 @@ class Event:
             event.widget.config(fg=BUTTON_COL)
 
     def config(self, event=None):
-        print(event.widget, event.width, event.height)
-        print(self.container.winfo_width(), self.container.winfo_height())
+        #print(event.widget, event.width, event.height)
+        #print(self.container.winfo_width(), self.container.winfo_height())
         if isinstance(event.widget, Canvas):
             if int(self.container.winfo_width()) == int(event.width) and int(self.container.winfo_height()) == int(event.height):
                 self.container.frame.canvas.delete("all")
