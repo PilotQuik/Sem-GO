@@ -1,6 +1,7 @@
 from tkinter import ttk
 from tkinter import *
 from const import *
+from button import Button_
 
 
 class Menu(ttk.Frame):
@@ -13,7 +14,10 @@ class Menu(ttk.Frame):
         menuCanvas = Canvas(self, width=MENU_WIDTH, height=MENU_HEIGHT, bg='white')
         menuCanvas.pack(side=TOP, fill=BOTH, expand=NO)
 
-        self.text = Label(menuCanvas, text="PLAY", fg="black", font=("Impact", 50), background="grey" )
-        self.text.place(x=50, y=50)
-
+        self.play_button = Button_(50, 50, menuCanvas, name="play-button", text="PLAY", fg="black", font=("Impact", 50),
+                            background="white", cursor="hand2")
+        self.opt_button = Button_(50, 150, menuCanvas, name="opt-button", text="OPTIONS", fg="black", font=("Impact", 30),
+                                   background="white", cursor="hand2")
+        self.quit_button = Button_(50, 200, menuCanvas, name="quit-button", text="QUIT", fg="black", font=("Impact", 30),
+                                   background="white", cursor="hand2")
         self.pack()
