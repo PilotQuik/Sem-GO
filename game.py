@@ -48,4 +48,4 @@ class Game(ttk.Frame):
             i += 1
         #draw stones
 
-        print("-----------Board")
+        print("<resize>")
