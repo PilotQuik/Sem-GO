@@ -1,4 +1,3 @@
-import re
 from tkinter import *
 from const import *
 from main import *
