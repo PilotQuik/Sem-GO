@@ -13,16 +13,18 @@ class Event:
         if isinstance(self.container.frame, Menu):
             if str(event.widget).split(".")[-1] == "play-button":
                 self.container.switchFrame(Game, width=GAME_WIDTH, height=GAME_HEIGHT)
-            if str(event.widget).split(".")[-1] == "opt-button":
+            elif str(event.widget).split(".")[-1] == "opt-button":
                 self.container.switchFrame(Opt, width=OPT_WIDTH, height=OPT_HEIGHT)
-            if str(event.widget).split(".")[-1] == "quit-button":
+            elif str(event.widget).split(".")[-1] == "quit-button":
                 self.container.destroy()
         elif isinstance(self.container.frame, Game):
             if ".!canvas" in str(event.widget):
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
         elif isinstance(self.container.frame, Opt):
-            if ".!canvas.!label" in str(event.widget):
+            if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
+            elif str(event.widget).split(".")[-1] == "play-button":
+                self.container.switchFrame(Game, width=GAME_WIDTH, height=GAME_HEIGHT)
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:

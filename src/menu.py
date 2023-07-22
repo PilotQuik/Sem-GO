@@ -1,6 +1,6 @@
 from tkinter import *
 from const import *
-from button import Button_
+from custom import Button_
 
 class Menu(Label):
     def __init__(self, container, width=MENU_WIDTH, height=MENU_HEIGHT):
