@@ -5,7 +5,7 @@ from tkinter import Label
 from events import Event
 from const import *
 from menu import Menu
-from game import Game
+from board import Board
 
 
 class Root(tk.Tk): # defines Main class inheriting from tk.TK
@@ -13,17 +13,17 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
         super().__init__() # initializing tkinter
 
         self.iconbitmap("assets/icon.ico")
-        self.wm_attributes("-transparentcolor", TRANSPARENT)
 
         self.frame = Menu(self)
         self.event = Event(self)
 
         self.gamemode = "player"
         self.ai_level = "easy"
-        self.board_size = 9
+        #self.board_size = 9
         self.theme = "classic"
 
-        self.board = [[0 for row in range(self.board_size)] for col in range(self.board_size)]
+        #self.board = [[0 for row in range(self.board_size)] for col in range(self.board_size)]
+        self.board = Board(self, 9)
         print(self.board)
 
 
@@ -33,6 +33,7 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
 
         centerX = int(screenWidth / 2 - winWidth / 2)
         centerY = int(screenHeight / 2 - winHeight / 2)
+        print((centerX, centerY))
         return (centerX, centerY)
 
     def switchFrame(self, newFrame, width=10, height=10):

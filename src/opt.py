@@ -53,13 +53,13 @@ class Opt(ttk.Frame):
         self.board_label.place(x=5, y=225)
         self.x9 = Button_(65, 275, self.canvas, name="9x9-button", text="9 : 9", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 10, 260, 193, 330, fill="White", width=3,
-                  outline=BUTTON_COL_SELECTED if self.container.board_size == 9 else BUTTON_COL)
+                  outline=BUTTON_COL_SELECTED if self.container.board.size == 9 else BUTTON_COL)
         self.x13 = Button_(245, 275, self.canvas, name="13x13-button", text="13 : 13", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 203, 260, 397, 330, fill="White", width=3,
-                  outline=BUTTON_COL_SELECTED if self.container.board_size == 13 else BUTTON_COL)
+                  outline=BUTTON_COL_SELECTED if self.container.board.size == 13 else BUTTON_COL)
         self.x19 = Button_(445, 275, self.canvas, name="19x19-button", text="19 : 19", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 407, 260, 590, 330, fill="White", width=3,
-                  outline=BUTTON_COL_SELECTED if self.container.board_size == 19 else BUTTON_COL)
+                  outline=BUTTON_COL_SELECTED if self.container.board.size == 19 else BUTTON_COL)
         # theme selector
         self.theme_label = Label(self.canvas, text="THEME", background=BACKGROUND, font=(FONT, 15, "bold"))
         self.theme_label.place(x=5, y=335)

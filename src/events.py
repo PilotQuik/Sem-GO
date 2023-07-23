@@ -44,13 +44,13 @@ class Event:
                 self.container.frame.displayCanvas()
             # board size
             elif str(event.widget).split(".")[-1] == "9x9-button":
-                self.container.board_size = 9
+                self.container.board.size = 9
                 self.container.frame.displayCanvas()
             elif str(event.widget).split(".")[-1] == "13x13-button":
-                self.container.board_size = 13
+                self.container.board.size = 13
                 self.container.frame.displayCanvas()
             elif str(event.widget).split(".")[-1] == "19x19-button":
-                self.container.board_size = 19
+                self.container.board.size = 19
                 self.container.frame.displayCanvas()
             # theme
             elif str(event.widget).split(".")[-1] == "classic-button":

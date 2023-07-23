@@ -17,7 +17,7 @@ class Game(ttk.Frame):
         self.container.resizable(True, True)
         self.container.minsize(GAME_WIDTH//2, GAME_HEIGHT//2)
 
-        centerPos = self.container.findCenter(winHeight=self.height, winWidth=self.width)
+        centerPos = self.container.findCenter(winHeight=self.width, winWidth=self.height)
         self.container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
 
         self.displayCanvas()
@@ -36,14 +36,14 @@ class Game(ttk.Frame):
         self.canvas.create_rectangle(self.pad, self.pad, len - self.pad, len - self.pad, fill="#c9833c",
                                      outline="#c9833c")
         length = int(len - (2 * self.pad))
-        boardPad = length / (self.container.board_size + 1)
-        tile = length / self.container.board_size
+        boardPad = length / (self.container.board.size + 1)
+        tile = length / self.container.board.size
         i = 0
         # draw board
-        for row in range(self.container.board_size):
+        for row in range(self.container.board.size):
             self.canvas.create_line(self.pad + boardPad, self.pad + boardPad + i * boardPad, len - boardPad - self.pad,
                                     self.pad + boardPad + i * boardPad)
-            for col in range(self.container.board_size):
+            for col in range(self.container.board.size):
                 self.canvas.create_line(self.pad + boardPad + i * boardPad, self.pad + boardPad, self.pad + boardPad + i * boardPad,len - self.pad - boardPad)
             i += 1
 
