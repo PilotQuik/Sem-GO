@@ -25,6 +25,33 @@ class Event:
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
             elif str(event.widget).split(".")[-1] == "play-button":
                 self.container.switchFrame(Game, width=GAME_WIDTH, height=GAME_HEIGHT)
+            # gamemode
+            elif str(event.widget).split(".")[-1] == "vs-player-button":
+                self.container.gamemode = "player"
+                self.container.frame.displayCanvas()
+            elif str(event.widget).split(".")[-1] == "vs-ai-button":
+                self.container.gamemode = "ai"
+                self.container.frame.displayCanvas()
+            # ai level
+            elif str(event.widget).split(".")[-1] == "easy-ai-button":
+                self.container.ai_level = "easy"
+                self.container.frame.displayCanvas()
+            elif str(event.widget).split(".")[-1] == "medium-ai-button":
+                self.container.ai_level = "medium"
+                self.container.frame.displayCanvas()
+            elif str(event.widget).split(".")[-1] == "hard-ai-button":
+                self.container.ai_level = "hard"
+                self.container.frame.displayCanvas()
+            # board size
+            elif str(event.widget).split(".")[-1] == "9x9-button":
+                self.container.board_size = 9
+                self.container.frame.displayCanvas()
+            elif str(event.widget).split(".")[-1] == "13x13-button":
+                self.container.board_size = 13
+                self.container.frame.displayCanvas()
+            elif str(event.widget).split(".")[-1] == "19x19-button":
+                self.container.board_size = 19
+                self.container.frame.displayCanvas()
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:

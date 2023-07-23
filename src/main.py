@@ -18,12 +18,13 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
         self.frame = Menu(self)
         self.event = Event(self)
 
-        self.board19 = [[0 for row in range(19)] for col in range(19)]
-        print(self.board19)
-        self.board13 = [[0 for row in range(13)] for col in range(13)]
-        print(self.board13)
-        self.board9 = [[0 for row in range(9)] for col in range(9)]
-        print(self.board9)
+        self.gamemode = "player"
+        self.ai_level = "easy"
+        self.board_size = 9
+
+        self.board = [[0 for row in range(self.board_size)] for col in range(self.board_size)]
+        print(self.board)
+
 
     def findCenter(self, winHeight, winWidth):
         screenWidth = self.winfo_screenwidth()

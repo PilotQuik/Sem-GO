@@ -33,8 +33,8 @@ class Game(ttk.Frame):
 
     def displayBoard(self):
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
-        self.canvas.create_rectangle(self.pad, self.pad, len - self.pad, len - self.pad, fill="#964b00",
-                                     outline="#964b00")
+        self.canvas.create_rectangle(self.pad, self.pad, len - self.pad, len - self.pad, fill="#c9833c",
+                                     outline="#c9833c")
         length = int(len - (2 * self.pad))
         boardPad = length / 20
         tile = length / 19
