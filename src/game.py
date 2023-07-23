@@ -46,6 +46,6 @@ class Game(ttk.Frame):
             for col in range(self.container.board_size):
                 self.canvas.create_line(self.pad + boardPad + i * boardPad, self.pad + boardPad, self.pad + boardPad + i * boardPad,len - self.pad - boardPad)
             i += 1
-        #draw stones
 
-        print("<resize>")
+    def drawStone(self):
+        pass
