@@ -36,14 +36,14 @@ class Game(ttk.Frame):
         self.canvas.create_rectangle(self.pad, self.pad, len - self.pad, len - self.pad, fill="#c9833c",
                                      outline="#c9833c")
         length = int(len - (2 * self.pad))
-        boardPad = length / 20
-        tile = length / 19
+        boardPad = length / (self.container.board_size + 1)
+        tile = length / self.container.board_size
         i = 0
         # draw board
-        for row in range(19):
+        for row in range(self.container.board_size):
             self.canvas.create_line(self.pad + boardPad, self.pad + boardPad + i * boardPad, len - boardPad - self.pad,
                                     self.pad + boardPad + i * boardPad)
-            for col in range(19):
+            for col in range(self.container.board_size):
                 self.canvas.create_line(self.pad + boardPad + i * boardPad, self.pad + boardPad, self.pad + boardPad + i * boardPad,len - self.pad - boardPad)
             i += 1
         #draw stones
