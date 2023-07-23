@@ -4,23 +4,26 @@ from main import *
 from game import Game
 from opt import Opt
 
+import os
 
 class Event:
     def __init__(self, container):
         self.container = container
     def mouse1(self, event = NONE):
         #print(int(event.x), int(event.y), event.widget)
-        if isinstance(self.container.frame, Menu):
+        if isinstance(self.container.frame, Menu): #--------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "play-button":
                 self.container.switchFrame(Game, width=GAME_WIDTH, height=GAME_HEIGHT)
             elif str(event.widget).split(".")[-1] == "opt-button":
                 self.container.switchFrame(Opt, width=OPT_WIDTH, height=OPT_HEIGHT)
             elif str(event.widget).split(".")[-1] == "quit-button":
                 self.container.destroy()
-        elif isinstance(self.container.frame, Game):
+            elif str(event.widget).split(".")[-1] == "rules-button":
+                os.system("notepad.exe README.md")
+        elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
-        elif isinstance(self.container.frame, Opt):
+        elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
             elif str(event.widget).split(".")[-1] == "play-button":
