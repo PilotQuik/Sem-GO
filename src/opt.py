@@ -28,8 +28,8 @@ class Opt(ttk.Frame):
     def displayCanvas(self):
 
         # gamemode selector
-        self.ai_label = Label(self.canvas, text="GAMEMODE", background=BACKGROUND, font=(FONT, 15, "bold"))
-        self.ai_label.place(x=5, y=5)
+        self.gamemode_label = Label(self.canvas, text="GAMEMODE", background=BACKGROUND, font=(FONT, 15, "bold"))
+        self.gamemode_label.place(x=5, y=5)
         self.vs_ai = Button_(50, 55, self.canvas, name="vs-player-button", text="VS PLAYER", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 10, 40, 290, 110, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.gamemode == "player" else BUTTON_COL)
@@ -49,8 +49,8 @@ class Opt(ttk.Frame):
         RoundRect(self.canvas, 407, 150, 590, 220, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.ai_level == "hard" else BUTTON_COL)
         # board selector
-        self.ai_label = Label(self.canvas, text="BOARD SIZE", background=BACKGROUND, font=(FONT, 15, "bold"))
-        self.ai_label.place(x=5, y=225)
+        self.board_label = Label(self.canvas, text="BOARD SIZE", background=BACKGROUND, font=(FONT, 15, "bold"))
+        self.board_label.place(x=5, y=225)
         self.x9 = Button_(65, 275, self.canvas, name="9x9-button", text="9 : 9", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 10, 260, 193, 330, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.board_size == 9 else BUTTON_COL)
@@ -60,6 +60,18 @@ class Opt(ttk.Frame):
         self.x19 = Button_(445, 275, self.canvas, name="19x19-button", text="19 : 19", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 407, 260, 590, 330, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.board_size == 19 else BUTTON_COL)
+        # theme selector
+        self.theme_label = Label(self.canvas, text="THEME", background=BACKGROUND, font=(FONT, 15, "bold"))
+        self.theme_label.place(x=5, y=335)
+        self.classic = Button_(27, 385, self.canvas, name="classic-button", text="CLASSIC", font=(FONT, 25, "bold"))
+        RoundRect(self.canvas, 10, 370, 193, 440, fill="White", width=3,
+                  outline=BUTTON_COL_SELECTED if self.container.theme == "classic" else BUTTON_COL)
+        self.minimal = Button_(225, 385, self.canvas, name="minimal-button", text="MINIMAL", font=(FONT, 25, "bold"))
+        RoundRect(self.canvas, 203, 370, 397, 440, fill="White", width=3,
+                  outline=BUTTON_COL_SELECTED if self.container.theme == "minimal" else BUTTON_COL)
+        self.error = Button_(445, 385, self.canvas, name="error-button", text="ERROR", font=(FONT, 25, "bold"))
+        RoundRect(self.canvas, 407, 370, 590, 440, fill="White", width=3,
+                  outline=BUTTON_COL_SELECTED if self.container.theme == "error" else BUTTON_COL)
 
         Button_(10, self.height - 65, self.canvas, name="back-button", text="<",
                                    font=(FONT, 40, "bold"))

@@ -52,6 +52,16 @@ class Event:
             elif str(event.widget).split(".")[-1] == "19x19-button":
                 self.container.board_size = 19
                 self.container.frame.displayCanvas()
+            # theme
+            elif str(event.widget).split(".")[-1] == "classic-button":
+                self.container.theme = "classic"
+                self.container.frame.displayCanvas()
+            elif str(event.widget).split(".")[-1] == "minimal-button":
+                self.container.theme = "minimal"
+                self.container.frame.displayCanvas()
+            elif str(event.widget).split(".")[-1] == "error-button":
+                self.container.theme = "error"
+                self.container.frame.displayCanvas()
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:

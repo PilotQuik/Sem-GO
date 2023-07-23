@@ -29,6 +29,6 @@ class Menu(Label):
         self.opt_button = Button_(45, 270, self.canvas, name="load-button", text="LOAD", font=(FONT, 40, "bold"))
         self.quit_button = Button_(45, 330, self.canvas, name="quit-button", text="QUIT", font=(FONT, 40, "bold"))
 
-        self.canvas.create_rectangle(430, 50, self.width - 50, self.height - 50, fill=TRANSPARENT)
+        self.canvas.create_rectangle(430, 50, self.width - 50, self.height - 50, fill="white")
 
         self.pack()
