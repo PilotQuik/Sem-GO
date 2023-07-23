@@ -33,7 +33,6 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
 
         centerX = int(screenWidth / 2 - winWidth / 2)
         centerY = int(screenHeight / 2 - winHeight / 2)
-        print((centerX, centerY))
         return (centerX, centerY)
 
     def switchFrame(self, newFrame, width=10, height=10):
