@@ -37,15 +37,29 @@ class Game(ttk.Frame):
                                      outline="#c9833c")
         length = int(len - (2 * self.pad))
         boardPad = length / (self.container.board.size + 1)
-        tile = length / self.container.board.size
-        i = 0
         # draw board
         for row in range(self.container.board.size):
-            self.canvas.create_line(self.pad + boardPad, self.pad + boardPad + i * boardPad, len - boardPad - self.pad,
-                                    self.pad + boardPad + i * boardPad)
+            self.canvas.create_line(self.pad + boardPad, self.pad + boardPad + row * boardPad,
+                                    len - boardPad - self.pad, self.pad + boardPad + row * boardPad)
             for col in range(self.container.board.size):
-                self.canvas.create_line(self.pad + boardPad + i * boardPad, self.pad + boardPad, self.pad + boardPad + i * boardPad,len - self.pad - boardPad)
-            i += 1
+                self.canvas.create_line(self.pad + boardPad + col * boardPad, self.pad + boardPad,
+                                        self.pad + boardPad + col * boardPad,len - self.pad - boardPad)
+
+                if self.container.board.size == 19 and row in (3, 9, 15) and col in (3, 9, 15):
+                    self.canvas.create_oval(self.pad + boardPad + col * boardPad - 3,
+                                            self.pad + boardPad + row * boardPad - 3,
+                                            self.pad + boardPad + col * boardPad + 3,
+                                            self.pad + boardPad + row * boardPad + 3, fill="black")
+                elif self.container.board.size == 13 and (row, col) in ((3, 3), (9, 3), (3, 9), (9, 9), (6, 6)):
+                    self.canvas.create_oval(self.pad + boardPad + col * boardPad - 3,
+                                            self.pad + boardPad + row * boardPad - 3,
+                                            self.pad + boardPad + col * boardPad + 3,
+                                            self.pad + boardPad + row * boardPad + 3, fill="black")
+                elif self.container.board.size == 9 and (row, col) in ((2, 2), (6, 2), (2, 6), (6, 6), (4, 4)):
+                    self.canvas.create_oval(self.pad + boardPad + col * boardPad - 3,
+                                            self.pad + boardPad + row * boardPad - 3,
+                                            self.pad + boardPad + col * boardPad + 3,
+                                            self.pad + boardPad + row * boardPad + 3, fill="black")
 
     def drawStone(self):
         pass
