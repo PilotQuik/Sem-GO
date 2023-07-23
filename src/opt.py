@@ -73,7 +73,7 @@ class Opt(ttk.Frame):
         RoundRect(self.canvas, 407, 370, 590, 440, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.theme == "error" else BUTTON_COL)
 
-        Button_(10, self.height - 65, self.canvas, name="back-button", text="<",
+        Button_(10, self.height - 65, self.canvas, name="back-button", text="<<",
                                    font=(FONT, 40, "bold"))
         Button_(230, self.height - 65, self.canvas, name="play-button", text="PLAY",
                                    font=(FONT, 40, "bold"))

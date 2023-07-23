@@ -18,7 +18,7 @@ class Event:
             elif str(event.widget).split(".")[-1] == "quit-button":
                 self.container.destroy()
         elif isinstance(self.container.frame, Game):
-            if ".!canvas" in str(event.widget):
+            if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
         elif isinstance(self.container.frame, Opt):
             if str(event.widget).split(".")[-1] == "back-button":

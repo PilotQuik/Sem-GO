@@ -2,6 +2,7 @@ from tkinter import ttk
 from tkinter import *
 from const import *
 from main import *
+from custom import Button_
 
 
 class Game(ttk.Frame):
@@ -26,9 +27,8 @@ class Game(ttk.Frame):
         self.canvas = Canvas(self, width=10000, height=10000, bg='white')
         self.canvas.pack(side=TOP, fill=BOTH, expand=NO)
 
-        text = Label(self.canvas, text="Back", fg="black", font=("Impact", 20), background="grey")
-        text.place(x=0, y=0)
-
+        Button_(3, 5, self.canvas, name="back-button", text="<<",
+                font=(FONT, 25, "bold"))
         self.pack()
 
     def displayBoard(self):
