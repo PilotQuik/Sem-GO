@@ -3,6 +3,7 @@ from const import *
 from main import *
 from game import Game
 from opt import Opt
+from stone import Stone
 
 import os
 
@@ -23,6 +24,12 @@ class Event:
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
+            if str(event.widget).split(".")[-1] == "!canvas":
+                x, y = self.container.frame.calcSquare(event.x, event.y)
+                self.container.board.positions[x][y] = Stone("white")
+                self.container.frame.board.positions[x][y] = Stone("white")
+                self.container.frame.board.displayStones(row=y, col=x)
+                print(self.container.board.positions)
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
@@ -47,7 +54,7 @@ class Event:
                 self.container.frame.displayCanvas()
             # board size
             elif str(event.widget).split(".")[-1] == "9x9-button":
-                self.container.board.__init__(self.container, 19)
+                self.container.board.__init__(self.container, 9)
                 self.container.frame.displayCanvas()
             elif str(event.widget).split(".")[-1] == "13x13-button":
                 self.container.board.__init__(self.container, 13)
