@@ -26,10 +26,12 @@ class Event:
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
             if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)
-                self.container.board.positions[x][y] = Stone("white")
-                self.container.frame.board.positions[x][y] = Stone("white")
-                self.container.frame.board.displayStones(row=y, col=x)
-                print(self.container.board.positions)
+                pad = self.container.frame.boardPad / 2 + self.container.frame.pad
+                if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
+                        event.x >= pad and event.y >= pad:
+                    self.container.board.positions[x][y] = Stone("white")
+                    self.container.frame.board.positions[x][y] = Stone("white")
+                    self.container.frame.board.displayStones(row=y, col=x)
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
