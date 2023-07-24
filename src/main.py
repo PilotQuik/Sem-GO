@@ -22,10 +22,7 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
         #self.board_size = 9
         self.theme = "classic"
 
-        #self.board = [[0 for row in range(self.board_size)] for col in range(self.board_size)]
         self.board = Board(self, 9)
-        print(self.board)
-
 
     def findCenter(self, winHeight, winWidth):
         screenWidth = self.winfo_screenwidth()
