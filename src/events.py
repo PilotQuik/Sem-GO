@@ -75,6 +75,17 @@ class Event:
                 self.container.theme = "error"
                 self.container.frame.displayCanvas()
 
+    def mouse3(self, event=NONE):
+        if isinstance(self.container.frame, Game):  # ------------------------------------------------------------------
+            if str(event.widget).split(".")[-1] == "!canvas":
+                x, y = self.container.frame.calcSquare(event.x, event.y)
+                pad = self.container.frame.boardPad / 2 + self.container.frame.pad
+                if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
+                        event.x >= pad and event.y >= pad:
+                    self.container.board.positions[x][y] = Stone("black")
+                    self.container.frame.board.positions[x][y] = Stone("black")
+                    self.container.frame.board.displayStones(row=y, col=x)
+
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
             event.widget.config(fg=BUTTON_COL_CLICKED)

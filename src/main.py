@@ -38,6 +38,7 @@ if __name__ == "__main__":
     root = Root() # creating instance of Main class
     root.bind("<Enter>", root.event.onHoverEnter)
     root.bind("<Leave>", root.event.onHoverLeave)
+    root.bind("<Button-3>", root.event.mouse3)  # rightclick-event
     root.bind("<Button-1>", root.event.mouse1) # leftclick-event
     root.bind("<Configure>", root.event.config)
     root.mainloop()
