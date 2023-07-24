@@ -19,9 +19,7 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
 
         self.gamemode = "player"
         self.ai_level = "easy"
-        #self.board_size = 9
         self.theme = "classic"
-
         self.board = Board(self, 9)
 
     def findCenter(self, winHeight, winWidth):
