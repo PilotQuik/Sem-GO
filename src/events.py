@@ -30,8 +30,7 @@ class Event:
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
                         event.x >= pad and event.y >= pad:
                     self.container.board.positions[x][y] = Stone("white")
-                    self.container.frame.board.positions[x][y] = Stone("white")
-                    self.container.frame.board.displayStones(row=y, col=x)
+                    self.container.board.displayStones(row=y, col=x)
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
@@ -83,8 +82,7 @@ class Event:
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
                     self.container.board.positions[x][y] = Stone("black")
-                    self.container.frame.board.positions[x][y] = Stone("black")
-                    self.container.frame.board.displayStones(row=y, col=x)
+                    self.container.board.displayStones(row=y, col=x)
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
