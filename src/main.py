@@ -5,6 +5,7 @@ from tkinter import Label
 from events import Event
 from const import *
 from menu import Menu
+from game import Game
 from board import Board
 
 
