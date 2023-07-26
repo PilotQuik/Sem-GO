@@ -22,6 +22,12 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
         self.theme = "classic"
         self.board = Board(self, 9)
 
+    def refresh(self):
+        if isinstance(self.frame, Game):
+            self.frame.canvas.delete("all")
+            self.frame.displayBoard()
+            self.board.displayStones()
+
     def findCenter(self, winHeight, winWidth):
         screenWidth = self.winfo_screenwidth()
         screenHeight = self.winfo_screenheight()
