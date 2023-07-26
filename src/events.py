@@ -10,7 +10,12 @@ import os
 class Event:
     def __init__(self, container):
         self.container = container
+
     def mouse1(self, event = NONE):
+        frame = self.container.frame
+        len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+        length = int(len - 100)
+        boardPad = length / (self.container.board.size + 1)
         #print(int(event.x), int(event.y), event.widget)
         if isinstance(self.container.frame, Menu): #--------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "play-button":
@@ -29,8 +34,11 @@ class Event:
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
                         event.x >= pad and event.y >= pad:
-                    self.container.board.positions[x][y] = Stone("white")
-                    self.container.board.displayStones(row=y, col=x)
+                    self.container.board.positions[x][y] = Stone(canvas=frame.canvas, col=x, row=y, color="white",
+                                                                 boardPad=boardPad)
+                    self.container.board.positions[x][y].draw()
+                    self.container.board.processStones()
+                    self.container.board.displayStones()
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
@@ -75,14 +83,21 @@ class Event:
                 self.container.frame.displayCanvas()
 
     def mouse3(self, event=NONE):
+        frame = self.container.frame
+        len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+        length = int(len - 100)
+        boardPad = length / (self.container.board.size + 1)
         if isinstance(self.container.frame, Game):  # ------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
-                    self.container.board.positions[x][y] = Stone("black")
-                    self.container.board.displayStones(row=y, col=x)
+                    self.container.board.positions[x][y] = Stone(canvas=frame.canvas, col=x, row=y, color="black",
+                                                                 boardPad=boardPad)
+                    self.container.board.positions[x][y].draw()
+                    self.container.board.processStones()
+                    self.container.board.displayStones()
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
@@ -99,5 +114,6 @@ class Event:
             if int(self.container.winfo_width()) == int(event.width) and int(self.container.winfo_height()) == int(event.height):
                 self.container.frame.canvas.delete("all")
                 self.container.frame.displayBoard()
+                self.container.board.displayStones()
 
 

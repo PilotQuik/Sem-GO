@@ -5,59 +5,57 @@ class Board:
         self.container = container
         self.size = size
         self.positions = [[0 for row in range(self.size)] for col in range(self.size)]
-        self.liberties = []
 
-    def displayStones(self, row=None, col=None):
-        self.group = []
-        for i in range(self.size):
-            for j in range(self.size):
-                pos = self.positions[i][j]
-                if isinstance(pos, Stone) and pos.marked == True:
-                    pos.marked = False
-        if row == None and col == None:
-            for y in range(self.size):
-                for x in range(self.size):
-                    if isinstance(self.positions[x][y], Stone):
-                        self.container.frame.canvas.create_oval(
-                            self.container.frame.pad + self.container.frame.boardPad + x * self.container.frame.boardPad - self.container.frame.boardPad / 2.5,
-                            self.container.frame.pad + self.container.frame.boardPad + y * self.container.frame.boardPad - self.container.frame.boardPad / 2.5,
-                            self.container.frame.pad + self.container.frame.boardPad + x* self.container.frame.boardPad + self.container.frame.boardPad / 2.5,
-                            self.container.frame.pad + self.container.frame.boardPad + y * self.container.frame.boardPad + self.container.frame.boardPad / 2.5,
-                            fill="black" if self.positions[x][y].color == "black" else "white")
-
-        elif isinstance(self.positions[col][row], Stone):
-            self.container.frame.canvas.create_oval(
-                self.container.frame.pad + self.container.frame.boardPad + col * self.container.frame.boardPad - self.container.frame.boardPad / 2.5,
-                self.container.frame.pad + self.container.frame.boardPad + row * self.container.frame.boardPad - self.container.frame.boardPad / 2.5,
-                self.container.frame.pad + self.container.frame.boardPad + col * self.container.frame.boardPad + self.container.frame.boardPad / 2.5,
-                self.container.frame.pad + self.container.frame.boardPad + row * self.container.frame.boardPad + self.container.frame.boardPad / 2.5,
-                fill="black" if self.positions[col][row].color == "black" else "white")
-
+    def displayStones(self):
         for col in range(self.size):
             for row in range(self.size):
-                if isinstance(self.positions[col][row], Stone) and self.positions[col][row].marked == False:
-                    list = self.countLibertiesAndGroups(col, row, self.positions[col][row].color, [])
-                    self.group.append(list)
-        print(self.group)
+                if isinstance(self.positions[col][row], Stone):
+                    len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+                    length = int(len - 100)
+                    boardPad = length / (self.container.board.size + 1)
+                    self.positions[col][row].boardPad = boardPad
+                    self.positions[col][row].draw()
 
-    def countLibertiesAndGroups(self, col, row, color, list=[]):
+    def processStones(self):
+        # resetting groups and stone markers
+        self.group = []
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone) and pos.marked == True:
+                    pos.marked = False
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone)and pos.marked == False:
+                    # --------------------------------count
+                    group, liberties = self.countLibertiesAndGroups(col, row, self.positions[col][row].color, group=[], liberties=0)
+                    print("--", group, liberties)
+                    if liberties == 0:
+                        for pos in group:
+                            print("deleted")
+                            self.positions[pos[0]][pos[1]] = 0
+                            self.container.refresh()
+                    else: self.group.append(group)
+        print("<>", self.group)
+    def countLibertiesAndGroups(self, col, row, color, group, liberties):
         piece = self.positions[col][row]
         if isinstance(piece, Stone) and piece.color == color and piece.marked == False:
-
             self.positions[col][row].marked = True
-            list.append((col, row))
+            group.append([col, row])
 
-            if not col - 1 < 0:
-                list = self.countLibertiesAndGroups(col, row-1, color, list) #oben
-            if not col + 1 > self.size:
-                list = self.countLibertiesAndGroups(col, row+1, color, list) # unten
-            if not row - 1 < 0:
-                list = self.countLibertiesAndGroups(col-1, row, color, list) # links
-            if not row + 1 > self.size:
-                list = self.countLibertiesAndGroups(col+1, row, color, list) # rechts
+            if row - 1 >= 0:
+                group, liberties = self.countLibertiesAndGroups(col, row-1, color, group, liberties) #oben
+            if row + 1 < self.size:
+                group, liberties = self.countLibertiesAndGroups(col, row+1, color, group, liberties) # unten
+            if col - 1 >= 0:
+                group, liberties = self.countLibertiesAndGroups(col-1, row, color, group, liberties) # links
+            if col + 1 < self.size:
+                group, liberties = self.countLibertiesAndGroups(col+1, row, color, group, liberties) # rechts
         elif not isinstance(piece, Stone):
             self.positions[col][row] = 1
-        return list
+            liberties += 1
+        return group, liberties
 
 
     def saveBoard(self):

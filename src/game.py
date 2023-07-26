@@ -21,9 +21,8 @@ class Game(ttk.Frame):
         centerPos = self.container.findCenter(winHeight=self.width, winWidth=self.height)
         self.container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
 
-        #self.board = self.container.board
-
         self.displayCanvas()
+        self.container.board.processStones()
 
     def displayCanvas(self):
         self.canvas = Canvas(self, width=10000, height=10000, bg='white')
