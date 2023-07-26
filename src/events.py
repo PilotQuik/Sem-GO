@@ -34,9 +34,8 @@ class Event:
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
                         event.x >= pad and event.y >= pad:
-                    self.container.board.positions[x][y] = Stone(canvas=frame.canvas, col=x, row=y, color="white",
+                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="white",
                                                                  boardPad=boardPad)
-                    self.container.board.positions[x][y].draw()
                     self.container.board.processStones()
                     self.container.board.displayStones()
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
@@ -93,9 +92,8 @@ class Event:
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
-                    self.container.board.positions[x][y] = Stone(canvas=frame.canvas, col=x, row=y, color="black",
+                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="black",
                                                                  boardPad=boardPad)
-                    self.container.board.positions[x][y].draw()
                     self.container.board.processStones()
                     self.container.board.displayStones()
 

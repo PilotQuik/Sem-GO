@@ -5,6 +5,7 @@ class Board:
         self.container = container
         self.size = size
         self.positions = [[0 for row in range(self.size)] for col in range(self.size)]
+        self.validMoves = []
 
     def displayStones(self):
         for col in range(self.size):
@@ -14,7 +15,7 @@ class Board:
                     length = int(len - 100)
                     boardPad = length / (self.container.board.size + 1)
                     self.positions[col][row].boardPad = boardPad
-                    self.positions[col][row].draw()
+                    self.positions[col][row].draw(self.container.frame.canvas)
 
     def processStones(self):
         # resetting groups and stone markers
@@ -30,14 +31,14 @@ class Board:
                 if isinstance(pos, Stone)and pos.marked == False:
                     # --------------------------------count
                     group, liberties = self.countLibertiesAndGroups(col, row, self.positions[col][row].color, group=[], liberties=0)
-                    print("--", group, liberties)
+                    #print("--", group, liberties)
                     if liberties == 0:
                         for pos in group:
-                            print("deleted")
+                            #print("-- deleted")
                             self.positions[pos[0]][pos[1]] = 0
                             self.container.refresh()
                     else: self.group.append(group)
-        print("<>", self.group)
+        #print("<>", self.group)
     def countLibertiesAndGroups(self, col, row, color, group, liberties):
         piece = self.positions[col][row]
         if isinstance(piece, Stone) and piece.color == color and piece.marked == False:

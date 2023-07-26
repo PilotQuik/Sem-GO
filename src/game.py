@@ -22,7 +22,7 @@ class Game(ttk.Frame):
         self.container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
 
         self.displayCanvas()
-        self.container.board.processStones()
+        self.container.board.displayStones()
 
     def displayCanvas(self):
         self.canvas = Canvas(self, width=10000, height=10000, bg='white')
