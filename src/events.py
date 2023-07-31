@@ -36,10 +36,13 @@ class Event:
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
                         event.x >= pad and event.y >= pad:
-                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="white",
-                                                                 boardPad=boardPad)
-                    self.container.board.processStones()
-                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                    color = self.container.board.currentPlayer
+                    if not isinstance(self.container.board.positions[x][y], Stone):
+                        self.container.board.positions[x][y] = Stone(col=x, row=y, color=color,
+                                                                     boardPad=boardPad)
+                        self.container.board.processStones(color)
+                        self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                        self.container.board.currentPlayer = "black" if color == "white" else "white"
 
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
@@ -90,17 +93,6 @@ class Event:
         length = int(len - 100)
         boardPad = length / (self.container.board.size + 1)
 
-        if isinstance(self.container.frame, Game):  # ------------------------------------------------------------------
-            if str(event.widget).split(".")[-1] == "!canvas":
-                x, y = self.container.frame.calcSquare(event.x, event.y)
-                pad = self.container.frame.boardPad / 2 + self.container.frame.pad
-                if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
-                        event.x >= pad and event.y >= pad:
-                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="black",
-                                                                 boardPad=boardPad)
-                    self.container.board.processStones()
-                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
-
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
             event.widget.config(fg=BUTTON_COL_CLICKED)
@@ -108,6 +100,14 @@ class Event:
     def onHoverLeave(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
             event.widget.config(fg=BUTTON_COL)
+
+    def motion(self, event=None):
+        if isinstance(self.container.frame, Game):
+            x, y = self.container.frame.calcSquare(event.x, event.y)
+            pad = self.container.frame.boardPad / 2 + self.container.frame.pad
+            if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
+                    event.x >= pad and event.y >= pad and not isinstance(self.container.board.positions[x][y], Stone):
+                self.container.frame.drawHover(x, y)
 
     def config(self, event=None):
         #print(event.widget, event.width, event.height)

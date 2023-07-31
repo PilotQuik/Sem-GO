@@ -13,6 +13,7 @@ class Game(ttk.Frame):
         self.width = width
         self.height = height
         self.pad = 50
+        self.hover = None
 
         self.container.title("Menu")
         self.container.resizable(True, True)
@@ -69,6 +70,24 @@ class Game(ttk.Frame):
                                             self.pad + self.boardPad + row * self.boardPad + 3, fill="black")
 
         self.container.board.displayStones()
+
+    def drawHover(self, x, y):
+        color = self.container.board.currentPlayer
+        self.canvas.delete(self.hover)
+        if color == "white":
+            self.hover = self.canvas.create_oval(
+            50 + self.boardPad + x * self.boardPad - self.boardPad / 2.5,
+            50 + self.boardPad + y * self.boardPad - self.boardPad / 2.5,
+            50 + self.boardPad + x * self.boardPad + self.boardPad / 2.5,
+            50 + self.boardPad + y * self.boardPad + self.boardPad / 2.5,
+            fill=HOVER_W)
+        else:
+            self.hover = self.canvas.create_oval(
+                50 + self.boardPad + x * self.boardPad - self.boardPad / 2.5,
+                50 + self.boardPad + y * self.boardPad - self.boardPad / 2.5,
+                50 + self.boardPad + x * self.boardPad + self.boardPad / 2.5,
+                50 + self.boardPad + y * self.boardPad + self.boardPad / 2.5,
+                fill=HOVER_B)
 
     def drawStone(self):
         pass

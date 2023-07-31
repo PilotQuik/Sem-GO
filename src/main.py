@@ -43,6 +43,7 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
 
 if __name__ == "__main__":
     root = Root() # creating instance of Main class
+    root.bind("<Motion>", root.event.motion)
     root.bind("<Enter>", root.event.onHoverEnter)
     root.bind("<Leave>", root.event.onHoverLeave)
     root.bind("<Button-3>", root.event.mouse3)  # rightclick-event
