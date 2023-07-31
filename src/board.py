@@ -39,6 +39,7 @@ class Board:
                             self.container.refresh()
                     else: self.group.append(group)
         #print("<>", self.group)
+
     def countLibertiesAndGroups(self, col, row, color, group, liberties):
         piece = self.positions[col][row]
         if isinstance(piece, Stone) and piece.color == color and piece.marked == False:

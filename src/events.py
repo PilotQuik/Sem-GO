@@ -17,6 +17,7 @@ class Event:
         length = int(len - 100)
         boardPad = length / (self.container.board.size + 1)
         #print(int(event.x), int(event.y), event.widget)
+
         if isinstance(self.container.frame, Menu): #--------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "play-button":
                 self.container.switchFrame(Game, width=GAME_WIDTH, height=GAME_HEIGHT)
@@ -26,6 +27,7 @@ class Event:
                 self.container.destroy()
             elif str(event.widget).split(".")[-1] == "rules-button":
                 os.system("notepad.exe README.md")
+
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
@@ -37,7 +39,8 @@ class Event:
                     self.container.board.positions[x][y] = Stone(col=x, row=y, color="white",
                                                                  boardPad=boardPad)
                     self.container.board.processStones()
-                    self.container.board.displayStones()
+                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
+
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
@@ -86,6 +89,7 @@ class Event:
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         length = int(len - 100)
         boardPad = length / (self.container.board.size + 1)
+
         if isinstance(self.container.frame, Game):  # ------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)
@@ -95,7 +99,7 @@ class Event:
                     self.container.board.positions[x][y] = Stone(col=x, row=y, color="black",
                                                                  boardPad=boardPad)
                     self.container.board.processStones()
-                    self.container.board.displayStones()
+                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
