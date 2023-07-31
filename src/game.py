@@ -1,7 +1,9 @@
+import random
 from tkinter import ttk
 from tkinter import *
 from const import *
 from main import *
+from stone import Stone
 from custom import Button_
 
 
@@ -13,6 +15,7 @@ class Game(ttk.Frame):
         self.width = width
         self.height = height
         self.pad = 50
+        self.boardPad = 80
         self.hover = None
 
         self.container.title("Menu")
@@ -71,6 +74,21 @@ class Game(ttk.Frame):
 
         self.container.board.displayStones()
 
+    def makeMoveAI(self):
+        if self.container.ai_level == "easy":
+            x, y = random.randint(0, self.container.board.size - 1), random.randint(0, self.container.board.size - 1)
+            while isinstance(self.container.board.positions[x][y], Stone):
+                x, y = random.randint(0, self.container.board.size - 1), random.randint(0, self.container.board.size - 1)
+
+            self.container.board.positions[x][y] = Stone(col=x, row=y, color="black",
+                                                         boardPad=self.boardPad)
+            self.container.board.processStones("black")
+
+            self.container.board.positions[x][y].draw(self.container.frame.canvas)
+        elif self.container.ai_level == "easy":
+            pass
+        elif self.container.ai_level == "easy":
+            pass
     def drawHover(self, x, y):
         color = self.container.board.currentPlayer
         self.canvas.delete(self.hover)
@@ -81,7 +99,7 @@ class Game(ttk.Frame):
             50 + self.boardPad + x * self.boardPad + self.boardPad / 2.5,
             50 + self.boardPad + y * self.boardPad + self.boardPad / 2.5,
             fill=HOVER_W)
-        else:
+        elif color == "black" and self.container.gamemode == "player":
             self.hover = self.canvas.create_oval(
                 50 + self.boardPad + x * self.boardPad - self.boardPad / 2.5,
                 50 + self.boardPad + y * self.boardPad - self.boardPad / 2.5,

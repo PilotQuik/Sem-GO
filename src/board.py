@@ -30,7 +30,7 @@ class Board:
         for col in range(self.size):
             for row in range(self.size):
                 pos = self.positions[col][row]
-                if isinstance(pos, Stone) and not pos.marked and pos.color == color:
+                if isinstance(pos, Stone) and not pos.marked and pos.color != color:
                     # --------------------------------count
                     group, liberties = self.countLibertiesAndGroups(col, row, color, group=[], liberties=0)
                     #print("--", group, liberti

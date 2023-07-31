@@ -23,6 +23,8 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
         self.theme = "classic"
         self.board = Board(self, 9)
 
+        self.aiFirst = False
+
     def refresh(self):
         if isinstance(self.frame, Game):
             self.frame.canvas.delete("all")
@@ -40,6 +42,10 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
     def switchFrame(self, newFrame, width=10, height=10):
         self.frame.pack_forget()
         self.frame = newFrame(self, width, height)
+
+        if self.aiFirst and newFrame == Game:
+            self.frame.makeMoveAI()
+            self.aiFirst = False
 
 if __name__ == "__main__":
     root = Root() # creating instance of Main class

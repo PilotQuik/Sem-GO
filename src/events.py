@@ -1,3 +1,4 @@
+import random
 from tkinter import *
 from const import *
 from main import *
@@ -42,7 +43,10 @@ class Event:
                                                                      boardPad=boardPad)
                         self.container.board.processStones(color)
                         self.container.board.positions[x][y].draw(self.container.frame.canvas)
-                        self.container.board.currentPlayer = "black" if color == "white" else "white"
+                        if self.container.gamemode == "player":
+                            self.container.board.currentPlayer = "black" if color == "white" else "white"
+                        elif self.container.gamemode == "ai":
+                            self.container.frame.makeMoveAI()
 
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
@@ -53,9 +57,15 @@ class Event:
             elif str(event.widget).split(".")[-1] == "vs-player-button":
                 self.container.gamemode = "player"
                 self.container.frame.displayCanvas()
+                if self.container.aiFirst:
+                    self.container.aiFirst = False
+                    self.container.board.currentPlayer = "black"
             elif str(event.widget).split(".")[-1] == "vs-ai-button":
                 self.container.gamemode = "ai"
                 self.container.frame.displayCanvas()
+                if self.container.board.currentPlayer == "black":
+                    self.container.aiFirst = True
+                    self.container.board.currentPlayer = "white"
             # ai level
             elif str(event.widget).split(".")[-1] == "easy-ai-button":
                 self.container.ai_level = "easy"
