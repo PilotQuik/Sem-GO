@@ -6,6 +6,7 @@ class Board:
         self.size = size
         self.positions = [[0 for row in range(self.size)] for col in range(self.size)]
         self.validMoves = []
+        self.currentPlayer = "white"
 
     def displayStones(self):
         for col in range(self.size):
@@ -17,7 +18,7 @@ class Board:
                     self.positions[col][row].boardPad = boardPad
                     self.positions[col][row].draw(self.container.frame.canvas)
 
-    def processStones(self):
+    def processStones(self, color):
         # resetting groups and stone markers
         self.group = []
         for col in range(self.size):
@@ -25,13 +26,28 @@ class Board:
                 pos = self.positions[col][row]
                 if isinstance(pos, Stone) and pos.marked == True:
                     pos.marked = False
+
         for col in range(self.size):
             for row in range(self.size):
                 pos = self.positions[col][row]
-                if isinstance(pos, Stone)and pos.marked == False:
+                if isinstance(pos, Stone) and not pos.marked and pos.color == color:
+                    # --------------------------------count
+                    group, liberties = self.countLibertiesAndGroups(col, row, color, group=[], liberties=0)
+                    #print("--", group, liberti
+                    if liberties == 0:
+                        for pos in group:
+                            #print("-- deleted")
+                            self.positions[pos[0]][pos[1]] = 0
+                            self.container.refresh()
+                    else: self.group.append(group)
+
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone) and not pos.marked:
                     # --------------------------------count
                     group, liberties = self.countLibertiesAndGroups(col, row, self.positions[col][row].color, group=[], liberties=0)
-                    #print("--", group, liberties)
+                    #print("--", group, liberti
                     if liberties == 0:
                         for pos in group:
                             #print("-- deleted")
@@ -39,6 +55,9 @@ class Board:
                             self.container.refresh()
                     else: self.group.append(group)
         #print("<>", self.group)
+
+    def checkPattern(self):
+        pass
 
     def countLibertiesAndGroups(self, col, row, color, group, liberties):
         piece = self.positions[col][row]
