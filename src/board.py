@@ -6,7 +6,7 @@ class Board:
         self.size = size
         self.positions = [[0 for row in range(self.size)] for col in range(self.size)]
         self.validMoves = []
-        self.currentPlayer = "white"
+        self.currentPlayer = "black"
 
     def displayStones(self):
         for col in range(self.size):
