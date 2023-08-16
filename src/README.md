@@ -1,6 +1,10 @@
-# GO
+# Spieleprogrammierung in Python: GO
 ___
+## INFO
+___
+lorem impsum
 ## REGELN
+___
 ### SPIEL
 Go ist ein Spiel für zwei Spieler, genannt Schwarz und Weiß.Go ist ein Spiel für zwei Spieler, genannt Schwarz und Weiß.
 Das Spielbrett ist ein Gitter aus 19 horizontalen und 19 vertikalen Linien, die 361 Schnittpunkte bilden. Das ist meist
