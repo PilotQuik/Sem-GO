@@ -26,32 +26,32 @@ class Board:
                 pos = self.positions[col][row]
                 if isinstance(pos, Stone) and pos.marked == True:
                     pos.marked = False
-
+        # calc groups and delete groups of opposite color
         for col in range(self.size):
             for row in range(self.size):
                 pos = self.positions[col][row]
                 if isinstance(pos, Stone) and not pos.marked and pos.color != color:
                     # --------------------------------count
                     group, liberties = self.countLibertiesAndGroups(col, row, color, group=[], liberties=0)
-                    #print("--", group, liberti
+
                     if liberties == 0:
                         for pos in group:
                             #print("-- deleted")
-                            self.positions[pos[0]][pos[1]] = 0
+                            self.positions[pos[0]][pos[1]] = 99
                             self.container.refresh()
                     else: self.group.append(group)
-
+        # calc groups and delete groups of rest
         for col in range(self.size):
             for row in range(self.size):
                 pos = self.positions[col][row]
                 if isinstance(pos, Stone) and not pos.marked:
                     # --------------------------------count
                     group, liberties = self.countLibertiesAndGroups(col, row, self.positions[col][row].color, group=[], liberties=0)
-                    #print("--", group, liberti
+
                     if liberties == 0:
                         for pos in group:
                             #print("-- deleted")
-                            self.positions[pos[0]][pos[1]] = 0
+                            self.positions[pos[0]][pos[1]] = 99
                             self.container.refresh()
                     else: self.group.append(group)
         #print("<>", self.group)
