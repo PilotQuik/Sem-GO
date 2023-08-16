@@ -39,8 +39,7 @@ class Event:
                         event.x >= pad and event.y >= pad:
                     color = self.container.board.currentPlayer
                     if not isinstance(self.container.board.positions[x][y], Stone):
-                        self.container.board.positions[x][y] = Stone(col=x, row=y, color=color,
-                                                                     boardPad=boardPad)
+                        self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
                         self.container.board.processStones(color)
                         self.container.board.positions[x][y].draw(self.container.frame.canvas)
                         if self.container.gamemode == "player":
@@ -115,9 +114,14 @@ class Event:
         if isinstance(self.container.frame, Game):
             x, y = self.container.frame.calcSquare(event.x, event.y)
             pad = self.container.frame.boardPad / 2 + self.container.frame.pad
-            if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
-                    event.x >= pad and event.y >= pad and not isinstance(self.container.board.positions[x][y], Stone):
-                self.container.frame.drawHover(x, y)
+            if (event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and
+                    event.x >= pad and event.y >= pad):
+                try:
+                    if not isinstance(self.container.board.positions[x][y], Stone):
+                        print(self.container.board.positions[x][y])
+                        self.container.frame.drawHover(x, y, False)
+                    else: self.container.frame.drawHover(x, y, True)
+                except: print("out of range")
 
     def config(self, event=None):
         #print(event.widget, event.width, event.height)

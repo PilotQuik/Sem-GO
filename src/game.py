@@ -89,10 +89,11 @@ class Game(ttk.Frame):
             pass
         elif self.container.ai_level == "easy":
             pass
-    def drawHover(self, x, y):
+    def drawHover(self, x, y, delete):
         color = self.container.board.currentPlayer
         self.canvas.delete(self.hover)
-        if color == "white":
+        if delete: self.canvas.delete(self.hover)
+        elif color == "white":
             self.hover = self.canvas.create_oval(
             50 + self.boardPad + x * self.boardPad - self.boardPad / 2.5,
             50 + self.boardPad + y * self.boardPad - self.boardPad / 2.5,
