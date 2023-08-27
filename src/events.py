@@ -30,15 +30,16 @@ class Event:
                 os.system("notepad.exe README.md")
 
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
-            if str(event.widget).split(".")[-1] == "back-button":
+            if str(event.widget).split(".")[-1] == "back-button": # return event
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
-            if str(event.widget).split(".")[-1] == "!canvas":
+            if str(event.widget).split(".")[-1] == "!canvas": # place event
                 x, y = self.container.frame.calcSquare(event.x, event.y)
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
                         event.x >= pad and event.y >= pad:
                     color = self.container.board.currentPlayer
-                    if not isinstance(self.container.board.positions[x][y], Stone):
+                    pos = self.container.board.positions[x][y]
+                    if not isinstance(pos, Stone) and not pos == 99:
                         self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
                         self.container.board.processStones(color)
                         self.container.board.positions[x][y].draw(self.container.frame.canvas)
@@ -118,7 +119,7 @@ class Event:
                     event.x >= pad and event.y >= pad):
                 try:
                     if not isinstance(self.container.board.positions[x][y], Stone):
-                        print(self.container.board.positions[x][y])
+                        #print(self.container.board.positions[x][y]) # show content of square
                         self.container.frame.drawHover(x, y, False)
                     else: self.container.frame.drawHover(x, y, True)
                 except: print("out of range")

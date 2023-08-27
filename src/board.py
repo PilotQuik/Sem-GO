@@ -18,14 +18,19 @@ class Board:
                     self.positions[col][row].boardPad = boardPad
                     self.positions[col][row].draw(self.container.frame.canvas)
 
+    def calcValidMoves(self):
+        pass
+
     def processStones(self, color):
-        # resetting groups and stone markers
+        # resetting groups and stone markers and removing 99 markers
         self.group = []
         for col in range(self.size):
             for row in range(self.size):
                 pos = self.positions[col][row]
                 if isinstance(pos, Stone) and pos.marked == True:
                     pos.marked = False
+                elif pos == 99:
+                    self.positions[col][row] = 0
         # calc groups and delete groups of opposite color
         for col in range(self.size):
             for row in range(self.size):
@@ -74,7 +79,7 @@ class Board:
             if col + 1 < self.size:
                 group, liberties = self.countLibertiesAndGroups(col+1, row, color, group, liberties) # rechts
         elif not isinstance(piece, Stone):
-            self.positions[col][row] = 1
+            #self.positions[col][row] = 1
             liberties += 1
         return group, liberties
 
