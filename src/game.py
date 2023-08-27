@@ -85,10 +85,11 @@ class Game(ttk.Frame):
             self.container.board.processStones("black")
 
             self.container.board.positions[x][y].draw(self.container.frame.canvas)
-        elif self.container.ai_level == "easy":
+        elif self.container.ai_level == "medium":
             pass
-        elif self.container.ai_level == "easy":
+        elif self.container.ai_level == "hard":
             pass
+
     def drawHover(self, x, y, delete):
         color = self.container.board.currentPlayer
         self.canvas.delete(self.hover)
