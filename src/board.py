@@ -18,8 +18,12 @@ class Board:
                     self.positions[col][row].boardPad = boardPad
                     self.positions[col][row].draw(self.container.frame.canvas)
 
-    def calcValidMoves(self):
-        pass
+    def calcValidMoves(self, filter):
+        if filter == "liberties":
+            pass
+        elif filter == "":
+            pass
+
 
     def processStones(self, color):
         # resetting groups and stone markers and removing 99 markers
