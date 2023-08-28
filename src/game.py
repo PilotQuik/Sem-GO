@@ -76,15 +76,34 @@ class Game(ttk.Frame):
 
     def makeMoveAI(self):
         if self.container.ai_level == "easy":
-            x, y = random.randint(0, self.container.board.size - 1), random.randint(0, self.container.board.size - 1)
-            while isinstance(self.container.board.positions[x][y], Stone):
-                x, y = random.randint(0, self.container.board.size - 1), random.randint(0, self.container.board.size - 1)
 
-            self.container.board.positions[x][y] = Stone(col=x, row=y, color="black",
-                                                         boardPad=self.boardPad)
-            self.container.board.processStones("black")
-
-            self.container.board.positions[x][y].draw(self.container.frame.canvas)
+            moves = self.container.board.calcValidMoves("black", "liberties")
+            if moves == []: # if no moves:
+                moves = self.container.board.calcValidMoves("white", "liberties")
+                if moves == []: # if no moves:
+                    freeSpaces = []
+                    for col in range(self.container.board.size):
+                        for row in range(self.container.board.size):
+                            pos = self.container.board.positions[col][row]
+                            if pos == 0:
+                                freeSpaces.append([col, row])
+                    move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
+                    x, y = move[0], move[1]
+                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+                    self.container.board.processStones("white")
+                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                else:
+                    move = moves[random.randint(0, len(moves) - 1)]
+                    x, y = move[0], move[1]
+                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+                    self.container.board.processStones("white")
+                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
+            else:
+                move = moves[random.randint(0, len(moves) - 1)]
+                x, y = move[0], move[1]
+                self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+                self.container.board.processStones("white")
+                self.container.board.positions[x][y].draw(self.container.frame.canvas)
         elif self.container.ai_level == "medium":
             pass
         elif self.container.ai_level == "hard":
@@ -94,14 +113,14 @@ class Game(ttk.Frame):
         color = self.container.board.currentPlayer
         self.canvas.delete(self.hover)
         if delete: self.canvas.delete(self.hover)
-        elif color == "white":
+        elif color == "white" and self.container.gamemode == "player":
             self.hover = self.canvas.create_oval(
             50 + self.boardPad + x * self.boardPad - self.boardPad / 2.5,
             50 + self.boardPad + y * self.boardPad - self.boardPad / 2.5,
             50 + self.boardPad + x * self.boardPad + self.boardPad / 2.5,
             50 + self.boardPad + y * self.boardPad + self.boardPad / 2.5,
             fill=HOVER_W)
-        elif color == "black" and self.container.gamemode == "player":
+        elif color == "black":
             self.hover = self.canvas.create_oval(
                 50 + self.boardPad + x * self.boardPad - self.boardPad / 2.5,
                 50 + self.boardPad + y * self.boardPad - self.boardPad / 2.5,

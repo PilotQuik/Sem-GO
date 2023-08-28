@@ -63,9 +63,9 @@ class Event:
             elif str(event.widget).split(".")[-1] == "vs-ai-button":
                 self.container.gamemode = "ai"
                 self.container.frame.displayCanvas()
-                if self.container.board.currentPlayer == "black":
+                if self.container.board.currentPlayer == "white":
                     self.container.aiFirst = True
-                    self.container.board.currentPlayer = "white"
+                    self.container.board.currentPlayer = "black"
             # ai level
             elif str(event.widget).split(".")[-1] == "easy-ai-button":
                 self.container.ai_level = "easy"

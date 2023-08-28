@@ -18,12 +18,35 @@ class Board:
                     self.positions[col][row].boardPad = boardPad
                     self.positions[col][row].draw(self.container.frame.canvas)
 
-    def calcValidMoves(self, filter):
-        if filter == "liberties":
-            pass
-        elif filter == "":
-            pass
-
+    def calcValidMoves(self, activePlayer, *filter):
+        if "liberties" in filter:
+            libs = []
+            # resetting groups and stone markers
+            for col in range(self.size):
+                for row in range(self.size):
+                    pos = self.positions[col][row]
+                    if not isinstance(pos, Stone):
+                        if row - 1 >= 0:
+                            posNord = self.positions[col][row - 1]
+                            if isinstance(posNord, Stone):
+                                if not posNord.color == activePlayer:
+                                    libs.append([col, row])
+                        if row + 1 < self.size:
+                            posSüd = self.positions[col][row + 1]
+                            if isinstance(posSüd, Stone):
+                                if not posSüd.color == activePlayer:
+                                    libs.append([col, row])
+                        if col - 1 >= 0:
+                            posWest = self.positions[col - 1][row]
+                            if isinstance(posWest, Stone):
+                                 if not posWest.color == activePlayer:
+                                    libs.append([col, row])
+                        if col + 1 < self.size:
+                            posOst = self.positions[col + 1][row]
+                            if isinstance(posOst, Stone):
+                                if not posOst.color == activePlayer:
+                                    libs.append([col, row])
+            return libs
 
     def processStones(self, color):
         # resetting groups and stone markers and removing 99 markers
@@ -82,8 +105,7 @@ class Board:
                 group, liberties = self.countLibertiesAndGroups(col-1, row, color, group, liberties) # links
             if col + 1 < self.size:
                 group, liberties = self.countLibertiesAndGroups(col+1, row, color, group, liberties) # rechts
-        elif not isinstance(piece, Stone):
-            #self.positions[col][row] = 1
+        elif not isinstance(piece, Stone) and not piece == 99:
             liberties += 1
         return group, liberties
 
