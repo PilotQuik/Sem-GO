@@ -1,6 +1,7 @@
 import random
 from tkinter import *
 from const import *
+import webbrowser
 from main import *
 from game import Game
 from opt import Opt
@@ -27,7 +28,8 @@ class Event:
             elif str(event.widget).split(".")[-1] == "quit-button":
                 self.container.destroy()
             elif str(event.widget).split(".")[-1] == "rules-button":
-                os.system("notepad.exe README.md")
+                webbrowser.open_new_tab("readme.html")
+                #os.system("notepad.exe README.md")
 
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button": # return event
@@ -39,10 +41,12 @@ class Event:
                         event.x >= pad and event.y >= pad:
                     color = self.container.board.currentPlayer
                     pos = self.container.board.positions[x][y]
-                    if not isinstance(pos, Stone) and not pos == 99:
+                    if (not isinstance(pos, Stone) and not pos == 99 and
+                            self.container.board.calcValidMoves(color,"self", [x, y])):
                         self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
-                        self.container.board.processStones(color)
                         self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                        self.container.board.processStones(color)
+
                         if self.container.gamemode == "player":
                             self.container.board.currentPlayer = "black" if color == "white" else "white"
                         elif self.container.gamemode == "ai":
