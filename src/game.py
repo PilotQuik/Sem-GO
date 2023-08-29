@@ -1,4 +1,5 @@
 import random
+import time
 from tkinter import ttk
 from tkinter import *
 from const import *
@@ -81,29 +82,33 @@ class Game(ttk.Frame):
             if moves == []: # if no moves:
                 moves = self.container.board.calcValidMoves("white", "liberties")
                 if moves == []: # if no moves:
-                    freeSpaces = []
-                    for col in range(self.container.board.size):
-                        for row in range(self.container.board.size):
-                            pos = self.container.board.positions[col][row]
-                            if pos == 0:
-                                freeSpaces.append([col, row])
+                    freeSpaces = self.container.board.calcValidMoves("black", "spaces")
                     move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
                     x, y = move[0], move[1]
                     self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                    self.container.board.processStones("white")
                     self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                    self.container.board.processStones("white"); self.container.board.processStones("white")
+                    print("placed", x, y)
+
+
                 else:
                     move = moves[random.randint(0, len(moves) - 1)]
                     x, y = move[0], move[1]
                     self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                    self.container.board.processStones("white")
                     self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                    self.container.board.processStones("white"); self.container.board.processStones("white")
+                    print("placed", x, y)
+
+
             else:
                 move = moves[random.randint(0, len(moves) - 1)]
                 x, y = move[0], move[1]
                 self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                self.container.board.processStones("white")
                 self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                self.container.board.processStones("white"); self.container.board.processStones("white")
+                print("placed", x, y)
+
+
         elif self.container.ai_level == "medium":
             pass
         elif self.container.ai_level == "hard":
