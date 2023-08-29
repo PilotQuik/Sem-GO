@@ -25,28 +25,97 @@ class Board:
             for col in range(self.size):
                 for row in range(self.size):
                     pos = self.positions[col][row]
+                    neighbours = 0
+                    isLib = False
                     if not isinstance(pos, Stone):
                         if row - 1 >= 0:
                             posNord = self.positions[col][row - 1]
                             if isinstance(posNord, Stone):
+                                neighbours += 1
                                 if not posNord.color == activePlayer:
-                                    libs.append([col, row])
+                                    isLib = True
+                        else: neighbours += 1
                         if row + 1 < self.size:
                             posSüd = self.positions[col][row + 1]
                             if isinstance(posSüd, Stone):
+                                neighbours += 1
                                 if not posSüd.color == activePlayer:
-                                    libs.append([col, row])
+                                    isLib = True
+                        else: neighbours += 1
                         if col - 1 >= 0:
                             posWest = self.positions[col - 1][row]
                             if isinstance(posWest, Stone):
-                                 if not posWest.color == activePlayer:
-                                    libs.append([col, row])
+                                neighbours += 1
+                                if not posWest.color == activePlayer:
+                                    isLib = True
+                        else: neighbours += 1
                         if col + 1 < self.size:
                             posOst = self.positions[col + 1][row]
                             if isinstance(posOst, Stone):
+                                neighbours += 1
                                 if not posOst.color == activePlayer:
-                                    libs.append([col, row])
+                                    isLib = True
+                        else: neighbours += 1
+                        if not neighbours == 4 and isLib: libs.append([col, row]); print("added ", col, row)
             return libs
+        if "spaces" in filter:
+            spaces = []
+            for col in range(self.size):
+                for row in range(self.size):
+                    pos = self.positions[col][row]
+                    neighbours = 0
+                    if not isinstance(pos, Stone):
+                        if row - 1 >= 0:
+                            posNord = self.positions[col][row - 1]
+                            if isinstance(posNord, Stone):
+                                neighbours += 1
+                        else: neighbours += 1
+                        if row + 1 < self.size:
+                            posSüd = self.positions[col][row + 1]
+                            if isinstance(posSüd, Stone):
+                                neighbours += 1
+                        else: neighbours += 1
+                        if col - 1 >= 0:
+                            posWest = self.positions[col - 1][row]
+                            if isinstance(posWest, Stone):
+                                neighbours += 1
+                        else: neighbours += 1
+                        if col + 1 < self.size:
+                            posOst = self.positions[col + 1][row]
+                            if isinstance(posOst, Stone):
+                                neighbours += 1
+                        else: neighbours += 1
+                        if not neighbours == 4: spaces.append([col, row]); print("added ", col, row)
+            return spaces
+        if "self" in filter:
+            col, row = filter[1][0], filter[1][1]
+            pos = self.positions[col][row]
+            neighbours = 0
+            isValid = False
+            if not isinstance(pos, Stone):
+                if row - 1 >= 0:
+                    posNord = self.positions[col][row - 1]
+                    if isinstance(posNord, Stone):
+                        neighbours += 1
+                else: neighbours += 1
+                if row + 1 < self.size:
+                    posSüd = self.positions[col][row + 1]
+                    if isinstance(posSüd, Stone):
+                        neighbours += 1
+                else: neighbours += 1
+                if col - 1 >= 0:
+                    posWest = self.positions[col - 1][row]
+                    if isinstance(posWest, Stone):
+                        neighbours += 1
+                else: neighbours += 1
+                if col + 1 < self.size:
+                    posOst = self.positions[col + 1][row]
+                    if isinstance(posOst, Stone):
+                        neighbours += 1
+                else: neighbours += 1
+                if not neighbours == 4: isValid = True; print("added ", col, row)
+            return isValid
+
 
     def processStones(self, color):
         # resetting groups and stone markers and removing 99 markers
@@ -69,7 +138,7 @@ class Board:
                     if liberties == 0:
                         for pos in group:
                             #print("-- deleted")
-                            self.positions[pos[0]][pos[1]] = 99
+                            self.positions[pos[0]][pos[1]] = 99 if self.container.gamemode == "player" else 0
                             self.container.refresh()
                     else: self.group.append(group)
         # calc groups and delete groups of rest
