@@ -39,9 +39,11 @@ entfernt. Dieses Entfernen ist Bestandteil des Zugs. Wenn es auch eigene Steine 
 entfernt. Es kann vorkommen, dass es nach dem Setzen eigene Steine ohne Freiheit gibt, während alle gegnerischen Steine
 noch eine Freiheit haben (Stichwort: Selbstmord). Ein solches Setzen nicht erlaubt.
 
-### KŌ
+### KŌ & SELBSTMORD
 Um endlose Wiederholungen zu unterbinden oder sinnlos zu machen, wird Stellungswiederholung eingeschränkt. Zwei 
 aufeinander folgende Züge (außer Passen) dürfen nicht die ursprüngliche Stellung wiederherstellen(Kō).
+
+Ein Zug ist verboten, wenn dadurch eigene Steine geschlagen werden würde.
 
 ### BEWERTUNG
 Das alternierende Ziehen endet, wenn ein Spieler passt und dann sogleich der andere Spieler auch passt.
