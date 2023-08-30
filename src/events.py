@@ -41,10 +41,9 @@ class Event:
                         event.x >= pad and event.y >= pad:
                     color = self.container.board.currentPlayer
                     pos = self.container.board.positions[x][y]
-                    if (not isinstance(pos, Stone) and not pos == 99 and
-                            self.container.board.calcValidMoves(color,"self", [x, y])):
+                    if not isinstance(pos, Stone) and not pos == 99:
                         self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
-                        self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                        self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                         self.container.board.processStones(color)
 
                         if self.container.gamemode == "player":

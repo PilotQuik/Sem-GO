@@ -16,7 +16,7 @@ class Board:
                     length = int(len - 100)
                     boardPad = length / (self.container.board.size + 1)
                     self.positions[col][row].boardPad = boardPad
-                    self.positions[col][row].draw(self.container.frame.canvas)
+                    self.positions[col][row].draw(self.container.frame.canvas, "Game")
 
     def calcValidMoves(self, activePlayer, *filter):
         if "liberties" in filter:

@@ -86,7 +86,7 @@ class Game(ttk.Frame):
                     move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
                     x, y = move[0], move[1]
                     self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                    self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                     self.container.board.processStones("white"); self.container.board.processStones("white")
                     print("placed", x, y)
 
@@ -95,7 +95,7 @@ class Game(ttk.Frame):
                     move = moves[random.randint(0, len(moves) - 1)]
                     x, y = move[0], move[1]
                     self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                    self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                    self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                     self.container.board.processStones("white"); self.container.board.processStones("white")
                     print("placed", x, y)
 
@@ -104,7 +104,7 @@ class Game(ttk.Frame):
                 move = moves[random.randint(0, len(moves) - 1)]
                 x, y = move[0], move[1]
                 self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                self.container.board.positions[x][y].draw(self.container.frame.canvas)
+                self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                 self.container.board.processStones("white"); self.container.board.processStones("white")
                 print("placed", x, y)
 

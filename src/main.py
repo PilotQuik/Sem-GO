@@ -15,13 +15,13 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
 
         self.iconbitmap("assets/icon.ico")
 
-        self.frame = Menu(self)
-        self.event = Event(self)
-
         self.gamemode = "player"
         self.ai_level = "easy"
         self.theme = "classic"
         self.board = Board(self, 9)
+
+        self.frame = Menu(self)
+        self.event = Event(self)
 
         self.aiFirst = False
 
