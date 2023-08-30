@@ -28,7 +28,7 @@ class Event:
             elif str(event.widget).split(".")[-1] == "quit-button":
                 self.container.destroy()
             elif str(event.widget).split(".")[-1] == "rules-button":
-                webbrowser.open_new_tab("readme.html")
+                webbrowser.open_new_tab("assets/readme.html")
                 #os.system("notepad.exe README.md")
 
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
