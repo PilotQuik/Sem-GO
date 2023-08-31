@@ -50,7 +50,7 @@ class Event:
                                     self.container.board.positions[col][row].marked = False
                         group, liberties = self.container.board.countLibertiesAndGroups(
                             x, y, color, group=[], liberties=0)
-                        print(group)
+                        #print(self.container.board.checkPattern(color))
                         if not liberties == 0:
                             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                             self.container.board.processStones(color)
@@ -59,8 +59,6 @@ class Event:
                             elif self.container.gamemode == "ai":
                                 self.container.frame.makeMoveAI()
                         else: self.container.board.positions[x][y] = 0
-
-
 
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
@@ -131,12 +129,11 @@ class Event:
             pad = self.container.frame.boardPad / 2 + self.container.frame.pad
             if (event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and
                     event.x >= pad and event.y >= pad):
-                try:
+                if x in range(0, self.container.board.size) and y in range(0, self.container.board.size):
                     if not isinstance(self.container.board.positions[x][y], Stone):
                         #print(self.container.board.positions[x][y]) # show content of square
                         self.container.frame.drawHover(x, y, False)
                     else: self.container.frame.drawHover(x, y, True)
-                except: print("out of range")
 
     def config(self, event=None):
         #print(event.widget, event.width, event.height)
