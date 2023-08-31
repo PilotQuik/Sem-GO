@@ -1,4 +1,5 @@
 from stone import Stone
+from const import *
 
 class Board:
     def __init__(self, container, size=9):
@@ -157,8 +158,23 @@ class Board:
                     else: self.group.append(group)
         #print("<>", self.group)
 
-    def checkPattern(self):
-        pass
+    def checkPattern(self, color):
+        matches = []
+        for col in range(self.size):
+            for row in range(self.size):
+                for pattern in PATTERNS:
+                    match = 0
+                    for ownColor in pattern[0]:
+                        if (col + ownColor[0] in range(0, self.size) and row + ownColor[1] in range(0, self.size)
+                                and isinstance(self.positions[col + ownColor[0]][row + ownColor[1]], Stone)):
+                            if self.positions[col + ownColor[0]][row + ownColor[1]].color == color:
+                                match += 1
+                    if (col + pattern[1][0] in range(0, self.size) and row + pattern[1][1] in range(0, self.size)
+                            and isinstance(self.positions[col + pattern[1][0]][row + pattern[1][1]], Stone)):
+                        if self.positions[col + pattern[1][0]][row + pattern[1][1]].color != color:
+                            match +=1
+                    if match == 3: matches.append([col, row])
+        return matches
 
     def countLibertiesAndGroups(self, col, row, color, group, liberties):
         piece = self.positions[col][row]
