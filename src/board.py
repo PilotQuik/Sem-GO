@@ -202,18 +202,16 @@ class Board:
         with open("assets/bin.dat", "wb") as f:
             pickle.dump([self.size, self.positions, self.currentPlayer], f)
             print("saved successfully")
-            print([self.size, self.positions, self.currentPlayer])
     def loadBoard(self):
-        #try:
+        try:
             with open("assets/bin.dat", "rb") as f:
                 loaded = pickle.load(f)
-                print(loaded)
                 board = Board(self.container, size=loaded[0])
                 board.positions = loaded[1]
                 board.currentPlayer = loaded[2]
                 print("loaded sucessfully")
-        #except:
-            #board = Board(self.container, 9)
-            #print("loading failed")
-            return board
+        except:
+            board = Board(self.container, 9)
+            print("loading failed")
+        return board
 
