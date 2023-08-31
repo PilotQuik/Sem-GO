@@ -1,3 +1,5 @@
+import pickle
+
 from stone import Stone
 from const import *
 
@@ -173,7 +175,8 @@ class Board:
                             and isinstance(self.positions[col + pattern[1][0]][row + pattern[1][1]], Stone)):
                         if self.positions[col + pattern[1][0]][row + pattern[1][1]].color != color:
                             match +=1
-                    if match == 3: matches.append([col, row])
+                    if match == 3 and not [col, row] in matches and self.positions[col][row] == 0:
+                        matches.append([col, row])
         return matches
 
     def countLibertiesAndGroups(self, col, row, color, group, liberties):
@@ -196,5 +199,21 @@ class Board:
 
 
     def saveBoard(self):
-        pass
+        with open("assets/bin.dat", "wb") as f:
+            pickle.dump([self.size, self.positions, self.currentPlayer], f)
+            print("saved successfully")
+            print([self.size, self.positions, self.currentPlayer])
+    def loadBoard(self):
+        #try:
+            with open("assets/bin.dat", "rb") as f:
+                loaded = pickle.load(f)
+                print(loaded)
+                board = Board(self.container, size=loaded[0])
+                board.positions = loaded[1]
+                board.currentPlayer = loaded[2]
+                print("loaded sucessfully")
+        #except:
+            #board = Board(self.container, 9)
+            #print("loading failed")
+            return board
 

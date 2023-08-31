@@ -1,7 +1,10 @@
 import random
 from tkinter import *
 from const import *
+
 import webbrowser
+import pickle
+
 from main import *
 from game import Game
 from opt import Opt
@@ -26,10 +29,14 @@ class Event:
             elif str(event.widget).split(".")[-1] == "opt-button":
                 self.container.switchFrame(Opt, width=OPT_WIDTH, height=OPT_HEIGHT)
             elif str(event.widget).split(".")[-1] == "quit-button":
+                self.container.board.saveBoard()
                 self.container.destroy()
             elif str(event.widget).split(".")[-1] == "rules-button":
                 webbrowser.open_new_tab("assets/readme.html")
                 #os.system("notepad.exe README.md")
+            elif str(event.widget).split(".")[-1] == "load-button":
+                self.container.board = self.container.board.loadBoard()
+                self.container.frame.displayBoard()
 
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button": # return event
@@ -50,7 +57,7 @@ class Event:
                                     self.container.board.positions[col][row].marked = False
                         group, liberties = self.container.board.countLibertiesAndGroups(
                             x, y, color, group=[], liberties=0)
-                        #print(self.container.board.checkPattern(color))
+                        print("patterns found:", self.container.board.checkPattern(color))
                         if not liberties == 0:
                             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                             self.container.board.processStones(color)
@@ -143,5 +150,3 @@ class Event:
                 self.container.frame.canvas.delete("all")
                 self.container.frame.displayBoard()
                 self.container.board.displayStones()
-
-
