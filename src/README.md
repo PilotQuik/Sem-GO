@@ -46,6 +46,7 @@ aufeinander folgende Züge (außer Passen) dürfen nicht die ursprüngliche Stel
 Ein Zug ist verboten, wenn dadurch eigene Steine geschlagen werden würde.
 
 ### BEWERTUNG
-Das alternierende Ziehen endet, wenn ein Spieler passt und dann sogleich der andere Spieler auch passt.
+Das alternierende Ziehen endet entweder, wenn ein Spieler passt und dann sogleich der andere Spieler auch passt, oder
+wenn ein Spieler keinen Zug mehr machen kann.
 
 ___
