@@ -164,7 +164,7 @@ class Board:
         matches = []
         for col in range(self.size):
             for row in range(self.size):
-                for pattern in PATTERNS:
+                for pattern in PATTERNS: # cycle patterns
                     match = 0
                     for ownColor in pattern[0]:
                         if (col + ownColor[0] in range(0, self.size) and row + ownColor[1] in range(0, self.size)
