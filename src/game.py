@@ -1,7 +1,9 @@
 import random
 import time
+
 from tkinter import ttk
 from tkinter import *
+
 from const import *
 from main import *
 from stone import Stone

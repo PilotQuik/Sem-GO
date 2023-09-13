@@ -1,5 +1,6 @@
 from tkinter import ttk
 from tkinter import *
+
 from const import *
 from custom import *
 from game import Game

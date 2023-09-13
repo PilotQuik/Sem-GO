@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 from tkinter import Label
+
 from events import Event
 from const import *
 from menu import Menu
@@ -9,9 +10,9 @@ from game import Game
 from board import Board
 
 
-class Root(tk.Tk): # defines Main class inheriting from tk.TK
+class Root(tk.Tk):
     def __init__(self):
-        super().__init__() # initializing tkinter
+        super().__init__()
 
         self.iconbitmap("assets/icon.ico")
 
@@ -48,7 +49,7 @@ class Root(tk.Tk): # defines Main class inheriting from tk.TK
             self.aiFirst = False
 
 if __name__ == "__main__":
-    root = Root() # creating instance of Main class
+    root = Root()
     root.bind("<Motion>", root.event.motion)
     root.bind("<Enter>", root.event.onHoverEnter)
     root.bind("<Leave>", root.event.onHoverLeave)

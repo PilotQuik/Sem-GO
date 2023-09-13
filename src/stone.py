@@ -1,5 +1,3 @@
-
-
 class Stone:
     def __init__(self, col, row, color, boardPad, marked=False):
         self.col = col

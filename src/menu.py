@@ -1,4 +1,5 @@
 from tkinter import *
+
 from const import *
 from stone import Stone
 from custom import Button_

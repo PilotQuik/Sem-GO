@@ -1,10 +1,8 @@
-import random
-from tkinter import *
-from const import *
-
 import webbrowser
-import pickle
 
+from tkinter import *
+
+from const import *
 from main import *
 from game import Game
 from opt import Opt
