@@ -67,10 +67,10 @@ class Opt(ttk.Frame):
         self.classic = Button_(27, 385, self.canvas, name="classic-button", text="CLASSIC", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 10, 370, 193, 440, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.theme == "classic" else BUTTON_COL)
-        self.minimal = Button_(225, 385, self.canvas, name="minimal-button", text="MINIMAL", font=(FONT, 25, "bold"))
+        self.light = Button_(248, 385, self.canvas, name="light-button", text="LIGHT", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 203, 370, 397, 440, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.theme == "minimal" else BUTTON_COL)
-        self.error = Button_(445, 385, self.canvas, name="error-button", text="ERROR", font=(FONT, 25, "bold"))
+        self.dark = Button_(448, 385, self.canvas, name="dark-button", text="DARK", font=(FONT, 25, "bold"))
         RoundRect(self.canvas, 407, 370, 590, 440, fill="White", width=3,
                   outline=BUTTON_COL_SELECTED if self.container.theme == "error" else BUTTON_COL)
 

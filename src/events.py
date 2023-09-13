@@ -107,10 +107,10 @@ class Event:
             elif str(event.widget).split(".")[-1] == "classic-button":
                 self.container.theme = "classic"
                 self.container.frame.displayCanvas()
-            elif str(event.widget).split(".")[-1] == "minimal-button":
+            elif str(event.widget).split(".")[-1] == "light-button":
                 self.container.theme = "minimal"
                 self.container.frame.displayCanvas()
-            elif str(event.widget).split(".")[-1] == "error-button":
+            elif str(event.widget).split(".")[-1] == "dark-button":
                 self.container.theme = "error"
                 self.container.frame.displayCanvas()
 
