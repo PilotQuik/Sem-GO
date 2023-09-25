@@ -1,4 +1,5 @@
 import webbrowser
+import os
 
 from tkinter import *
 
@@ -30,8 +31,12 @@ class Event:
                 self.container.board.saveBoard()
                 self.container.destroy()
             elif str(event.widget).split(".")[-1] == "rules-button":
-                webbrowser.open_new_tab("assets/readme.html")
-                #os.system("notepad.exe README.md")
+                try:
+                    chrome = "C:/Program Files/Google/Chrome/Application/chrome.exe %s"
+                    webbrowser.get(chrome).open_new_tab(f"file:///{os.getcwd()}/assets/rules.html")
+                except:
+                    print("could not open chrome")
+                    webbrowser.open_new_tab(f"file:///{os.getcwd()}/assets/rules.html")
             elif str(event.widget).split(".")[-1] == "load-button":
                 self.container.board = self.container.board.loadBoard()
                 self.container.frame.displayBoard()
