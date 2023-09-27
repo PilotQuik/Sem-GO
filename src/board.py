@@ -120,9 +120,10 @@ class Board:
             return isValid
 
 
-    def processStones(self, color):
-        # resetting groups and stone markers and removing 99 markers
-        self.group = []
+    def processStones(self, color, checkMove=None):
+        stonesToDeleteW = []
+        stonesToDeleteB = []
+        # RESET --------------------------------------------------------------------------------------------------------
         for col in range(self.size):
             for row in range(self.size):
                 pos = self.positions[col][row]
@@ -130,35 +131,35 @@ class Board:
                     pos.marked = False
                 elif pos == 99:
                     self.positions[col][row] = 0
-        # calc groups and delete groups of opposite color
-        for col in range(self.size):
-            for row in range(self.size):
-                pos = self.positions[col][row]
-                if isinstance(pos, Stone) and not pos.marked and pos.color != color:
-                    # --------------------------------count
-                    group, liberties = self.countLibertiesAndGroups(col, row, color, group=[], liberties=0)
-
-                    if liberties == 0:
-                        for pos in group:
-                            #print("-- deleted")
-                            self.positions[pos[0]][pos[1]] = 99 if self.container.gamemode == "player" else 0
-                            self.container.refresh()
-                    else: self.group.append(group)
-        # calc groups and delete groups of rest
+        # CHECK --------------------------------------------------------------------------------------------------------
+        if checkMove != None:
+            print(checkMove[0], checkMove[1])
+            pos = self.positions[checkMove[0]][checkMove[1]]
+            # --------------------------------count
+            cheeckGroup, checkLiberties = self.countLibertiesAndGroups(checkMove[0], checkMove[1], pos.color, group=[], liberties=0)
+            print(checkLiberties)
+        # PROCESS ------------------------------------------------------------------------------------------------------
         for col in range(self.size):
             for row in range(self.size):
                 pos = self.positions[col][row]
                 if isinstance(pos, Stone) and not pos.marked:
                     # --------------------------------count
-                    group, liberties = self.countLibertiesAndGroups(col, row, self.positions[col][row].color, group=[], liberties=0)
-
+                    group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
                     if liberties == 0:
-                        for pos in group:
-                            #print("-- deleted")
-                            self.positions[pos[0]][pos[1]] = 99
-                            self.container.refresh()
-                    else: self.group.append(group)
-        #print("<>", self.group)
+                        for stone in group:
+                            print("to delete")
+                            stonesToDeleteW.append(stone) if (self.positions[col][row].color
+                                                              == "white") else stonesToDeleteB.append(stone)
+        # DELETE -------------------------------------------------------------------------------------------------------
+        if checkMove == None:
+            for pos in stonesToDeleteB if color == "white" else stonesToDeleteW:
+                self.positions[pos[0]][pos[1]] = 99
+                self.container.refresh()
+        else:
+            toDelete = stonesToDeleteB if color == "white" else stonesToDeleteW
+            if checkLiberties == 0 and toDelete == []:
+                return False # not valid
+            else: return True # valid
 
     def checkPattern(self, color):
         matches = []

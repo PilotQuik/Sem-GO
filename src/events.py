@@ -42,26 +42,22 @@ class Event:
                 self.container.frame.displayBoard()
 
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
-            if str(event.widget).split(".")[-1] == "back-button": # return event
+            # return button
+            if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
-            if str(event.widget).split(".")[-1] == "!canvas": # place event
+            # player move
+            if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
                         event.x >= pad and event.y >= pad:
                     color = self.container.board.currentPlayer
                     pos = self.container.board.positions[x][y]
+                    # check move validity
                     if not isinstance(pos, Stone) and not pos == 99:
                         self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
-                        for col in range(self.container.board.size):
-                            for row in range(self.container.board.size):
-                                pos = self.container.board.positions[col][row]
-                                if isinstance(pos, Stone) and pos.marked:
-                                    self.container.board.positions[col][row].marked = False
-                        group, liberties = self.container.board.countLibertiesAndGroups(
-                            x, y, color, group=[], liberties=0)
-                        print("patterns found:", self.container.board.checkPattern(color))
-                        if not liberties == 0:
+                        # make move
+                        if self.container.board.processStones(color, checkMove=[x, y]):
                             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                             self.container.board.processStones(color)
                             if self.container.gamemode == "player":

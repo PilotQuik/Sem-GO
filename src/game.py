@@ -43,8 +43,6 @@ class Game(ttk.Frame):
         return int((x - self.pad - self.boardPad / 2) / self.boardPad), int(
             (y - self.pad - self.boardPad / 2) / self.boardPad)
 
-    def displayCurrentPlayer(self):
-        pass
     def displayBoard(self):
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         self.canvas.create_rectangle(self.pad, self.pad, len - self.pad, len - self.pad, fill="#c9833c",
