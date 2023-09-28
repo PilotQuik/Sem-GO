@@ -120,6 +120,17 @@ class Event:
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         length = int(len - 100)
         boardPad = length / (self.container.board.size + 1)
+        if isinstance(self.container.frame, Game):
+            if str(event.widget).split(".")[-1] == "!canvas":
+                x, y = self.container.frame.calcSquare(event.x, event.y)
+                pad = self.container.frame.boardPad / 2 + self.container.frame.pad
+                if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
+                        event.x >= pad and event.y >= pad:
+                    color = "white" if self.container.board.currentPlayer == "black" else "black"
+                    self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
+                    self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
+                    self.container.board.processStones(color)
+                    self.container.board.currentPlayer = "white" if self.container.board.currentPlayer == "black" else "black"
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
