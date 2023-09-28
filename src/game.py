@@ -77,42 +77,57 @@ class Game(ttk.Frame):
 
     def makeMoveAI(self):
         if self.container.ai_level == "easy":
+            self.aiEasy()
 
-            moves = self.container.board.calcValidMoves("black", "liberties")
-            if moves == []: # if no moves:
-                moves = self.container.board.calcValidMoves("white", "liberties")
-                if moves == []: # if no moves:
-                    freeSpaces = self.container.board.calcValidMoves("black", "spaces")
-                    move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
-                    x, y = move[0], move[1]
-                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                    self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-                    self.container.board.processStones("white"); self.container.board.processStones("white")
-                    print("placed", x, y)
+        elif self.container.ai_level == "medium":
+            """
+            Priorities:
+            1   -   Take more than would be lost
+            2   -   Preservation
+            3   -   Offence
+            """
+            self.aiMedium()
 
+        elif self.container.ai_level == "hard":
+            pass
 
-                else:
-                    move = moves[random.randint(0, len(moves) - 1)]
-                    x, y = move[0], move[1]
-                    self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                    self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-                    self.container.board.processStones("white"); self.container.board.processStones("white")
-                    print("placed", x, y)
-
+    def aiEasy(self):
+        moves = self.container.board.calcValidMoves("black", "liberties")
+        if moves == []:  # if no moves:
+            moves = self.container.board.calcValidMoves("white", "liberties")
+            if moves == []:  # if no moves:
+                freeSpaces = self.container.board.calcValidMoves("black", "spaces")
+                move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
+                self.placeMove(move[0], move[1])
 
             else:
                 move = moves[random.randint(0, len(moves) - 1)]
-                x, y = move[0], move[1]
-                self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-                self.container.board.processStones("white"); self.container.board.processStones("white")
-                print("placed", x, y)
+                self.placeMove(move[0], move[1])
 
+        else:
+            move = moves[random.randint(0, len(moves) - 1)]
+            self.placeMove(move[0], move[1])
 
-        elif self.container.ai_level == "medium":
-            pass
-        elif self.container.ai_level == "hard":
-            pass
+    def aiMedium(self):
+        groups = self.container.board.getGroups()
+        for group in groups:
+            if group[0] == "black" and group[1] <= 2:  # defend
+                pass
+            elif group[0] == "white" and group[1] <= 2:  # attack
+                pass
+            else:
+                patternPos = self.container.board.checkPattern("black")
+                if len(patternPos) != 0:
+                    move = patternPos[0]
+                    self.placeMove(move[0], move[1])
+                else:
+                    self.aiEasy()
+
+    def placeMove(self, x, y):
+            self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+            self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
+            self.container.board.processStones("white");
+            self.container.board.processStones("white")
 
     def drawHover(self, x, y, delete):
         color = self.container.board.currentPlayer
