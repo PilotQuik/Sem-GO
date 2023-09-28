@@ -133,11 +133,9 @@ class Board:
                     self.positions[col][row] = 0
         # CHECK --------------------------------------------------------------------------------------------------------
         if checkMove != None:
-            print(checkMove[0], checkMove[1])
             pos = self.positions[checkMove[0]][checkMove[1]]
             # --------------------------------count
             cheeckGroup, checkLiberties = self.countLibertiesAndGroups(checkMove[0], checkMove[1], pos.color, group=[], liberties=0)
-            print(checkLiberties)
         # PROCESS ------------------------------------------------------------------------------------------------------
         for col in range(self.size):
             for row in range(self.size):
@@ -147,7 +145,6 @@ class Board:
                     group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
                     if liberties == 0:
                         for stone in group:
-                            print("to delete")
                             stonesToDeleteW.append(stone) if (self.positions[col][row].color
                                                               == "white") else stonesToDeleteB.append(stone)
         # DELETE -------------------------------------------------------------------------------------------------------
@@ -179,6 +176,27 @@ class Board:
                     if match == 3 and not [col, row] in matches and self.positions[col][row] == 0:
                         matches.append([col, row])
         return matches
+
+    def getGroups(self):
+        # [color, liberties, [positions]]
+        groups = []
+        # RESET --------------------------------------------------------------------------------------------------------
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone) and pos.marked == True:
+                    pos.marked = False
+                elif pos == 99:
+                    self.positions[col][row] = 0
+        # PROCESS ------------------------------------------------------------------------------------------------------
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone) and not pos.marked:
+                    # --------------------------------count
+                    group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
+                    groups.append([pos.color, liberties, group])
+        return groups
 
     def countLibertiesAndGroups(self, col, row, color, group, liberties):
         piece = self.positions[col][row]
