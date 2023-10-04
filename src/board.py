@@ -59,7 +59,7 @@ class Board:
                                 if not posOst.color == activePlayer:
                                     isLib = True
                         else: neighbours += 1
-                        if not neighbours == 4 and isLib: libs.append([col, row]); print("added ", col, row)
+                        if not neighbours == 4 and isLib: libs.append([col, row]); #print("added ", col, row)
             return libs
         if "spaces" in filter:
             spaces = []
@@ -116,7 +116,7 @@ class Board:
                     if isinstance(posOst, Stone):
                         neighbours += 1
                 else: neighbours += 1
-                if not neighbours == 4: isValid = True; print("added ", col, row)
+                if not neighbours == 4: isValid = True; #print("added ", col, row)
             return isValid
 
 
@@ -135,7 +135,7 @@ class Board:
         if checkMove != None:
             pos = self.positions[checkMove[0]][checkMove[1]]
             # --------------------------------count
-            cheeckGroup, checkLiberties = self.countLibertiesAndGroups(checkMove[0], checkMove[1], pos.color, group=[], liberties=0)
+            checkGroup, checkLiberties = self.countLibertiesAndGroups(checkMove[0], checkMove[1], pos.color, group=[], liberties=0)
         # PROCESS ------------------------------------------------------------------------------------------------------
         for col in range(self.size):
             for row in range(self.size):
@@ -178,7 +178,7 @@ class Board:
         return matches
 
     def getGroups(self):
-        # [color, liberties, [positions]]
+        # [color, [liberties], [positions]]
         groups = []
         # RESET --------------------------------------------------------------------------------------------------------
         for col in range(self.size):
@@ -186,8 +186,6 @@ class Board:
                 pos = self.positions[col][row]
                 if isinstance(pos, Stone) and pos.marked == True:
                     pos.marked = False
-                elif pos == 99:
-                    self.positions[col][row] = 0
         # PROCESS ------------------------------------------------------------------------------------------------------
         for col in range(self.size):
             for row in range(self.size):
@@ -195,8 +193,30 @@ class Board:
                 if isinstance(pos, Stone) and not pos.marked:
                     # --------------------------------count
                     group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
+                    # --------------------------------get liberties
+                    print(f"liberties: {liberties}")
+                    liberties = self.getLibertiesFromGroup(group)
                     groups.append([pos.color, liberties, group])
         return groups
+
+    def getLibertiesFromGroup(self, group):
+        liberties = []
+        for pos in group:
+            col, row = pos[0], pos[1]
+            print(col, row)
+            if row - 1 >= 0:
+                if not isinstance(self.positions[col][row - 1], Stone) and pos not in liberties:
+                    liberties.append([col, row - 1])
+            if row + 1 < self.size:
+                if not isinstance(self.positions[col][row + 1], Stone) and pos not in liberties:
+                    liberties.append([col, row + 1])
+            if col - 1 >= 0:
+                if not isinstance(self.positions[col - 1][row], Stone) and pos not in liberties:
+                    liberties.append([col - 1, row])
+            if col + 1 < self.size:
+                if not isinstance(self.positions[col + 1][row], Stone) and pos not in liberties:
+                    liberties.append([col + 1, row])
+        return liberties
 
     def countLibertiesAndGroups(self, col, row, color, group, liberties):
         piece = self.positions[col][row]

@@ -108,25 +108,72 @@ class Game(ttk.Frame):
             move = moves[random.randint(0, len(moves) - 1)]
             self.placeMove(move[0], move[1])
 
-    def aiMedium(self):
+    def aiMedium(self): # check move validity
+        board = self.container.board
         groups = self.container.board.getGroups()
+        groupsToDefend = []
+        groupsToAttack = []
+        # GET GROUPS ---------------------------------------------------------------------------------------------------
         for group in groups:
-            if group[0] == "black" and group[1] <= 2:  # defend
-                pass
-            elif group[0] == "white" and group[1] <= 2:  # attack
-                pass
+            if group[0] == "white" and len(group[1]) <= 2:  # defend
+                groupsToDefend.append(group)
+            elif group[0] == "black" and len(group[1]) <= 2:  # attack
+                groupsToAttack.append(group)
+        patternPos = self.container.board.checkPattern("white")
+        # FILTER MOVES -------------------------------------------------------------------------------------------------
+        for group in groupsToDefend:
+            for pos in group[1]:
+                x, y = pos[0], pos[1]
+                space = self.container.board.positions[x][y]
+                self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+                if board.positions[x][y] == 99 or not board.processStones("white", [pos[0], pos[1]]):
+                    group[1].remove(pos)
+                    print("--purged in Defend")
+                self.container.board.positions[x][y] = space
+            if len(group[1]) == 0: groupsToDefend.remove(group)
+        for group in groupsToAttack:
+            for pos in group[1]:
+                x, y = pos[0], pos[1]
+                space = self.container.board.positions[x][y]
+                self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+                if board.positions[pos[0]][pos[1]] == 99 or not board.processStones("white", [pos[0], pos[1]]):
+                    group[1].remove(pos)
+                    print("--purged in Attack")
+                self.container.board.positions[x][y] = space
+            if len(group[1]) == 0: groupsToAttack.remove(group)
+        for pos in patternPos:
+            x, y = pos[0], pos[1]
+            space = self.container.board.positions[x][y]
+            self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+            if board.positions[pos[0]][pos[1]] == 99 or not board.processStones("white", [pos[0], pos[1]]):
+                patternPos.remove(pos)
+                print("--purged in patternPos")
+            self.container.board.positions[x][y] = space
+
+        # MAKE MOVE ----------------------------------------------------------------------------------------------------
+        if groupsToDefend != []:
+            groupsToDefend.sort(key=len, reverse=True)
+            print(f"Defending: {groupsToDefend[0]} at {groupsToDefend[0][1][0]}")
+            self.placeMove(groupsToDefend[0][1][0][0], groupsToDefend[0][1][0][1])
+
+        elif groupsToAttack != []:
+            groupsToAttack.sort(key=len, reverse=True)
+            print(f"Attacking: {groupsToAttack[0]} at {groupsToAttack[0][1][0]}")
+            self.placeMove(groupsToAttack[0][1][0][0], groupsToAttack[0][1][0][1])
+
+        else:
+            patternPos = self.container.board.checkPattern("black")
+            if len(patternPos) != 0:
+                print(f"Using pattern: {patternPos[0]}")
+                move = patternPos[0]
+                self.placeMove(move[0], move[1])
             else:
-                patternPos = self.container.board.checkPattern("black")
-                if len(patternPos) != 0:
-                    move = patternPos[0]
-                    self.placeMove(move[0], move[1])
-                else:
-                    self.aiEasy()
+                self.aiEasy()
 
     def placeMove(self, x, y):
             self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-            self.container.board.processStones("white");
+            self.container.board.processStones("white")
             self.container.board.processStones("white")
 
     def drawHover(self, x, y, delete):
