@@ -11,17 +11,11 @@ class Board:
         self.validMoves = []
         self.currentPlayer = "black"
 
-    def displayStones(self):
-        for col in range(self.size):
-            for row in range(self.size):
-                if isinstance(self.positions[col][row], Stone):
-                    len = int(min(self.container.winfo_width(), self.container.winfo_height()))
-                    length = int(len - 100)
-                    boardPad = length / (self.container.board.size + 1)
-                    self.positions[col][row].boardPad = boardPad
-                    self.positions[col][row].draw(self.container.frame.canvas, "Game")
+        len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+        length = int(len - 100)
+        self.boardPad = length / (self.size + 1)
 
-    def calcValidMoves(self, activePlayer, *filter):
+    def calcMoves(self, activePlayer, *filter):
         if "liberties" in filter:
             libs = []
             # resetting groups and stone markers
@@ -119,6 +113,39 @@ class Board:
                 if not neighbours == 4: isValid = True; #print("added ", col, row)
             return isValid
 
+    def calcValidMoves(self, colorToMove):
+        validMoves = []
+        board = self.positions
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = board[col][row]
+                if not isinstance(pos, Stone) and pos != 99:
+                    board[col][row] = Stone(col, row, colorToMove, self.boardPad)
+
+    def checkMove(self):
+        pass
+
+    def getGroups(self):
+        # [color, [liberties], [positions]]
+        groups = []
+        # RESET --------------------------------------------------------------------------------------------------------
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone) and pos.marked == True:
+                    pos.marked = False
+        # PROCESS ------------------------------------------------------------------------------------------------------
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone) and not pos.marked:
+                    # --------------------------------count
+                    group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
+                    # --------------------------------get liberties
+                    print(f"liberties: {liberties}")
+                    liberties = self.getLibertiesFromGroup(group)
+                    groups.append([pos.color, liberties, group])
+        return groups
 
     def processStones(self, color, checkMove=None):
         stonesToDeleteW = []
@@ -177,28 +204,6 @@ class Board:
                         matches.append([col, row])
         return matches
 
-    def getGroups(self):
-        # [color, [liberties], [positions]]
-        groups = []
-        # RESET --------------------------------------------------------------------------------------------------------
-        for col in range(self.size):
-            for row in range(self.size):
-                pos = self.positions[col][row]
-                if isinstance(pos, Stone) and pos.marked == True:
-                    pos.marked = False
-        # PROCESS ------------------------------------------------------------------------------------------------------
-        for col in range(self.size):
-            for row in range(self.size):
-                pos = self.positions[col][row]
-                if isinstance(pos, Stone) and not pos.marked:
-                    # --------------------------------count
-                    group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
-                    # --------------------------------get liberties
-                    print(f"liberties: {liberties}")
-                    liberties = self.getLibertiesFromGroup(group)
-                    groups.append([pos.color, liberties, group])
-        return groups
-
     def getLibertiesFromGroup(self, group):
         liberties = []
         for pos in group:
@@ -236,6 +241,15 @@ class Board:
             liberties += 1
         return group, liberties
 
+    def displayStones(self):
+        for col in range(self.size):
+            for row in range(self.size):
+                if isinstance(self.positions[col][row], Stone):
+                    len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+                    length = int(len - 100)
+                    self.boardPad = length / (self.container.board.size + 1)
+                    self.positions[col][row].boardPad = self.boardPad
+                    self.positions[col][row].draw(self.container.frame.canvas, "Game")
 
     def saveBoard(self):
         with open("assets/bin.dat", "wb") as f:

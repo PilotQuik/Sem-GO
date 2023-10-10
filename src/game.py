@@ -92,11 +92,11 @@ class Game(ttk.Frame):
             pass
 
     def aiEasy(self):
-        moves = self.container.board.calcValidMoves("black", "liberties")
+        moves = self.container.board.calcMoves("black", "liberties")
         if moves == []:  # if no moves:
-            moves = self.container.board.calcValidMoves("white", "liberties")
+            moves = self.container.board.calcMoves("white", "liberties")
             if moves == []:  # if no moves:
-                freeSpaces = self.container.board.calcValidMoves("black", "spaces")
+                freeSpaces = self.container.board.calcMoves("black", "spaces")
                 move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
                 self.placeMove(move[0], move[1])
 
