@@ -179,6 +179,9 @@ class Board:
         if checkMove == None:
             for pos in stonesToDeleteB if color == "white" else stonesToDeleteW:
                 self.positions[pos[0]][pos[1]] = 99
+                if color == "white":
+                    self.stonesCapturedByWhite += 1
+                else: self.stonesCapturedByBlack += 1
                 self.container.refresh()
         else:
             toDelete = stonesToDeleteB if color == "white" else stonesToDeleteW

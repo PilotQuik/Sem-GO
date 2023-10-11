@@ -72,6 +72,20 @@ class Game(ttk.Frame):
                                             self.pad + self.boardPad + row * self.boardPad - 3,
                                             self.pad + self.boardPad + col * self.boardPad + 3,
                                             self.pad + self.boardPad + row * self.boardPad + 3, fill="black")
+        # draw stone counter
+        self.canvas.create_oval(len + self.boardPad * 0.5, self.pad,
+                                len + self.boardPad * 0.5 + self.boardPad * 1.5,
+                                self.pad + self.boardPad * 1.5, fill="black")
+        self.canvas.create_oval(len + self.boardPad * 0.5, self.pad + self.boardPad * 3,
+                                len + self.boardPad * 0.5 + self.boardPad * 1.5,
+                                self.pad + self.boardPad * 3 + self.boardPad * 1.5, fill="white")
+        fontSize = len//30
+        self.canvas.create_text(len + self.boardPad * 0.5 + self.boardPad * 0.75, self.pad + self.boardPad * 2,
+                                text=self.container.board.stonesCapturedByWhite, fill="black",
+                                font=(FONT, fontSize, "bold"), justify="center")
+        self.canvas.create_text(len + self.boardPad * 0.5 + self.boardPad * 0.75, self.pad + self.boardPad * 3 + self.boardPad * 2,
+                                text=self.container.board.stonesCapturedByBlack, fill="black",
+                                font=(FONT, fontSize, "bold"), justify="center")
 
         self.container.board.displayStones()
 
@@ -151,22 +165,22 @@ class Game(ttk.Frame):
             self.container.board.positions[x][y] = space
 
         # MAKE MOVE ----------------------------------------------------------------------------------------------------
-        if groupsToDefend != []:
-            groupsToDefend.sort(key=len, reverse=True)
-            print(f"Defending: {groupsToDefend[0]} at {groupsToDefend[0][1][0]}")
-            self.placeMove(groupsToDefend[0][1][0][0], groupsToDefend[0][1][0][1])
-
-        elif groupsToAttack != []:
-            groupsToAttack.sort(key=len, reverse=True)
-            print(f"Attacking: {groupsToAttack[0]} at {groupsToAttack[0][1][0]}")
-            self.placeMove(groupsToAttack[0][1][0][0], groupsToAttack[0][1][0][1])
-
+        patternPos = self.container.board.checkPattern("black")
+        if len(patternPos) != 0:
+            print(f"Using pattern: {patternPos[0]}")
+            move = patternPos[0]
+            self.placeMove(move[0], move[1])
         else:
-            patternPos = self.container.board.checkPattern("black")
-            if len(patternPos) != 0:
-                print(f"Using pattern: {patternPos[0]}")
-                move = patternPos[0]
-                self.placeMove(move[0], move[1])
+            if groupsToDefend != []:
+                groupsToDefend.sort(key=len, reverse=True)
+                print(f"Defending: {groupsToDefend[0]} at {groupsToDefend[0][1][0]}")
+                self.placeMove(groupsToDefend[0][1][0][0], groupsToDefend[0][1][0][1])
+
+            elif groupsToAttack != []:
+                groupsToAttack.sort(key=len, reverse=True)
+                print(f"Attacking: {groupsToAttack[0]} at {groupsToAttack[0][1][0]}")
+                self.placeMove(groupsToAttack[0][1][0][0], groupsToAttack[0][1][0][1])
+
             else:
                 self.aiEasy()
 
