@@ -10,6 +10,8 @@ class Board:
         self.positions = [[0 for row in range(self.size)] for col in range(self.size)]
         self.validMoves = []
         self.currentPlayer = "black"
+        self.stonesCapturedByBlack = 0
+        self.stonesCapturedByWhite = 0
 
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         length = int(len - 100)
@@ -121,9 +123,8 @@ class Board:
                 pos = board[col][row]
                 if not isinstance(pos, Stone) and pos != 99:
                     board[col][row] = Stone(col, row, colorToMove, self.boardPad)
-
-    def checkMove(self):
-        pass
+                    if self.processStones(colorToMove, checkMove=[col, row]):
+                        validMoves.append([col, row])
 
     def getGroups(self):
         # [color, [liberties], [positions]]
