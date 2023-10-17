@@ -17,6 +17,17 @@ class Board:
         length = int(len - 100)
         self.boardPad = length / (self.size + 1)
 
+    def getStoneDiff(self):
+        black, white = 0, 0
+        for col in range(self.size):
+            for row in range(self.size):
+                if isinstance(self.positions[col][row], Stone):
+                    if self.positions[col][row].color == "white":
+                        white += 1
+                    else: black += 1
+        return black - white
+
+
     def calcMoves(self, activePlayer, *filter):
         if "liberties" in filter:
             libs = []
@@ -125,6 +136,8 @@ class Board:
                     board[col][row] = Stone(col, row, colorToMove, self.boardPad)
                     if self.processStones(colorToMove, checkMove=[col, row]):
                         validMoves.append([col, row])
+                    board[col][row] = pos
+        return validMoves
 
     def getGroups(self):
         # [color, [liberties], [positions]]

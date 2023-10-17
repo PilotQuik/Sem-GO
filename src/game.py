@@ -1,5 +1,9 @@
 import random
+import sys
 import time
+from math import inf
+from timeit import default_timer as timer
+from copy import deepcopy
 
 from tkinter import ttk
 from tkinter import *
@@ -103,7 +107,7 @@ class Game(ttk.Frame):
             self.aiMedium()
 
         elif self.container.ai_level == "hard":
-            pass
+            self.aiHard()
 
     def aiEasy(self):
         moves = self.container.board.calcMoves("black", "liberties")
@@ -183,6 +187,62 @@ class Game(ttk.Frame):
 
             else:
                 self.aiEasy()
+
+    def aiHard(self):
+        progress = 0
+        start = timer()
+        board = self.container.board
+        depth = 0
+        bestMove = None
+        possibleMoves = board.calcValidMoves("white")
+
+        bestScore = inf
+        for i in possibleMoves:
+            pos = deepcopy(board.positions)
+            board.positions[i[0]][i[1]] = Stone(col=i[0], row=i[1], color="white", boardPad=self.boardPad)
+            board.processStones("white")
+            score = self.minimax(board, depth, True)
+            board.positions = pos
+            if bestScore != score:
+                bestMove = i
+                print(" found")
+            bestScore = min(score, bestScore)
+
+            progress += 1
+            print("\r", f"Loading: {round(progress / len(possibleMoves) * 100, 2)}% score: {bestScore}", end="")
+
+        time1 = timer() - start
+        print("time taken:", time1)
+        print(f"best move: {bestMove}")
+
+    def minimax(self, board, depth, isMaximizer):
+
+        res = board.getStoneDiff() # b - w >> ai likes negative
+        if depth == 2: return res
+
+        possibleMoves = board.calcValidMoves("black") if isMaximizer else (board.calcValidMoves("white"))
+
+        if isMaximizer:
+            bestScore = -inf
+            for i in possibleMoves:
+                pos = deepcopy(board.positions)
+                board.positions[i[0]][i[1]] = Stone(col=i[0], row=i[1], color="black", boardPad=self.boardPad)
+                board.processStones("black")
+                score = self.minimax(board, depth + 1, False)
+                board.positions = pos
+                bestScore = max(score, bestScore)
+            return bestScore
+
+        else:
+            bestScore = inf
+            for i in possibleMoves:
+                pos = deepcopy(board.positions)
+                board.positions[i[0]][i[1]] = Stone(col=i[0], row=i[1], color="white", boardPad=self.boardPad)
+                board.processStones("white")
+                score = self.minimax(board, depth + 1, True)
+                board.positions = pos
+                bestScore = min(score, bestScore)
+            return bestScore
 
     def placeMove(self, x, y):
             self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
