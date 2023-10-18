@@ -11,7 +11,7 @@ from tkinter import *
 from const import *
 from main import *
 from stone import Stone
-from custom import Button_
+from custom import Button_, ProgressBar
 
 
 class Game(ttk.Frame):
@@ -205,15 +205,15 @@ class Game(ttk.Frame):
             board.positions = pos
             if bestScore != score:
                 bestMove = i
-                print(" found")
             bestScore = min(score, bestScore)
 
             progress += 1
-            print("\r", f"Loading: {round(progress / len(possibleMoves) * 100, 2)}% score: {bestScore}", end="")
+            ProgressBar.progressBar(50, progress / len(possibleMoves), "Calculating")
 
-        time1 = timer() - start
-        print("time taken:", time1)
-        print(f"best move: {bestMove}")
+        time1 = round(timer() - start, 2)
+        self.container.refresh()
+        print(f"time taken: {time1}s  ||  best move: {bestMove}", )
+        print(f"")
 
     def minimax(self, board, depth, isMaximizer):
 

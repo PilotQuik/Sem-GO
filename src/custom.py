@@ -29,3 +29,13 @@ class RoundRect:
               x1, y2-radius, x1, y2-radius, x1, y1+radius, x1, y1+radius, x1, y1]
 
         self.roundRect = container.create_polygon(self.points, **kwargsPolygon, smooth=True)
+
+class ProgressBar:
+    def progressBar(length, progress, title):
+        percentage = round(progress * 100, 2)
+        bar = round(length * progress) * "-" + ">" + (length - round(length * progress)) * " "
+        if progress != 1:
+            print("\r", f"{title}: |{bar}| {percentage}%", end=" ")
+        else:
+            bar = (length + 1) * "-"
+            print("\r", f"{title}: |{bar}| 100%", end="\n")
