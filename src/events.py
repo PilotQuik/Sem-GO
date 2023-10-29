@@ -136,7 +136,7 @@ class Event:
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
-                    self.container.frame.aiHard()
+                    self.container.board.calcInfluence()
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:

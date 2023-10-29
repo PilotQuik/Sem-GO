@@ -1,4 +1,5 @@
 import pickle
+from copy import deepcopy
 
 from stone import Stone
 from const import *
@@ -12,6 +13,8 @@ class Board:
         self.currentPlayer = "black"
         self.stonesCapturedByBlack = 0
         self.stonesCapturedByWhite = 0
+
+        self.influence = []
 
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         length = int(len - 100)
@@ -27,6 +30,33 @@ class Board:
                     else: black += 1
         return black - white
 
+    def calcInfluence(self):
+        # black stone = 50, white stone = -50
+        self.influence = [[0 for row in range(self.size)] for col in range(self.size)]
+        influence = deepcopy(self.influence)
+
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone):
+                    self.influence[col][row] = 50 if pos.color == "black" else -50
+
+        for i in range(4):
+            for col in range(self.size):
+                for row in range(self.size):
+                    pos = self.influence[col][row]
+                    f = 1 if pos > 0 else -1
+                    if pos != 0:
+
+                        if col - 1 >= 0:
+                            influence[col - 1][row] += f
+                        if col + 1 < self.size:
+                            influence[col + 1][row] += f
+                        if row - 1 >= 0:
+                            influence[col][row - 1] += f
+                        if row + 1 < self.size:
+                            influence[col][row + 1] += f
+            self.influence = [[sum(x) for x in zip(self.influence[i], influence[i])] for i in range(self.size)]
 
     def calcMoves(self, activePlayer, *filter):
         if "liberties" in filter:
