@@ -58,6 +58,45 @@ class Board:
                             influence[col][row + 1] += f
             self.influence = [[sum(x) for x in zip(self.influence[i], influence[i])] for i in range(self.size)]
 
+        # debug -------------------------------------------------
+        i, j = 0, 0
+        for col in range(self.size):
+            for row in range(self.size):
+                if self.influence[col][row] > 0:
+                    i += 1
+                elif self.influence[col][row] < 0:
+                    j += 1
+        print(f"Black terretory: {i} ; White terretory: {j}")
+
+    def calcTerretoriesFromInfluence(self):
+        influenceMap = deepcopy(self.influence)
+        terretories = []
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = influenceMap[col][row]
+                if pos != 0:
+                    if pos < 0:
+                        terretories.append(["white", self.getTerretory(influenceMap, col, row, 1)])
+                    else:
+                        terretories.append(["black", self.getTerretory(influenceMap, col, row, -1)])
+        return terretories
+    def getTerretory(self, map, col, row, neg, terretory=[]):
+        pos = map[col][row]
+        if pos != 0 and pos * neg < 0:
+            map[col][row] = 0
+            terretory.append([col, row])
+
+            if row - 1 >= 0:
+                terretory = self.getTerretory(map, col, row - 1, neg, terretory)  # oben
+            if row + 1 < self.size:
+                terretory = self.getTerretory(map, col, row + 1, neg, terretory)  # unten
+            if col - 1 >= 0:
+                terretory = self.getTerretory(map, col - 1, row, neg, terretory)  # links
+            if col + 1 < self.size:
+                terretory = self.getTerretory(map, col + 1, row, neg, terretory)  # rechts
+
+        return terretory
+
     def calcMoves(self, activePlayer, *filter):
         if "liberties" in filter:
             libs = []
