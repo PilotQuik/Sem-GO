@@ -337,6 +337,21 @@ class Board:
                     self.positions[col][row].boardPad = self.boardPad
                     self.positions[col][row].draw(self.container.frame.canvas, "Game")
 
+    def displayTerretories(self):
+        for col in range(self.size):
+            for row in range(self.size):
+                if self.influence[col][row] != 0:
+                    len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+                    length = int(len - 100)
+                    self.boardPad = length / (self.container.board.size + 1)
+                    self.container.frame.canvas.create_oval(
+                        50 + self.boardPad + col * self.boardPad - self.boardPad / 5,
+                        50 + self.boardPad + row * self.boardPad - self.boardPad / 5,
+                        50 + self.boardPad + col * self.boardPad + self.boardPad / 5,
+                        50 + self.boardPad + row * self.boardPad + self.boardPad / 5,
+                        fill="black" if self.influence[col][row] > 0 else "white",
+                    outline="white" if self.influence[col][row] > 0 else "black")
+
     def saveBoard(self):
         with open("assets/bin.dat", "wb") as f:
             try:
