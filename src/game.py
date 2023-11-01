@@ -42,6 +42,7 @@ class Game(ttk.Frame):
         Button_(46, 8, self.canvas, name="back-button", text="MENU", font=(FONT, 20, "bold"))
         Button_(166, 8, self.canvas, name="pass-button", text="PASS", font=(FONT, 20, "bold"))
         Button_(286, 8, self.canvas, name="undo-button", text="UNDO", font=(FONT, 20, "bold"))
+        Button_(406, 8, self.canvas, name="resign-button", text="RESIGN", font=(FONT, 20, "bold"))
 
         self.pack()
 
