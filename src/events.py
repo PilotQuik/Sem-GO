@@ -52,9 +52,13 @@ class Event:
                 self.container.frame.displayBoard()
 
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
-            # return button
+            # top bar
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
+            elif str(event.widget).split(".")[-1] == "pass-button":
+                print("pass")
+            elif str(event.widget).split(".")[-1] == "undo-button":
+                print("undo")
             # player move
             if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)

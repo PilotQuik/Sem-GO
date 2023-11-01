@@ -39,8 +39,10 @@ class Game(ttk.Frame):
         self.canvas = Canvas(self, width=10000, height=10000, bg='white')
         self.canvas.pack(side=TOP, fill=BOTH, expand=NO)
 
-        Button_(3, 5, self.canvas, name="back-button", text="<<",
-                font=(FONT, 25, "bold"))
+        Button_(46, 8, self.canvas, name="back-button", text="MENU", font=(FONT, 20, "bold"))
+        Button_(166, 8, self.canvas, name="pass-button", text="PASS", font=(FONT, 20, "bold"))
+        Button_(286, 8, self.canvas, name="undo-button", text="UNDO", font=(FONT, 20, "bold"))
+
         self.pack()
 
     def calcSquare(self, x, y):
