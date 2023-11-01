@@ -99,6 +99,8 @@ class Game(ttk.Frame):
         self.container.board.displayStones()
 
     def makeMoveAI(self):
+        if len(self.container.board.history) == 0:
+            return
         if self.container.ai_level == "easy":
             self.aiEasy()
 

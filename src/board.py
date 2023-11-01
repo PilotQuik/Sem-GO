@@ -358,17 +358,22 @@ class Board:
 
     def undoMove(self):
         if len(self.history) == 0:
-            pass
+            return
         elif len(self.history) == 1:
-            self.positions = [[0 for row in range(self.size)] for col in range(self.size)]
+            self.positions = [[0 for row in range(self.size)]for col in range(self.size)]
             self.history.pop()
             self.container.refresh()
-            self.currentPlayer = "black" if self.currentPlayer == "white" else "white"
-        else:
+            return
+        elif self.container.gamemode == "ai" and len(self.history) % 2 == 0:
             self.positions = deepcopy(self.history[-2])
             self.history.pop()
+            self.undoMove()
             self.container.refresh()
-            self.currentPlayer = "black" if self.currentPlayer == "white" else "white"
+            return
+        self.positions = deepcopy(self.history[-2])
+        self.history.pop()
+        self.container.refresh()
+        self.currentPlayer = "black" if self.currentPlayer == "white" else "white"
 
     def saveBoard(self):
         with open("assets/bin.dat", "wb") as f:
