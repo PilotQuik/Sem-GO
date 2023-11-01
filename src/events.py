@@ -137,6 +137,8 @@ class Event:
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
                     self.container.board.calcInfluence()
+                    print(self.container.board.calcTerretoriesFromInfluence())
+                    self.container.board.displayTerretories()
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
@@ -154,9 +156,9 @@ class Event:
                     event.x >= pad and event.y >= pad):
                 if x in range(0, self.container.board.size) and y in range(0, self.container.board.size):
                     if not isinstance(self.container.board.positions[x][y], Stone):
-                        #print(self.container.board.positions[x][y]) # show content of square
                         self.container.frame.drawHover(x, y, False)
                     else: self.container.frame.drawHover(x, y, True)
+            else: self.container.frame.drawHover(x, y, True)
 
     def config(self, event=None):
         #print(event.widget, event.width, event.height)
