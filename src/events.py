@@ -58,6 +58,7 @@ class Event:
             elif str(event.widget).split(".")[-1] == "pass-button":
                 print("pass")
             elif str(event.widget).split(".")[-1] == "undo-button":
+                self.container.board.undoMove()
                 print("undo")
             # player move
             if str(event.widget).split(".")[-1] == "!canvas":
@@ -70,10 +71,10 @@ class Event:
                     # check move validity
                     if not isinstance(pos, Stone) and not pos == 99:
                         self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
-                        # make move
                         if self.container.board.processStones(color, checkMove=[x, y]):
                             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                             self.container.board.processStones(color)
+                            self.container.board.archiveBoard()
                             if self.container.gamemode == "player":
                                 self.container.board.currentPlayer = "black" if color == "white" else "white"
                             elif self.container.gamemode == "ai":

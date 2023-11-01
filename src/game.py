@@ -253,6 +253,7 @@ class Game(ttk.Frame):
             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
             self.container.board.processStones("white")
             self.container.board.processStones("white")
+            self.container.board.archiveBoard()
 
     def drawHover(self, x, y, delete):
         color = self.container.board.currentPlayer

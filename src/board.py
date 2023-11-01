@@ -13,6 +13,7 @@ class Board:
         self.currentPlayer = "black"
         self.stonesCapturedByBlack = 0
         self.stonesCapturedByWhite = 0
+        self.history = []
 
         self.influence = []
 
@@ -351,6 +352,24 @@ class Board:
                         50 + self.boardPad + row * self.boardPad + self.boardPad / 5,
                         fill="black" if self.influence[col][row] > 0 else "white",
                     outline="white" if self.influence[col][row] > 0 else "black")
+
+    def archiveBoard(self):
+        self.history.append(deepcopy(self.positions))
+
+    def undoMove(self):
+        print(f"history: {len(self.history)}")
+        if len(self.history) == 0:
+            pass
+        elif len(self.history) == 1:
+            self.positions = [[0 for row in range(self.size)] for col in range(self.size)]
+            self.history.pop()
+            self.container.refresh()
+            self.currentPlayer = "black" if self.currentPlayer == "white" else "white"
+        else:
+            self.positions = deepcopy(self.history[-2])
+            self.history.pop()
+            self.container.refresh()
+            self.currentPlayer = "black" if self.currentPlayer == "white" else "white"
 
     def saveBoard(self):
         with open("assets/bin.dat", "wb") as f:
