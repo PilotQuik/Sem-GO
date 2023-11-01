@@ -357,7 +357,6 @@ class Board:
         self.history.append(deepcopy(self.positions))
 
     def undoMove(self):
-        print(f"history: {len(self.history)}")
         if len(self.history) == 0:
             pass
         elif len(self.history) == 1:

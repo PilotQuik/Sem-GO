@@ -77,3 +77,9 @@ PATTERNS = [  # rule: [[own color], [other color]], [0, 0] = place location
     [[[-1, -1], [-1, 1]], [0, 1]],
 
 ]
+
+PATTERNS2 = [
+
+    #[[col1], [col2], [col1-pos], weight]
+
+]

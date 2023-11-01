@@ -59,7 +59,6 @@ class Event:
                 print("pass")
             elif str(event.widget).split(".")[-1] == "undo-button":
                 self.container.board.undoMove()
-                print("undo")
             # player move
             if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)
