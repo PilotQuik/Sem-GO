@@ -6,6 +6,7 @@ from timeit import default_timer as timer
 from copy import deepcopy
 
 from tkinter import ttk
+from tkinter.messagebox import showinfo
 from tkinter import *
 
 from const import *
@@ -25,7 +26,7 @@ class Game(ttk.Frame):
         self.boardPad = 80
         self.hover = None
 
-        self.container.title("Menu")
+        self.container.title("Game")
         self.container.resizable(True, True)
         self.container.minsize(500, 500)
 
@@ -252,11 +253,12 @@ class Game(ttk.Frame):
             return bestScore
 
     def placeMove(self, x, y):
-            self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-            self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-            self.container.board.processStones("white")
-            self.container.board.processStones("white")
-            self.container.board.archiveBoard()
+        self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
+        self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
+        self.container.board.processStones("white")
+        self.container.board.processStones("white")
+        self.container.board.archiveBoard()
+        self.container.board.passCounter = 0
 
     def drawHover(self, x, y, delete):
         color = self.container.board.currentPlayer
@@ -276,6 +278,14 @@ class Game(ttk.Frame):
                 50 + self.boardPad + x * self.boardPad + self.boardPad / 2.5,
                 50 + self.boardPad + y * self.boardPad + self.boardPad / 2.5,
                 fill=HOVER_B)
+
+    def passConfirmation(self):
+        out = tk.messagebox.askquestion('Player-Confirmation', 'Are you sure you want to pass your turn?\n'
+                                                               'You will give 1 stone to your opponent.')
+        if out == 'yes':
+            return True
+        else:
+            return False
 
     def drawStone(self):
         pass

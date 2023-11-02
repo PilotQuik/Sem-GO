@@ -56,7 +56,17 @@ class Event:
             if str(event.widget).split(".")[-1] == "back-button":
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
             elif str(event.widget).split(".")[-1] == "pass-button":
-                print("pass")
+                if self.container.frame.passConfirmation():
+                    if self.container.board.currentPlayer == "white":
+                        self.container.board.stonesCapturedByBlack += 1
+                        self.container.board.currentPlayer = "black"
+                    else:
+                        self.container.board.stonesCapturedByWhite += 1
+                        self.container.board.currentPlayer = "white"
+                    self.container.refresh()
+                    self.container.board.passCounter += 1
+                    if self.container.board.passCounter == 2:
+                        print("endgame evaluation")
             elif str(event.widget).split(".")[-1] == "undo-button":
                 self.container.board.undoMove()
             elif str(event.widget).split(".")[-1] == "resign-button":
@@ -76,6 +86,7 @@ class Event:
                             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                             self.container.board.processStones(color)
                             self.container.board.archiveBoard()
+                            self.container.board.passCounter = 0
                             if self.container.gamemode == "player":
                                 self.container.board.currentPlayer = "black" if color == "white" else "white"
                             elif self.container.gamemode == "ai":

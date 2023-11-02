@@ -14,6 +14,7 @@ class Board:
         self.stonesCapturedByBlack = 0
         self.stonesCapturedByWhite = 0
         self.history = []
+        self.passCounter = 0
 
         self.influence = []
 
