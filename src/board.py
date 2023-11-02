@@ -354,24 +354,29 @@ class Board:
                         fill="black" if self.influence[col][row] > 0 else "white",
                     outline="white" if self.influence[col][row] > 0 else "black")
 
-    def archiveBoard(self):
-        self.history.append(deepcopy(self.positions))
+    def archiveBoard(self, move):
+        self.history.append([deepcopy(self.positions), move])
 
     def undoMove(self):
-        if len(self.history) == 0:
+        if self.history[-1][1] == "white":
+            self.stonesCapturedByBlack -= 1
+        elif self.history[-1][1] == "black":
+            self.stonesCapturedByWhite -= 1
+        elif len(self.history) == 0:
             return
         elif len(self.history) == 1:
             self.positions = [[0 for row in range(self.size)]for col in range(self.size)]
+
             self.history.pop()
             self.container.refresh()
             return
         elif self.container.gamemode == "ai" and len(self.history) % 2 == 0:
-            self.positions = deepcopy(self.history[-2])
+            self.positions = deepcopy(self.history[-2][0])
             self.history.pop()
             self.undoMove()
             self.container.refresh()
             return
-        self.positions = deepcopy(self.history[-2])
+        self.positions = deepcopy(self.history[-2][0])
         self.history.pop()
         self.container.refresh()
         self.currentPlayer = "black" if self.currentPlayer == "white" else "white"

@@ -257,7 +257,7 @@ class Game(ttk.Frame):
         self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
         self.container.board.processStones("white")
         self.container.board.processStones("white")
-        self.container.board.archiveBoard()
+        self.container.board.archiveBoard([x, y])
         self.container.board.passCounter = 0
 
     def drawHover(self, x, y, delete):
