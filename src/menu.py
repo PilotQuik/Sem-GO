@@ -77,6 +77,7 @@ class Menu(Label):
                                             padLeft + self.boardPad + col * self.boardPad + 3,
                                             pad + self.boardPad + row * self.boardPad + 3,
                                             fill=self.container.board_line, outline=self.container.board_line)
+
         for col in range(self.container.board.size):
             for row in range(self.container.board.size):
                 if isinstance(self.container.board.positions[col][row], Stone):
