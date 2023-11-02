@@ -3,7 +3,8 @@ from tkinter import *
 from const import *
 
 class Button_(Label):
-    def __init__(self, x, y, container, name="!label", text="", fg=BUTTON_COL, font=("Impact", 10), background=BACKGROUND, cursor="hand2"):
+    def __init__(self, x, y, container, name="!label", text="", fg=BUTTON_COL, font=("Impact", 10),
+                 background=BACKGROUND, cursor="hand2", **kwargs):
         super().__init__(container)
 
         self.container = container
@@ -17,7 +18,7 @@ class Button_(Label):
         self.cursor = cursor
 
         self.button = Label(self.container, name=self.name, text=self.text, fg=self.fg, font=self.font,
-                                 background=self.background, cursor=self.cursor)
+                                 background=self.background, cursor=self.cursor, **kwargs)
         self.button.place(x=self.x, y=self.y)
 
 class RoundRect:

@@ -11,14 +11,36 @@ ROWS = 19
 COLS = 19
 SQSIZE = GAME_WIDTH // COLS
 
-BACKGROUND = "white"
+FONT = ""
 TRANSPARENT = "#fefefe"
-BUTTON_COL = "black"
-BUTTON_COL_CLICKED = "#ff9e17"
-BUTTON_COL_SELECTED = "#1677ff"
+# classic theme
+BACKGROUND = "#c8b599"
+BUTTON_COL = "#000000"
+BUTTON_COL_CLICKED = "#ffa200"
+BUTTON_COL_SELECTED = "#005eff"
+BOARD_COL = "#c8b599"
+BOARD_LINE = "#000000"
 HOVER_B = "gray20"
 HOVER_W = "gray80"
-FONT = ""
+#light theme
+BACKGROUND_LIGHT = "#FFFFFF"
+BUTTON_COL_LIGHT = "#000000"
+BUTTON_COL_CLICKED_LIGHT = "#ffa200"
+BUTTON_COL_SELECTED_LIGHT = "#005eff"
+BOARD_COL_LIGHT = "#FFFFFF"
+BOARD_LINE_LIGHT = "#000000"
+HOVER_B_LIGHT = "gray20"
+HOVER_W_LIGHT = "gray80"
+#dark theme
+BACKGROUND_DARK = "#232931"
+BUTTON_COL_DARK = "#FFE0B8"
+BUTTON_COL_CLICKED_DARK = "#ffa200"
+BUTTON_COL_SELECTED_DARK = "#005eff"
+BOARD_COL_DARK = ""
+BOARD_LINE_DARK = "#FFE0B8"
+HOVER_B_DARK = "gray20"
+HOVER_W_DARK = "gray80"
+
 
 PATTERNS = [  # rule: [[own color], [other color]], [0, 0] = place location
     [[[-1, 0], [1, 0]], [0, 1]],  # a standard ------

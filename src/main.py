@@ -21,6 +21,15 @@ class Root(tk.Tk):
         self.theme = "classic"
         self.board = Board(self, 9)
 
+        self.background = BACKGROUND
+        self.button_col = BUTTON_COL
+        self.button_col_clicked = BUTTON_COL_CLICKED
+        self.button_col_selected = BUTTON_COL_SELECTED
+        self.board_col = BOARD_COL
+        self.board_line = BOARD_LINE
+        self.hover_b = HOVER_B
+        self.hover_w = HOVER_W
+
         self.frame = Menu(self)
         self.event = Event(self)
 

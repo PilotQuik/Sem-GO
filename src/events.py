@@ -136,12 +136,35 @@ class Event:
             # theme
             elif str(event.widget).split(".")[-1] == "classic-button":
                 self.container.theme = "classic"
+                self.container.background = BACKGROUND
+                self.container.button_col = BUTTON_COL
+                self.container.button_col_clicked = BUTTON_COL_CLICKED
+                self.container.button_col_selected = BUTTON_COL_SELECTED
+                self.container.board_col = BOARD_COL
+                self.container.hover_b = HOVER_B
+                self.container.hover_w = HOVER_W
                 self.container.frame.displayCanvas()
             elif str(event.widget).split(".")[-1] == "light-button":
-                self.container.theme = "minimal"
+                self.container.theme = "light"
+                self.container.background = BACKGROUND_LIGHT
+                self.container.button_col = BUTTON_COL_LIGHT
+                self.container.button_col_clicked = BUTTON_COL_CLICKED_LIGHT
+                self.container.button_col_selected = BUTTON_COL_SELECTED_LIGHT
+                self.container.board_col = BOARD_COL_LIGHT
+                self.container.board_line = BOARD_LINE_LIGHT
+                self.container.hover_b = HOVER_B_LIGHT
+                self.container.hover_w = HOVER_W_LIGHT
                 self.container.frame.displayCanvas()
             elif str(event.widget).split(".")[-1] == "dark-button":
-                self.container.theme = "error"
+                self.container.theme = "dark"
+                self.container.background = BACKGROUND_DARK
+                self.container.button_col = BUTTON_COL_DARK
+                self.container.button_col_clicked = BUTTON_COL_CLICKED_DARK
+                self.container.button_col_selected = BUTTON_COL_SELECTED_DARK
+                self.container.board_col = BOARD_COL_DARK
+                self.container.board_line = BOARD_LINE_DARK
+                self.container.hover_b = HOVER_B_DARK
+                self.container.hover_w = HOVER_W_DARK
                 self.container.frame.displayCanvas()
 
     def mouse3(self, event=NONE):
@@ -161,11 +184,12 @@ class Event:
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
-            event.widget.config(fg=BUTTON_COL_CLICKED)
+            event.widget.config(fg=self.container.button_col_clicked)
+
 
     def onHoverLeave(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:
-            event.widget.config(fg=BUTTON_COL)
+            event.widget.config(fg=self.container.button_col)
 
     def motion(self, event=None):
         if isinstance(self.container.frame, Game):
