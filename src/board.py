@@ -358,12 +358,13 @@ class Board:
         self.history.append([deepcopy(self.positions), move])
 
     def undoMove(self):
-        if self.history[-1][1] == "white":
+        print(len(self.history))
+        if len(self.history) == 0:
+            return
+        elif self.history[-1][1] == "white":
             self.stonesCapturedByBlack -= 1
         elif self.history[-1][1] == "black":
             self.stonesCapturedByWhite -= 1
-        elif len(self.history) == 0:
-            return
         elif len(self.history) == 1:
             self.positions = [[0 for row in range(self.size)]for col in range(self.size)]
 
@@ -384,7 +385,7 @@ class Board:
     def saveBoard(self):
         with open("assets/bin.dat", "wb") as f:
             try:
-                pickle.dump([self.size, self.positions, self.currentPlayer], f)
+                pickle.dump([self.size, self.positions, self.currentPlayer, self.history], f)
                 print("saved successfully")
             except: print("could not save")
             finally: f.close()
@@ -395,6 +396,7 @@ class Board:
                 board = Board(self.container, size=loaded[0])
                 board.positions = loaded[1]
                 board.currentPlayer = loaded[2]
+                board.history = loaded[3]
                 print("loaded sucessfully")
         except:
             board = Board(self.container, 9)
