@@ -210,6 +210,21 @@ class Board:
                     board[col][row] = pos
         return validMoves
 
+    def checkMove(self, col, row, colorToMove):
+        board = self.positions
+        pos = deepcopy(board[col][row])
+
+        if isinstance(pos, Stone) or pos == 99:
+            return False
+
+        board[col][row] = Stone(col, row, colorToMove, self.boardPad)
+        if not self.processStones(colorToMove, checkMove=[col, row]):
+            board[col][row] = pos
+            return False
+
+        board[col][row] = pos
+        return True
+
     def getGroups(self):
         # [color, [liberties], [positions]]
         groups = []

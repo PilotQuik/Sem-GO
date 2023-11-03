@@ -82,18 +82,16 @@ class Event:
                     color = self.container.board.currentPlayer
                     pos = self.container.board.positions[x][y]
                     # check move validity
-                    if not isinstance(pos, Stone) and not pos == 99:
+                    if self.container.board.checkMove(x, y, color):
                         self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
-                        if self.container.board.processStones(color, checkMove=[x, y]):
-                            self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-                            self.container.board.processStones(color)
-                            self.container.board.archiveBoard([x, y])
-                            self.container.board.passCounter = 0
-                            if self.container.gamemode == "player":
-                                self.container.board.currentPlayer = "black" if color == "white" else "white"
-                            elif self.container.gamemode == "ai":
-                                self.container.frame.makeMoveAI()
-                        else: self.container.board.positions[x][y] = 0
+                        self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
+                        self.container.board.processStones(color)
+                        self.container.board.archiveBoard([x, y])
+                        self.container.board.passCounter = 0
+                        if self.container.gamemode == "player":
+                            self.container.board.currentPlayer = "black" if color == "white" else "white"
+                        elif self.container.gamemode == "ai":
+                            self.container.frame.makeMoveAI()
 
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":
