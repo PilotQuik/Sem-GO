@@ -32,20 +32,14 @@ class Event:
                 self.container.destroy()
             elif str(event.widget).split(".")[-1] == "rules-button":
 
-                try: #chrome
-                    chrome = "C:/Program Files/Google/Chrome/Application/chrome.exe %s"
-                    webbrowser.get(chrome).open_new_tab(f"file:///{os.getcwd()}/assets/rules.html")
+                try: #default
+                    webbrowser.get().open_new_tab(f"file:///{os.getcwd()}/assets/rules.html")
                 except:
-                    print("could not open chrome")
-                    try: #edge
-                        edge = "C:/}Program Files (x86)/Microsoft\Edge/Application/msedge.exe"
-                        webbrowser.get(edge).open_new_tab(f"file:///{os.getcwd()}/assets/rules.html")
+                    print("could not open default browser")
+                    try: #notepad
+                        os.system("notepad.exe assets/rules.md")
                     except:
-                        print("could not open ms edge")
-                        try: #notepad
-                            os.system("notepad.exe assets/rules.md")
-                        except:
-                            print("unable to display rules")
+                        print("unable to display rules")
 
             elif str(event.widget).split(".")[-1] == "load-button":
                 self.container.board = self.container.board.loadBoard()
