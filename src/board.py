@@ -373,7 +373,6 @@ class Board:
         self.history.append([deepcopy(self.positions), move])
 
     def undoMove(self):
-        print(len(self.history))
         if len(self.history) == 0:
             return
         elif self.history[-1][1] == "white":
