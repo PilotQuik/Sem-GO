@@ -133,6 +133,7 @@ class Event:
                 self.container.button_col_clicked = BUTTON_COL_CLICKED
                 self.container.button_col_selected = BUTTON_COL_SELECTED
                 self.container.board_col = BOARD_COL
+                self.container.board_line = BOARD_LINE
                 self.container.hover_b = HOVER_B
                 self.container.hover_w = HOVER_W
                 self.container.frame.displayCanvas()
@@ -171,7 +172,6 @@ class Event:
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
                     self.container.board.calcInfluence()
-                    print(self.container.board.calcTerretoriesFromInfluence())
                     self.container.board.displayTerretories()
 
     def onHoverEnter(self, event=None):
