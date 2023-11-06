@@ -28,7 +28,7 @@ class Game(ttk.Frame):
 
         self.container.title("Game")
         self.container.resizable(True, True)
-        self.container.minsize(500, 500)
+        self.container.minsize(561, 561)
 
         centerPos = self.container.findCenter(winHeight=self.width, winWidth=self.height)
         self.container.geometry(f"{self.width}x{self.height}+{centerPos[0]}+{centerPos[1]}")
