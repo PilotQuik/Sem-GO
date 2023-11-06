@@ -377,8 +377,12 @@ class Board:
             return
         elif self.history[-1][1] == "white":
             self.stonesCapturedByBlack -= 1
+            self.container.refresh()
+            return
         elif self.history[-1][1] == "black":
             self.stonesCapturedByWhite -= 1
+            self.container.refresh()
+            return
         elif len(self.history) == 1:
             self.positions = [[0 for row in range(self.size)]for col in range(self.size)]
 
