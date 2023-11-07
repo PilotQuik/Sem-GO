@@ -173,6 +173,8 @@ class Event:
                         event.x >= pad and event.y >= pad:
                     self.container.board.calcInfluence()
                     self.container.board.displayTerretories()
+                    self.container.frame.displayEndgame()
+
 
     def onHoverEnter(self, event=None):
         if "-button" in str(event.widget).split(".")[-1]:

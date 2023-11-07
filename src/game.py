@@ -110,6 +110,19 @@ class Game(ttk.Frame):
 
         self.container.board.displayStones()
 
+    def displayEndgame(self):
+        len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+        winner = random.choice(["BLACK", "WHITE"])
+
+        self.container.frame.canvas.create_rectangle(0, len / 2 - 125, len, len / 2 + 125,
+                                                 fill=self.container.background)
+        self.container.frame.canvas.create_text(len / 2, len / 2 - 25,
+                                                text="VICTORY" if winner == "BLACK" else "DEFEAT",
+                                                font=(FONT, 125, "bold"), fill="black")
+        self.container.frame.canvas.create_text(len / 2, len / 2 + 75,
+                                                text="WHITE 108 - 69  BLACK",
+                                                font=(FONT, 25, "bold"), fill="black")
+
     def makeMoveAI(self):
         if len(self.container.board.history) == 0:
             return
