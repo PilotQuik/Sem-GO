@@ -2,9 +2,7 @@
 ___
 ## INFO
 ___
-    Schüler:        Malte Verhoeff T13b
-    Thema:          Spieleprogrammierung in Python (Sem_6)
-    Seminarleiter:  M. Mayrhofer / P. Weidenhammer
+
     
 ## REGELN
 ___
