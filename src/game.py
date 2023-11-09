@@ -48,6 +48,8 @@ class Game(ttk.Frame):
                                    bg=self.container.background, fg=self.container.button_col)
         Button_(406, 8, self.canvas, name="resign-button", text="RESIGN", font=(FONT, 20, "bold"),
                                    bg=self.container.background, fg=self.container.button_col)
+        Button_(4150, 250, self.canvas, name="easteregg-button", text="?", font=(FONT, 20, "bold"),
+                bg=self.container.background, fg=self.container.button_col)
 
         self.pack()
 

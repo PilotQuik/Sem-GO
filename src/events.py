@@ -67,6 +67,8 @@ class Event:
                 self.container.board.undoMove()
             elif str(event.widget).split(".")[-1] == "resign-button":
                 print("resign") # evaluate points but make current player lose
+            elif str(event.widget).split(".")[-1] == "easteregg-button":
+                print("easteregg")
             # player move
             if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)
