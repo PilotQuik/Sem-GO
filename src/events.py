@@ -65,6 +65,7 @@ class Event:
                     self.container.refresh()
                     self.container.board.passCounter += 1
                     if self.container.board.passCounter == 2:
+                        self.container.board.endgame = True
                         self.container.board.calcInfluence()
                         self.container.board.displayTerretories()
                         self.container.frame.displayEndgame()
