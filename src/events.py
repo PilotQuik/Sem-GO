@@ -210,10 +210,11 @@ class Event:
                 else: self.container.frame.drawHover(x, y, True)
 
     def config(self, event=None):
-        #print(event.widget, event.width, event.height)
-        #print(self.container.winfo_width(), self.container.winfo_height())
         if isinstance(event.widget, Canvas) and isinstance(self.container.frame, Game):
             if int(self.container.winfo_width()) == int(event.width) and int(self.container.winfo_height()) == int(event.height):
                 self.container.frame.canvas.delete("all")
                 self.container.frame.displayBoard()
                 self.container.board.displayStones()
+                if self.container.board.endgame:
+                    self.container.board.displayTerretories(False)
+                    self.container.frame.displayEndgame()

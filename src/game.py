@@ -110,11 +110,7 @@ class Game(ttk.Frame):
                                 text=self.container.board.stonesCapturedByBlack, fill="black",
                                 font=(FONT, fontSize, "bold"), justify="center")
 
-
-        if self.container.board.endgame:
-            self.displayEndgame()
-        else:
-            self.container.board.displayStones()
+        self.container.board.displayStones()
 
     def displayEndgame(self, winner=None):
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))

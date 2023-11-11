@@ -72,7 +72,6 @@ class Board:
                     i += 1
                 elif self.influence[col][row] < 0:
                     j += 1
-        print(f"Black terretory: {i} ; White terretory: {j}")
         return i, j
 
     def calcTerretoriesFromInfluence(self):
@@ -359,13 +358,14 @@ class Board:
                     self.positions[col][row].boardPad = self.boardPad
                     self.positions[col][row].draw(self.container.frame.canvas, "Game")
 
-    def displayTerretories(self):
+    def displayTerretories(self, anim=True):
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         length = int(len - 100)
         self.boardPad = length / (self.container.board.size + 1)
         for col in range(self.size):
             for row in range(self.size):
-                time.sleep(0.02)
+                if anim:
+                    time.sleep(0.02)
                 if self.influence[col][row] != 0:
                     RoundRect(self.container.frame.canvas,
                         50 + self.boardPad + col * self.boardPad - self.boardPad / 2.5,
@@ -377,7 +377,8 @@ class Board:
                     self.container.frame.canvas.update()
         self.displayStones()
         self.container.frame.canvas.update()
-        time.sleep(3)
+        if anim:
+            time.sleep(3)
 
 
 
