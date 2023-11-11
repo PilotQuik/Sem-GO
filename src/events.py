@@ -66,7 +66,8 @@ class Event:
             elif str(event.widget).split(".")[-1] == "undo-button":
                 self.container.board.undoMove()
             elif str(event.widget).split(".")[-1] == "resign-button":
-                print("resign") # evaluate points but make current player lose
+                if self.container.frame.resignConfirmation():
+                    print("resign") # evaluate points but make current player lose
             elif str(event.widget).split(".")[-1] == "easteregg-button":
                 print("easteregg")
             # player move

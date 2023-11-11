@@ -314,5 +314,13 @@ class Game(ttk.Frame):
         else:
             return False
 
+    def resignConfirmation(self):
+        out = tk.messagebox.askquestion('Player-Confirmation', 'Are you sure you want to resign?\n'
+                                                               'You will lose the game no matter the score.')
+        if out == 'yes':
+            return True
+        else:
+            return False
+
     def drawStone(self):
         pass
