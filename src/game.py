@@ -110,9 +110,13 @@ class Game(ttk.Frame):
                                 text=self.container.board.stonesCapturedByBlack, fill="black",
                                 font=(FONT, fontSize, "bold"), justify="center")
 
-        self.container.board.displayStones()
 
-    def displayEndgame(self):
+        if self.container.board.endgame:
+            self.displayEndgame()
+        else:
+            self.container.board.displayStones()
+
+    def displayEndgame(self, winner=None):
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         fontsize = len // 9
         fontsize2 = len // 36
@@ -121,7 +125,8 @@ class Game(ttk.Frame):
         print(self.container.board.stonesCapturedByBlack)
         black, white = (str(black + self.container.board.stonesCapturedByBlack).zfill(3),
                         str(white + self.container.board.stonesCapturedByWhite).zfill(3))
-        winner = "BLACK" if black > white else "WHITE" if white > black else "DRAW"
+        if winner == None:
+            winner = "BLACK" if black > white else "WHITE" if white > black else "DRAW"
 
         RoundRect(self.canvas, len / 7, len / 2.5, len - len / 7, len - len / 2.5, fill="gray80", outline="black",
                   width=3, radius=50)

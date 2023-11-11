@@ -48,6 +48,9 @@ class Event:
         elif isinstance(self.container.frame, Game): #------------------------------------------------------------------
             # top bar
             if str(event.widget).split(".")[-1] == "back-button":
+                if self.container.board.endgame:
+                    self.container.board.endgame = False
+                    self.container.board.__init__(self.container)
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
             elif str(event.widget).split(".")[-1] == "pass-button":
                 if self.container.frame.passConfirmation():
@@ -62,12 +65,18 @@ class Event:
                     self.container.refresh()
                     self.container.board.passCounter += 1
                     if self.container.board.passCounter == 2:
-                        print("endgame evaluation")
+                        self.container.board.calcInfluence()
+                        self.container.board.displayTerretories()
+                        self.container.frame.displayEndgame()
             elif str(event.widget).split(".")[-1] == "undo-button":
                 self.container.board.undoMove()
             elif str(event.widget).split(".")[-1] == "resign-button":
                 if self.container.frame.resignConfirmation():
-                    print("resign") # evaluate points but make current player lose
+                    self.container.board.endgame = True
+                    self.container.board.calcInfluence()
+                    self.container.board.displayTerretories()
+                    self.container.frame.displayEndgame(winner="BLACK" if
+                                            self.container.board.currentPlayer == "white" else "WHITE")
             elif str(event.widget).split(".")[-1] == "easteregg-button":
                 print("easteregg")
             # player move
@@ -189,16 +198,17 @@ class Event:
             event.widget.config(fg=self.container.button_col)
 
     def motion(self, event=None):
-        if isinstance(self.container.frame, Game):
-            x, y = self.container.frame.calcSquare(event.x, event.y)
-            pad = self.container.frame.boardPad / 2 + self.container.frame.pad
-            if (event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and
-                    event.x >= pad and event.y >= pad):
-                if x in range(0, self.container.board.size) and y in range(0, self.container.board.size):
-                    if not isinstance(self.container.board.positions[x][y], Stone):
-                        self.container.frame.drawHover(x, y, False)
-                    else: self.container.frame.drawHover(x, y, True)
-            else: self.container.frame.drawHover(x, y, True)
+        if not self.container.board.endgame:
+            if isinstance(self.container.frame, Game):
+                x, y = self.container.frame.calcSquare(event.x, event.y)
+                pad = self.container.frame.boardPad / 2 + self.container.frame.pad
+                if (event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and
+                        event.x >= pad and event.y >= pad):
+                    if x in range(0, self.container.board.size) and y in range(0, self.container.board.size):
+                        if not isinstance(self.container.board.positions[x][y], Stone):
+                            self.container.frame.drawHover(x, y, False)
+                        else: self.container.frame.drawHover(x, y, True)
+                else: self.container.frame.drawHover(x, y, True)
 
     def config(self, event=None):
         #print(event.widget, event.width, event.height)
