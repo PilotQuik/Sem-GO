@@ -116,14 +116,29 @@ class Game(ttk.Frame):
         len = int(min(self.container.winfo_width(), self.container.winfo_height()))
         fontsize = len // 9
         fontsize2 = len // 36
-        winner = random.choice(["BLACK", "WHITE"])
 
-        RoundRect(self.canvas, len / 7, len / 4, len - len / 7, len - len / 4, fill="gray75")
-        self.container.frame.canvas.create_text(len / 2, len / 3,
+        black, white = self.container.board.calcInfluence()
+        print(self.container.board.stonesCapturedByBlack)
+        black, white = (str(black + self.container.board.stonesCapturedByBlack).zfill(3),
+                        str(white + self.container.board.stonesCapturedByWhite).zfill(3))
+        winner = "BLACK" if black > white else "WHITE" if white > black else "DRAW"
+
+        RoundRect(self.canvas, len / 7, len / 2.5, len - len / 7, len - len / 2.5, fill="gray80", outline="black",
+                  width=3, radius=50)
+        if self.container.gamemode == "ai":
+            self.container.frame.canvas.create_text(len / 2, len / 2.125,
                                                 text="VICTORY" if winner == "BLACK" else "DEFEAT",
                                                 font=(FONT, fontsize, "bold"), fill="black")
-        self.container.frame.canvas.create_text(len / 2, len / 2.25,
-                                                text="WHITE 108 - 69  BLACK",
+        else:
+            if winner == "DRAW":
+                self.container.frame.canvas.create_text(len / 2, len / 2.125,
+                                                    text="DRAW", font=(FONT, fontsize, "bold"), fill="black")
+            else:
+                self.container.frame.canvas.create_text(len / 2, len / 2.125,
+                                                        text=f"{winner} WINS", font=(FONT, int(fontsize / 1.5), "bold"),
+                                                        fill="black")
+        self.container.frame.canvas.create_text(len / 2, len / 1.75,
+                                                text=f"WHITE {white} - {black}  BLACK",
                                                 font=(FONT, fontsize2, "bold"), fill="black")
 
     def makeMoveAI(self):

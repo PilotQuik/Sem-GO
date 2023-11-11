@@ -1,8 +1,10 @@
 import pickle
+import time
 from copy import deepcopy
 
 from stone import Stone
 from const import *
+from custom import RoundRect
 
 class Board:
     def __init__(self, container, size=9):
@@ -61,7 +63,7 @@ class Board:
                             influence[col][row + 1] += f
             self.influence = [[sum(x) for x in zip(self.influence[i], influence[i])] for i in range(self.size)]
 
-        # debug -------------------------------------------------
+        # count -------------------------------------------------
         i, j = 0, 0
         for col in range(self.size):
             for row in range(self.size):
@@ -70,6 +72,7 @@ class Board:
                 elif self.influence[col][row] < 0:
                     j += 1
         print(f"Black terretory: {i} ; White terretory: {j}")
+        return i, j
 
     def calcTerretoriesFromInfluence(self):
         influenceMap = deepcopy(self.influence)
@@ -356,19 +359,27 @@ class Board:
                     self.positions[col][row].draw(self.container.frame.canvas, "Game")
 
     def displayTerretories(self):
+        len = int(min(self.container.winfo_width(), self.container.winfo_height()))
+        length = int(len - 100)
+        self.boardPad = length / (self.container.board.size + 1)
         for col in range(self.size):
             for row in range(self.size):
+                time.sleep(0.02)
                 if self.influence[col][row] != 0:
-                    len = int(min(self.container.winfo_width(), self.container.winfo_height()))
-                    length = int(len - 100)
-                    self.boardPad = length / (self.container.board.size + 1)
-                    self.container.frame.canvas.create_oval(
-                        50 + self.boardPad + col * self.boardPad - self.boardPad / 5,
-                        50 + self.boardPad + row * self.boardPad - self.boardPad / 5,
-                        50 + self.boardPad + col * self.boardPad + self.boardPad / 5,
-                        50 + self.boardPad + row * self.boardPad + self.boardPad / 5,
-                        fill="black" if self.influence[col][row] > 0 else "white",
-                    outline="white" if self.influence[col][row] > 0 else "black")
+                    RoundRect(self.container.frame.canvas,
+                        50 + self.boardPad + col * self.boardPad - self.boardPad / 2.5,
+                        50 + self.boardPad + row * self.boardPad - self.boardPad / 2.5,
+                        50 + self.boardPad + col * self.boardPad + self.boardPad / 2.5,
+                        50 + self.boardPad + row * self.boardPad + self.boardPad / 2.5,
+                        fill="gray20" if self.influence[col][row] > 0 else "gray80",
+                        outline="gray20" if self.influence[col][row] > 0 else "gray80")
+                    self.container.frame.canvas.update()
+        self.displayStones()
+        self.container.frame.canvas.update()
+        time.sleep(3)
+
+
+
 
     def archiveBoard(self):
         self.history.append([deepcopy(self.positions), self.stonesCapturedByBlack, self.stonesCapturedByWhite])

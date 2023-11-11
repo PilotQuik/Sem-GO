@@ -13,7 +13,8 @@ class Stone:
                 50 + self.boardPad + self.row * self.boardPad - self.boardPad / 2.5,
                 50 + self.boardPad + self.col * self.boardPad + self.boardPad / 2.5,
                 50 + self.boardPad + self.row * self.boardPad + self.boardPad / 2.5,
-                fill="black" if self.color == "black" else "white")
+                fill="black" if self.color == "black" else "white",
+                outline="white" if self.color == "black" else "black")
         if frame == "Menu":
             padLeft = 422
             canvas.create_oval(
