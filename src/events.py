@@ -54,11 +54,11 @@ class Event:
                     if self.container.board.currentPlayer == "white":
                         self.container.board.stonesCapturedByBlack += 1
                         self.container.board.currentPlayer = "black"
-                        self.container.board.archiveBoard("white")
+                        self.container.board.archiveBoard()
                     else:
                         self.container.board.stonesCapturedByWhite += 1
                         self.container.board.currentPlayer = "white"
-                        self.container.board.archiveBoard("black")
+                        self.container.board.archiveBoard()
                     self.container.refresh()
                     self.container.board.passCounter += 1
                     if self.container.board.passCounter == 2:
@@ -82,7 +82,7 @@ class Event:
                         self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
                         self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                         self.container.board.processStones(color)
-                        self.container.board.archiveBoard([x, y])
+                        self.container.board.archiveBoard()
                         self.container.board.passCounter = 0
                         if self.container.gamemode == "player":
                             self.container.board.currentPlayer = "black" if color == "white" else "white"
