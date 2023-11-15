@@ -166,8 +166,14 @@ class Game(ttk.Frame):
             moves = self.container.board.calcMoves("white", "liberties")
             if moves == []:  # if no moves:
                 freeSpaces = self.container.board.calcMoves("black", "spaces")
-                move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
-                self.placeMove(move[0], move[1])
+                if freeSpaces == []:
+                    self.container.board.endgame = True
+                    self.container.board.calcInfluence()
+                    self.container.board.displayTerretories()
+                    self.container.frame.displayEndgame()
+                else:
+                    move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
+                    self.placeMove(move[0], move[1])
 
             else:
                 move = moves[random.randint(0, len(moves) - 1)]
@@ -184,9 +190,9 @@ class Game(ttk.Frame):
         groupsToAttack = []
         # GET GROUPS ---------------------------------------------------------------------------------------------------
         for group in groups:
-            if group[0] == "white" and len(group[1]) <= 2:  # defend
+            if group[0] == "white" and len(group[1]) <= 1:  # defend
                 groupsToDefend.append(group)
-            elif group[0] == "black" and len(group[1]) <= 2:  # attack
+            elif group[0] == "black" and len(group[1]) <= 1:  # attack
                 groupsToAttack.append(group)
         patternPos = self.container.board.checkPattern("white")
         # FILTER MOVES -------------------------------------------------------------------------------------------------
@@ -258,7 +264,13 @@ class Game(ttk.Frame):
             if patternPos != []:
                 for pattern in patternPos:
                     self.container.board.evalMove(pattern, "white", 2, bestMove, bestLiberties)
-        # get
+        # check rest
+        for move in possibleMoves:
+            self.container.board.evalMove(move, "white", 3, bestMove, bestLiberties)
+        # no best move
+        if bestMove == []:
+            self.aiEasy()
+            return
         # place move
         self.placeMove(bestMove[0], bestMove[1])
 
