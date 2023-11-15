@@ -240,30 +240,32 @@ class Game(ttk.Frame):
                 self.aiEasy()
 
     def aiHard(self):
+        # if group > 5 liberties = 1 >> check pattern: if pattern doesn't change liberties >> defend
+        # else >> changing pattern
         progress = 0
         start = timer()
         board = self.container.board
-        depth = 0
-        bestMove = None
         possibleMoves = board.calcValidMoves("white")
+        patternPos = self.container.board.checkPattern("white")
+        bestMove, bestLiberties = [], 0
+        # patterns
+        if patternPos != []:
+            # filter patterns
+            for pattern in patternPos:
+                if pattern not in possibleMoves:
+                    patternPos.remove(pattern)
+            # eval patterns
+            if patternPos != []:
+                for pattern in patternPos:
+                    self.container.board.evalMove(pattern, "white", 2, bestMove, bestLiberties)
+        # get
+        # place move
+        self.placeMove(bestMove[0], bestMove[1])
 
-        bestScore = inf
-        for i in possibleMoves:
-            pos = deepcopy(board.positions)
-            board.positions[i[0]][i[1]] = Stone(col=i[0], row=i[1], color="white", boardPad=self.boardPad)
-            board.processStones("white")
-            score = self.minimax(board, depth, True)
-            board.positions = pos
-            if bestScore != score:
-                bestMove = i
-            bestScore = min(score, bestScore)
 
-            progress += 1
-            ProgressBar.progressBar(50, progress / len(possibleMoves), "Calculating")
 
         time1 = round(timer() - start, 2)
-        self.container.refresh()
-        print(f"time taken: {time1}s  ||  best move: {bestMove}", )
+        print(f"time taken: {time1}s")
         print(f"")
 
     def minimax(self, board, depth, isMaximizer):

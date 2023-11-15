@@ -278,6 +278,12 @@ class Board:
                         for stone in group:
                             stonesToDeleteW.append(stone) if (self.positions[col][row].color
                                                               == "white") else stonesToDeleteB.append(stone)
+        # RESET --------------------------------------------------------------------------------------------------------
+        for col in range(self.size):
+            for row in range(self.size):
+                pos = self.positions[col][row]
+                if isinstance(pos, Stone) and pos.marked == True:
+                    pos.marked = False
         # DELETE -------------------------------------------------------------------------------------------------------
         if checkMove == None:
             for pos in stonesToDeleteB if color == "white" else stonesToDeleteW:
@@ -294,22 +300,29 @@ class Board:
 
     def checkPattern(self, color):
         matches = []
+        _color = "white" if color == "black" else "black"
         for col in range(self.size):
             for row in range(self.size):
-                for pattern in PATTERNS: # cycle patterns
-                    match = 0
-                    for ownColor in pattern[0]:
-                        if (col + ownColor[0] in range(0, self.size) and row + ownColor[1] in range(0, self.size)
-                                and isinstance(self.positions[col + ownColor[0]][row + ownColor[1]], Stone)):
-                            if self.positions[col + ownColor[0]][row + ownColor[1]].color == color:
+                if isinstance(self.positions[col][row], Stone):
+                    if self.positions[col][row].color == _color:
+                        for pattern in PATTERNS:
+                            match = 0
+                            for ownColor in pattern[0]:
+                                if (col + ownColor[0] in range(0, self.size) and row + ownColor[1] in range(0, self.size)
+                                        and isinstance(self.positions[col + ownColor[0]][row + ownColor[1]], Stone)
+                                        and self.positions[col + ownColor[0]][row + ownColor[1]].color == color):
+                                    match += 1
+                                elif (col + ownColor[0] in [-1, self.size] or row + ownColor[1]
+                                    in [-1, self.size]):
+                                    match += 1
+                            if (col + pattern[1][0] in range(0, self.size) and row + pattern[1][1] in range(0, self.size)
+                                    and not isinstance(self.positions[col + pattern[1][0]][row + pattern[1][1]], Stone)):
                                 match += 1
-                    if (col + pattern[1][0] in range(0, self.size) and row + pattern[1][1] in range(0, self.size)
-                            and isinstance(self.positions[col + pattern[1][0]][row + pattern[1][1]], Stone)):
-                        if self.positions[col + pattern[1][0]][row + pattern[1][1]].color != color:
-                            match +=1
-                    if match == 3 and not [col, row] in matches and self.positions[col][row] == 0:
-                        matches.append([col, row])
+                            if match == 3 and [col + pattern[1][0], row + pattern[1][1]] not in matches:
+                                matches.append([col + pattern[1][0], row + pattern[1][1]])
         return matches
+
+
 
     def getLibertiesFromGroup(self, group):
         liberties = []
@@ -380,8 +393,15 @@ class Board:
         if anim:
             time.sleep(3)
 
+    def libertieForecast(self, col, row, colorToMove):
+        positions = deepcopy(self.positions)
+        self.positions[col][row] = Stone(col=col, row=row, color=colorToMove, boardPad=self.boardPad)
+        group, liberties = self.countLibertiesAndGroups(col, row, colorToMove, [], 0)
+        return liberties
 
-
+    def evalMove(self, move, colorToMove, liberties, bestMove, bestLiberties):
+        if liberties <= bestLiberties and self.libertieForecast(move[0], move[1], colorToMove) >= 2:
+            bestMove, bestLiberties = move, liberties
 
     def archiveBoard(self):
         self.history.append([deepcopy(self.positions), self.stonesCapturedByBlack, self.stonesCapturedByWhite])
