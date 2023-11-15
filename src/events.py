@@ -52,34 +52,35 @@ class Event:
                     self.container.board.endgame = False
                     self.container.board.__init__(self.container)
                 self.container.switchFrame(Menu, width=MENU_WIDTH, height=MENU_HEIGHT)
-            elif str(event.widget).split(".")[-1] == "pass-button":
-                if self.container.frame.passConfirmation():
-                    if self.container.board.currentPlayer == "white":
-                        self.container.board.stonesCapturedByBlack += 1
-                        self.container.board.currentPlayer = "black"
-                        self.container.board.archiveBoard()
-                    else:
-                        self.container.board.stonesCapturedByWhite += 1
-                        self.container.board.currentPlayer = "white"
-                        self.container.board.archiveBoard()
-                    self.container.refresh()
-                    self.container.board.passCounter += 1
-                    if self.container.board.passCounter == 2:
+            if not self.container.board.endgame:
+                if str(event.widget).split(".")[-1] == "pass-button":
+                    if self.container.frame.passConfirmation():
+                        if self.container.board.currentPlayer == "white":
+                            self.container.board.stonesCapturedByBlack += 1
+                            self.container.board.currentPlayer = "black"
+                            self.container.board.archiveBoard()
+                        else:
+                            self.container.board.stonesCapturedByWhite += 1
+                            self.container.board.currentPlayer = "white"
+                            self.container.board.archiveBoard()
+                        self.container.refresh()
+                        self.container.board.passCounter += 1
+                        if self.container.board.passCounter == 2:
+                            self.container.board.endgame = True
+                            self.container.board.calcInfluence()
+                            self.container.board.displayTerretories()
+                            self.container.frame.displayEndgame()
+                elif str(event.widget).split(".")[-1] == "undo-button":
+                    self.container.board.undoMove()
+                elif str(event.widget).split(".")[-1] == "resign-button":
+                    if self.container.frame.resignConfirmation():
                         self.container.board.endgame = True
                         self.container.board.calcInfluence()
                         self.container.board.displayTerretories()
-                        self.container.frame.displayEndgame()
-            elif str(event.widget).split(".")[-1] == "undo-button":
-                self.container.board.undoMove()
-            elif str(event.widget).split(".")[-1] == "resign-button":
-                if self.container.frame.resignConfirmation():
-                    self.container.board.endgame = True
-                    self.container.board.calcInfluence()
-                    self.container.board.displayTerretories()
-                    self.container.frame.displayEndgame(winner="BLACK" if
-                                            self.container.board.currentPlayer == "white" else "WHITE")
-            elif str(event.widget).split(".")[-1] == "easteregg-button":
-                print("easteregg")
+                        self.container.frame.displayEndgame(winner="BLACK" if
+                                                self.container.board.currentPlayer == "white" else "WHITE")
+                elif str(event.widget).split(".")[-1] == "easteregg-button":
+                    print("easteregg")
             # player move
             if str(event.widget).split(".")[-1] == "!canvas":
                 x, y = self.container.frame.calcSquare(event.x, event.y)
