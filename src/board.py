@@ -230,7 +230,7 @@ class Board:
         return True
 
     def getGroups(self):
-        # [color, [liberties], [positions]]
+        # [color, liberties, [positions]]
         groups = []
         # RESET --------------------------------------------------------------------------------------------------------
         for col in range(self.size):
@@ -246,7 +246,6 @@ class Board:
                     # --------------------------------count
                     group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
                     # --------------------------------get liberties
-                    print(f"liberties: {liberties}")
                     liberties = self.getLibertiesFromGroup(group)
                     groups.append([pos.color, liberties, group])
         return groups
@@ -328,7 +327,6 @@ class Board:
         liberties = []
         for pos in group:
             col, row = pos[0], pos[1]
-            print(col, row)
             if row - 1 >= 0:
                 if not isinstance(self.positions[col][row - 1], Stone) and pos not in liberties:
                     liberties.append([col, row - 1])
@@ -402,6 +400,7 @@ class Board:
     def evalMove(self, move, colorToMove, liberties, bestMove, bestLiberties):
         if liberties <= bestLiberties and self.libertieForecast(move[0], move[1], colorToMove) >= 2:
             bestMove, bestLiberties = move, liberties
+        return bestMove, bestLiberties
 
     def archiveBoard(self):
         self.history.append([deepcopy(self.positions), self.stonesCapturedByBlack, self.stonesCapturedByWhite])
@@ -409,13 +408,13 @@ class Board:
     def undoMove(self):
         if len(self.history) == 1:
             return
-        elif self.container.gamemode == "ai" and len(self.history) % 2 == 0:
-            self.positions = deepcopy(self.history[-2][0])
-            self.stonesCapturedByBlack, self.stonesCapturedByWhite = self.history[-2][1], self.history[-2][2]
+        if self.container.gamemode == "ai":
+            print("ai")
+            self.positions = deepcopy(self.history[-3][0])
+            self.stonesCapturedByBlack, self.stonesCapturedByWhite = self.history[-3][1], self.history[-3][2]
             self.history.pop()
-            self.undoMove()
+            self.history.pop()
             self.container.refresh()
-            self.currentPlayer = "black" if self.currentPlayer == "white" else "white"
             return
         self.positions = deepcopy(self.history[-2][0])
         self.stonesCapturedByBlack, self.stonesCapturedByWhite = self.history[-2][1], self.history[-2][2]
