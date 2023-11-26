@@ -395,6 +395,7 @@ class Board:
         positions = deepcopy(self.positions)
         self.positions[col][row] = Stone(col=col, row=row, color=colorToMove, boardPad=self.boardPad)
         group, liberties = self.countLibertiesAndGroups(col, row, colorToMove, [], 0)
+        self.positions = positions
         return liberties
 
     def evalMove(self, move, colorToMove, liberties, bestMove, bestLiberties):
@@ -409,7 +410,6 @@ class Board:
         if len(self.history) == 1:
             return
         if self.container.gamemode == "ai":
-            print("ai")
             self.positions = deepcopy(self.history[-3][0])
             self.stonesCapturedByBlack, self.stonesCapturedByWhite = self.history[-3][1], self.history[-3][2]
             self.history.pop()

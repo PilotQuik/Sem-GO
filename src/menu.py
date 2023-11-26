@@ -22,7 +22,6 @@ class Menu(Label):
         self.displayCanvas()
 
     def displayCanvas(self):
-        print(self.container.theme)
         self.canvas = Canvas(self, width=self.width, height=self.height, bg=self.container.background)
         self.canvas.pack(side=TOP, fill=BOTH, expand=NO)
 

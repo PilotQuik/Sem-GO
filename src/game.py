@@ -158,7 +158,19 @@ class Game(ttk.Frame):
             self.aiMedium()
 
         elif self.container.ai_level == "hard":
+            start = timer()
+            """
+            Priorities:
+            1   -   Take groups with one liberty
+            2   -   Save own Groups with one liberty
+            3   -   Forecast liberties of own groups with two liberties
+            4   -   Match patterns
+            5   -   Surround enemy groups with more than two liberties
+            6   -   Easy AI
+            """
             self.aiHard()
+            print("-------------------------")
+
 
     def aiEasy(self):
         moves = self.container.board.calcMoves("black", "liberties")
@@ -183,73 +195,7 @@ class Game(ttk.Frame):
             move = moves[random.randint(0, len(moves) - 1)]
             self.placeMove(move[0], move[1])
 
-    def aiMedium(self): # check move validity
-        board = self.container.board
-        groups = self.container.board.getGroups()
-        groupsToDefend = []
-        groupsToAttack = []
-        # GET GROUPS ---------------------------------------------------------------------------------------------------
-        for group in groups:
-            if group[0] == "white" and len(group[1]) <= 1:  # defend
-                groupsToDefend.append(group)
-            elif group[0] == "black" and len(group[1]) <= 1:  # attack
-                groupsToAttack.append(group)
-        patternPos = self.container.board.checkPattern("white")
-        # FILTER MOVES -------------------------------------------------------------------------------------------------
-        for group in groupsToDefend:
-            for pos in group[1]:
-                x, y = pos[0], pos[1]
-                space = self.container.board.positions[x][y]
-                self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                if board.positions[x][y] == 99 or not board.processStones("white", [pos[0], pos[1]]):
-                    group[1].remove(pos)
-                    print("--purged in Defend")
-                self.container.board.positions[x][y] = space
-            if len(group[1]) == 0: groupsToDefend.remove(group)
-        for group in groupsToAttack:
-            for pos in group[1]:
-                x, y = pos[0], pos[1]
-                space = self.container.board.positions[x][y]
-                self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-                if board.positions[pos[0]][pos[1]] == 99 or not board.processStones("white", [pos[0], pos[1]]):
-                    group[1].remove(pos)
-                    print("--purged in Attack")
-                self.container.board.positions[x][y] = space
-            if len(group[1]) == 0: groupsToAttack.remove(group)
-        for pos in patternPos:
-            x, y = pos[0], pos[1]
-            space = self.container.board.positions[x][y]
-            self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
-            if board.positions[pos[0]][pos[1]] == 99 or not board.processStones("white", [pos[0], pos[1]]):
-                patternPos.remove(pos)
-                print("--purged in patternPos")
-            self.container.board.positions[x][y] = space
-
-        # MAKE MOVE ----------------------------------------------------------------------------------------------------
-        patternPos = self.container.board.checkPattern("black")
-        if len(patternPos) != 0:
-            print(f"Using pattern: {patternPos[0]}")
-            move = patternPos[0]
-            self.placeMove(move[0], move[1])
-        else:
-            if groupsToDefend != []:
-                groupsToDefend.sort(key=len, reverse=True)
-                print(f"Defending: {groupsToDefend[0]} at {groupsToDefend[0][1][0]}")
-                self.placeMove(groupsToDefend[0][1][0][0], groupsToDefend[0][1][0][1])
-
-            elif groupsToAttack != []:
-                groupsToAttack.sort(key=len, reverse=True)
-                print(f"Attacking: {groupsToAttack[0]} at {groupsToAttack[0][1][0]}")
-                self.placeMove(groupsToAttack[0][1][0][0], groupsToAttack[0][1][0][1])
-
-            else:
-                self.aiEasy()
-
-    def aiHard(self):
-        # if group > 5 liberties = 1 >> check pattern: if pattern doesn't change liberties >> defend
-        # else >> changing pattern
-        progress = 0
-        start = timer()
+    def aiMedium(self):
         board = self.container.board
         possibleMoves = board.calcValidMoves("white")
         patternPos = self.container.board.checkPattern("white")
@@ -263,22 +209,132 @@ class Game(ttk.Frame):
             # eval patterns
             if patternPos != []:
                 for pattern in patternPos:
-                    self.container.board.evalMove(pattern, "white", 2, bestMove, bestLiberties)
+                    bestMove, bestLiberties = self.container.board.evalMove(pattern, "white", 2, bestMove, bestLiberties)
+                if bestMove != []:
+                    self.placeMove(bestMove[0], bestMove[1])
+                    return
         # check rest
         for move in possibleMoves:
-            self.container.board.evalMove(move, "white", 3, bestMove, bestLiberties)
+            bestMove, bestLiberties = self.container.board.evalMove(move, "white", 3, bestMove, bestLiberties)
+        if bestMove != []:
+            self.placeMove(bestMove[0], bestMove[1])
+            return
         # no best move
         if bestMove == []:
             self.aiEasy()
             return
-        # place move
-        self.placeMove(bestMove[0], bestMove[1])
 
+    def aiHard(self):
+        board = self.container.board
+        patternPos = self.container.board.checkPattern("white")
+        groups = board.getGroups()
 
+        bestMove = None
 
-        time1 = round(timer() - start, 2)
-        print(f"time taken: {time1}s")
-        print(f"")
+        # 1   -   Take groups with one liberty
+        targetGroups = []
+        for group in groups:
+            if len(group[1]) == 1 and group[0] == "black":
+                targetGroups.append(group)
+        if targetGroups != []:
+            bestGroup, bestSize = [], 0
+            for group in targetGroups:
+                if not self.container.board.checkMove(group[1][0][0], group[1][0][1], "white"):
+                    targetGroups.remove(group)
+                    continue
+                elif len(group[2]) > bestSize:
+                    bestGroup, bestSize = group, len(group[2])
+            if bestGroup != []:
+                bestMove = bestGroup[1][0]
+                self.placeMove(bestMove[0], bestMove[1])
+                print("kill")
+                return
+
+        # 2 - Save own Groups with one liberty
+        targetGroups = []
+        for group in groups:
+            if len(group[1]) == 1 and group[0] == "white":
+                targetGroups.append(group)
+        if targetGroups != []:
+            bestGroup, bestLib = [], 0
+            for group in targetGroups:
+                if not self.container.board.checkMove(group[1][0][0], group[1][0][1], "white"):
+                    targetGroups.remove(group)
+                    continue
+                lib = board.libertieForecast(group[1][0][0], group[1][0][1], "white")
+                if lib <= 2:
+                    targetGroups.remove(group)
+                    continue
+                elif len(group[2]) > bestLib:
+                    bestGroup, bestLib = group, lib
+            if bestGroup != []:
+                bestMove = bestGroup[1][0]
+                self.placeMove(bestMove[0], bestMove[1])
+                print("save")
+                return
+
+        # 3 - Forecast liberties of own groups with two liberties
+
+        targetGroups = []
+        for group in groups:
+            if len(group[1]) == 2 and group[0] == "black":
+                targetGroups.append(group)
+        if targetGroups != []:
+            bestPos, bestLiberties = [], 0
+            for group in targetGroups:
+                for pos in group[1]:
+                    if not self.container.board.checkMove(pos[0], pos[1], "white"):
+                        group[1].remove(pos)
+                        continue
+                    lib = board.libertieForecast(pos[0], pos[1], "white")
+                    if lib > bestLiberties:
+                        bestPos, bestLiberties = pos, lib
+            if bestPos != []:
+                bestMove = bestPos
+                self.placeMove(bestMove[0], bestMove[1])
+                print("forecast")
+                return
+
+        # 4 - Match patterns
+        if patternPos != []:
+            bestPattern, bestLiberties = [], 0
+            for pattern in patternPos:
+                if not self.container.board.checkMove(pattern[0], pattern[1], "white"):
+                    patternPos.remove(pattern)
+                    continue
+                lib = board.libertieForecast(pattern[0], pattern[1], "white")
+                if lib > bestLiberties:
+                    bestPattern, bestLiberties = pattern, lib
+            if bestPattern != []:
+                bestMove = bestPattern[1]
+                print(bestMove)
+                self.placeMove(bestPattern[0], bestPattern[1])
+                print("pattern")
+                return
+
+        # 5 - Surround enemy groups with more than two liberties
+        targetGroups = []
+        for group in groups:
+            if len(group[1]) == 1 and group[0] == "black":
+                targetGroups.append(group)
+        if targetGroups != []:
+            bestGroup, bestSize = [], 100
+            for group in targetGroups:
+                if not self.container.board.checkMove(group[1][0][0], group[1][0][1], "white"):
+                    targetGroups.remove(group)
+                    continue
+                elif len(group[1]) < bestSize:
+                    bestGroup, bestSize = group, len(group[1])
+            if bestGroup != []:
+                bestMove = bestGroup[1][0]
+                self.placeMove(bestMove[0], bestMove[1])
+                print("attack")
+                return
+
+        # 6 - Easy AI
+        print("easy")
+        self.aiEasy()
+        return
 
     def minimax(self, board, depth, isMaximizer):
 
@@ -316,6 +372,7 @@ class Game(ttk.Frame):
         self.container.board.processStones("white")
         self.container.board.archiveBoard()
         self.container.board.passCounter = 0
+        print("Move:", x, y)
 
     def drawHover(self, x, y, delete):
         color = self.container.board.currentPlayer
