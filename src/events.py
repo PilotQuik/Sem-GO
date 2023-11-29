@@ -55,21 +55,27 @@ class Event:
             if not self.container.board.endgame:
                 if str(event.widget).split(".")[-1] == "pass-button":
                     if self.container.frame.passConfirmation():
-                        if self.container.board.currentPlayer == "white":
-                            self.container.board.stonesCapturedByBlack += 1
-                            self.container.board.currentPlayer = "black"
-                            self.container.board.archiveBoard()
+                        if self.container.gamemode == "player":
+                            if self.container.board.currentPlayer == "white":
+                                self.container.board.stonesCapturedByBlack += 1
+                                self.container.board.currentPlayer = "black"
+                                self.container.board.archiveBoard()
+                            else:
+                                self.container.board.stonesCapturedByWhite += 1
+                                self.container.board.currentPlayer = "white"
+                                self.container.board.archiveBoard()
+                            self.container.board.passCounter += 1
+                            self.container.refresh()
+                            if self.container.board.passCounter == 2:
+                                self.container.board.endgame = True
+                                self.container.board.calcInfluence()
+                                self.container.board.displayTerretories()
+                                self.container.frame.displayEndgame()
                         else:
                             self.container.board.stonesCapturedByWhite += 1
-                            self.container.board.currentPlayer = "white"
                             self.container.board.archiveBoard()
-                        self.container.refresh()
-                        self.container.board.passCounter += 1
-                        if self.container.board.passCounter == 2:
-                            self.container.board.endgame = True
-                            self.container.board.calcInfluence()
-                            self.container.board.displayTerretories()
-                            self.container.frame.displayEndgame()
+                            self.container.board.passCounter += 1
+                            self.container.frame.makeMoveAI()
                 elif str(event.widget).split(".")[-1] == "undo-button":
                     self.container.board.undoMove()
                 elif str(event.widget).split(".")[-1] == "resign-button":
@@ -81,25 +87,25 @@ class Event:
                                                 self.container.board.currentPlayer == "white" else "WHITE")
                 elif str(event.widget).split(".")[-1] == "easteregg-button":
                     print("easteregg")
-            # player move
-            if str(event.widget).split(".")[-1] == "!canvas":
-                x, y = self.container.frame.calcSquare(event.x, event.y)
-                pad = self.container.frame.boardPad / 2 + self.container.frame.pad
-                if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
-                        event.x >= pad and event.y >= pad:
-                    color = self.container.board.currentPlayer
-                    pos = self.container.board.positions[x][y]
-                    # check move validity
-                    if self.container.board.checkMove(x, y, color):
-                        self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
-                        self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-                        self.container.board.processStones(color)
-                        self.container.board.archiveBoard()
-                        self.container.board.passCounter = 0
-                        if self.container.gamemode == "player":
-                            self.container.board.currentPlayer = "black" if color == "white" else "white"
-                        elif self.container.gamemode == "ai":
-                            self.container.frame.makeMoveAI()
+                # player move
+                if str(event.widget).split(".")[-1] == "!canvas":
+                    x, y = self.container.frame.calcSquare(event.x, event.y)
+                    pad = self.container.frame.boardPad / 2 + self.container.frame.pad
+                    if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and\
+                            event.x >= pad and event.y >= pad:
+                        color = self.container.board.currentPlayer
+                        pos = self.container.board.positions[x][y]
+                        # check move validity
+                        if self.container.board.checkMove(x, y, color):
+                            self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
+                            self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
+                            self.container.board.processStones(color)
+                            self.container.board.archiveBoard()
+                            self.container.board.passCounter = 0
+                            if self.container.gamemode == "player":
+                                self.container.board.currentPlayer = "black" if color == "white" else "white"
+                            elif self.container.gamemode == "ai":
+                                self.container.frame.makeMoveAI()
 
         elif isinstance(self.container.frame, Opt): #-------------------------------------------------------------------
             if str(event.widget).split(".")[-1] == "back-button":

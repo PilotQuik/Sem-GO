@@ -18,6 +18,7 @@ class Board:
         self.history = []
         self.archiveBoard()
         self.passCounter = 0
+        self.aiPassCounter = 0
         self.endgame = False
 
         self.influence = []

@@ -94,7 +94,7 @@ class Game(ttk.Frame):
                                             self.pad + self.boardPad + row * self.boardPad + 3,
                                             fill=board_line, outline=board_line)
         # draw stone counter
-        RoundRect(self.canvas, len, self.pad , len + self.boardPad * 5, self.pad + self.boardPad * 10,
+        RoundRect(self.canvas, len, self.pad , len + self.boardPad * 5, self.pad + self.boardPad * 3.25,
                   radius=self.boardPad / 2, fill="gray75")
         self.canvas.create_oval(len + self.boardPad * 0.5, self.pad + self.boardPad * 0.5,
                                 len + self.boardPad * 0.5 + self.boardPad * 1.5,
@@ -118,7 +118,6 @@ class Game(ttk.Frame):
         fontsize2 = len // 36
 
         black, white = self.container.board.calcInfluence()
-        print(self.container.board.stonesCapturedByBlack)
         black, white = (str(black + self.container.board.stonesCapturedByBlack).zfill(3),
                         str(white + self.container.board.stonesCapturedByWhite).zfill(3))
         if winner == None:
@@ -145,15 +144,34 @@ class Game(ttk.Frame):
     def makeMoveAI(self):
         if len(self.container.board.history) == 0:
             return
-        if self.container.ai_level == "easy":
+
+        if self.checkPass():
+            self.container.board.stonesCapturedByBlack += 1
+            self.container.board.aiPassCounter += 1
+            self.container.board.passCounter += 1
+            self.container.board.archiveBoard()
+            self.passInformation()
+            if self.container.board.passCounter == 2:
+                self.container.board.endgame = True
+                self.container.board.calcInfluence()
+                self.container.board.displayTerretories()
+                self.container.frame.displayEndgame()
+        elif self.container.ai_level == "easy":
+            """
+            Priorities:
+            1   -   Place next to random black stone
+            2   -   Place next to random white stone
+            3   -   Place at random
+            """
             self.aiEasy()
 
         elif self.container.ai_level == "medium":
             """
             Priorities:
-            1   -   Take more than would be lost
-            2   -   Preservation
-            3   -   Offence
+            1   -   Take groups with one liberty
+            2   -   Match patterns
+            3   -   Surround enemy groups with more than two liberties
+            4   -   Easy AI
             """
             self.aiMedium()
 
@@ -169,8 +187,29 @@ class Game(ttk.Frame):
             6   -   Easy AI
             """
             self.aiHard()
-            print("-------------------------")
+            print(f"Calcualtion-Time: {round(timer()-start, 4)}s\n-------------------------\n")
 
+    def checkPass(self):
+        board = self.container.board
+        blackInf, whiteInf = board.calcInfluence()
+        blackPoints, whitePoints = blackInf + board.stonesCapturedByBlack, whiteInf + board.stonesCapturedByWhite
+        blackStones, whiteStones = 0, 0
+        for col in range(board.size):
+            for row in range(board.size):
+                if isinstance(board.positions[col][row], Stone):
+                    if board.positions[col][row].color == "black":
+                        blackPoints += 1
+                    if board.positions[col][row].color == "white":
+                        whitePoints += 1
+        if board.passCounter == 1:
+            if blackPoints < whitePoints:
+                print("pass")
+                return True
+        if blackPoints < whitePoints * 0.25 and len(board.history) > board.size * 0.5 + 10 * board.aiPassCounter:
+            return True
+        if whitePoints < blackPoints * 0.25 and len(board.history) > board.size * 0.5 + 10 * board.aiPassCounter:
+            return True
+        return False
 
     def aiEasy(self):
         moves = self.container.board.calcMoves("black", "liberties")
@@ -183,6 +222,7 @@ class Game(ttk.Frame):
                     self.container.board.calcInfluence()
                     self.container.board.displayTerretories()
                     self.container.frame.displayEndgame()
+                    return
                 else:
                     move = freeSpaces[random.randint(0, len(freeSpaces) - 1)]
                     self.placeMove(move[0], move[1])
@@ -197,32 +237,65 @@ class Game(ttk.Frame):
 
     def aiMedium(self):
         board = self.container.board
-        possibleMoves = board.calcValidMoves("white")
         patternPos = self.container.board.checkPattern("white")
-        bestMove, bestLiberties = [], 0
-        # patterns
+        groups = board.getGroups()
+
+        bestMove = None
+        # 1 - Take groups with one liberty
+        targetGroups = []
+        for group in groups:
+            if len(group[1]) == 1 and group[0] == "black":
+                targetGroups.append(group)
+        if targetGroups != []:
+            bestGroup, bestSize = [], 0
+            for group in targetGroups:
+                if not self.container.board.checkMove(group[1][0][0], group[1][0][1], "white"):
+                    targetGroups.remove(group)
+                    continue
+                elif len(group[2]) > bestSize:
+                    bestGroup, bestSize = group, len(group[2])
+            if bestGroup != []:
+                bestMove = bestGroup[1][0]
+                self.placeMove(bestMove[0], bestMove[1])
+                return
+
+        # 2 - Match patterns
         if patternPos != []:
-            # filter patterns
+            bestPattern, bestLiberties = [], 0
             for pattern in patternPos:
-                if pattern not in possibleMoves:
+                if not self.container.board.checkMove(pattern[0], pattern[1], "white"):
                     patternPos.remove(pattern)
-            # eval patterns
-            if patternPos != []:
-                for pattern in patternPos:
-                    bestMove, bestLiberties = self.container.board.evalMove(pattern, "white", 2, bestMove, bestLiberties)
-                if bestMove != []:
-                    self.placeMove(bestMove[0], bestMove[1])
-                    return
-        # check rest
-        for move in possibleMoves:
-            bestMove, bestLiberties = self.container.board.evalMove(move, "white", 3, bestMove, bestLiberties)
-        if bestMove != []:
-            self.placeMove(bestMove[0], bestMove[1])
-            return
-        # no best move
-        if bestMove == []:
-            self.aiEasy()
-            return
+                    continue
+                lib = board.libertieForecast(pattern[0], pattern[1], "white")
+                if lib > bestLiberties:
+                    bestPattern, bestLiberties = pattern, lib
+            if bestPattern != []:
+                bestMove = bestPattern[1]
+                print(bestMove)
+                self.placeMove(bestPattern[0], bestPattern[1])
+                return
+
+        # 3 - Surround enemy groups with more than two liberties
+        targetGroups = []
+        for group in groups:
+            if len(group[1]) == 1 and group[0] == "black":
+                targetGroups.append(group)
+        if targetGroups != []:
+            bestGroup, bestSize = [], 100
+            for group in targetGroups:
+                if not self.container.board.checkMove(group[1][0][0], group[1][0][1], "white"):
+                    targetGroups.remove(group)
+                    continue
+                elif len(group[1]) < bestSize:
+                    bestGroup, bestSize = group, len(group[1])
+            if bestGroup != []:
+                bestMove = bestGroup[1][0]
+                self.placeMove(bestMove[0], bestMove[1])
+                return
+
+        # 4 - Easy AI
+        self.aiEasy()
+        return
 
     def aiHard(self):
         board = self.container.board
@@ -230,7 +303,6 @@ class Game(ttk.Frame):
         groups = board.getGroups()
 
         bestMove = None
-
         # 1   -   Take groups with one liberty
         targetGroups = []
         for group in groups:
@@ -247,7 +319,6 @@ class Game(ttk.Frame):
             if bestGroup != []:
                 bestMove = bestGroup[1][0]
                 self.placeMove(bestMove[0], bestMove[1])
-                print("kill")
                 return
 
         # 2 - Save own Groups with one liberty
@@ -270,11 +341,9 @@ class Game(ttk.Frame):
             if bestGroup != []:
                 bestMove = bestGroup[1][0]
                 self.placeMove(bestMove[0], bestMove[1])
-                print("save")
                 return
 
         # 3 - Forecast liberties of own groups with two liberties
-
         targetGroups = []
         for group in groups:
             if len(group[1]) == 2 and group[0] == "black":
@@ -292,7 +361,6 @@ class Game(ttk.Frame):
             if bestPos != []:
                 bestMove = bestPos
                 self.placeMove(bestMove[0], bestMove[1])
-                print("forecast")
                 return
 
         # 4 - Match patterns
@@ -309,7 +377,6 @@ class Game(ttk.Frame):
                 bestMove = bestPattern[1]
                 print(bestMove)
                 self.placeMove(bestPattern[0], bestPattern[1])
-                print("pattern")
                 return
 
         # 5 - Surround enemy groups with more than two liberties
@@ -328,11 +395,9 @@ class Game(ttk.Frame):
             if bestGroup != []:
                 bestMove = bestGroup[1][0]
                 self.placeMove(bestMove[0], bestMove[1])
-                print("attack")
                 return
 
         # 6 - Easy AI
-        print("easy")
         self.aiEasy()
         return
 
@@ -394,20 +459,26 @@ class Game(ttk.Frame):
                 fill=HOVER_B)
 
     def passConfirmation(self):
-        out = tk.messagebox.askquestion('Player-Confirmation', 'Are you sure you want to pass your turn?\n'
-                                                               'You will give 1 stone to your opponent.')
+        out = tk.messagebox.askquestion('Player-Confirmation',
+                                        'Are you sure you want to pass your turn?\n'
+                                                'You will give 1 stone to your opponent.')
         if out == 'yes':
             return True
         else:
             return False
 
     def resignConfirmation(self):
-        out = tk.messagebox.askquestion('Player-Confirmation', 'Are you sure you want to resign?\n'
-                                                               'You will lose the game no matter the score.')
+        out = tk.messagebox.askquestion('Player-Confirmation',
+                                        'Are you sure you want to resign?\n'
+                                                'You will lose the game no matter the score.')
         if out == 'yes':
             return True
         else:
             return False
+
+    def passInformation(self):
+        out = tk.messagebox.showwarning('Player-Confirmation',
+                                        'The AI has passed its turn and given you one stone.')
 
     def drawStone(self):
         pass
