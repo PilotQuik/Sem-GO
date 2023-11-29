@@ -172,34 +172,6 @@ class Board:
                         else: neighbours += 1
                         if not neighbours == 4: spaces.append([col, row]); print("added ", col, row)
             return spaces
-        if "self" in filter:
-            col, row = filter[1][0], filter[1][1]
-            pos = self.positions[col][row]
-            neighbours = 0
-            isValid = False
-            if not isinstance(pos, Stone):
-                if row - 1 >= 0:
-                    posNord = self.positions[col][row - 1]
-                    if isinstance(posNord, Stone):
-                        neighbours += 1
-                else: neighbours += 1
-                if row + 1 < self.size:
-                    posSüd = self.positions[col][row + 1]
-                    if isinstance(posSüd, Stone):
-                        neighbours += 1
-                else: neighbours += 1
-                if col - 1 >= 0:
-                    posWest = self.positions[col - 1][row]
-                    if isinstance(posWest, Stone):
-                        neighbours += 1
-                else: neighbours += 1
-                if col + 1 < self.size:
-                    posOst = self.positions[col + 1][row]
-                    if isinstance(posOst, Stone):
-                        neighbours += 1
-                else: neighbours += 1
-                if not neighbours == 4: isValid = True; #print("added ", col, row)
-            return isValid
 
     def calcValidMoves(self, colorToMove):
         validMoves = []
