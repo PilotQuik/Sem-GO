@@ -191,6 +191,7 @@ class Game(ttk.Frame):
 
     def checkPass(self):
         board = self.container.board
+        passCooldown = 20 if board.size == 9 else 40 if board.size == 13 else 60
         blackInf, whiteInf = board.calcInfluence()
         blackPoints, whitePoints = blackInf + board.stonesCapturedByBlack, whiteInf + board.stonesCapturedByWhite
         blackStones, whiteStones = 0, 0
@@ -205,9 +206,11 @@ class Game(ttk.Frame):
             if blackPoints < whitePoints:
                 print("pass")
                 return True
-        if blackPoints < whitePoints * 0.25 and len(board.history) > board.size * 0.5 + 10 * board.aiPassCounter:
+        if (blackPoints < whitePoints * 0.25 and len(board.history) > board.size * board.size * 0.5 +
+                passCooldown * board.aiPassCounter):
             return True
-        if whitePoints < blackPoints * 0.25 and len(board.history) > board.size * 0.5 + 10 * board.aiPassCounter:
+        if (whitePoints < blackPoints * 0.25 and len(board.history) > board.size * board.size * 0.5 +
+                passCooldown * board.aiPassCounter):
             return True
         return False
 
@@ -237,7 +240,7 @@ class Game(ttk.Frame):
 
     def aiMedium(self):
         board = self.container.board
-        patternPos = self.container.board.checkPattern("white")
+        patternPos = board.checkPattern("white")
         groups = board.getGroups()
 
         bestMove = None
@@ -299,7 +302,7 @@ class Game(ttk.Frame):
 
     def aiHard(self):
         board = self.container.board
-        patternPos = self.container.board.checkPattern("white")
+        patternPos = board.checkPattern("white")
         groups = board.getGroups()
 
         bestMove = None
@@ -401,39 +404,9 @@ class Game(ttk.Frame):
         self.aiEasy()
         return
 
-    def minimax(self, board, depth, isMaximizer):
-
-        res = board.getStoneDiff() # b - w >> ai likes negative
-        if depth == 2: return res
-
-        possibleMoves = board.calcValidMoves("black") if isMaximizer else (board.calcValidMoves("white"))
-
-        if isMaximizer:
-            bestScore = -inf
-            for i in possibleMoves:
-                pos = deepcopy(board.positions)
-                board.positions[i[0]][i[1]] = Stone(col=i[0], row=i[1], color="black", boardPad=self.boardPad)
-                board.processStones("black")
-                score = self.minimax(board, depth + 1, False)
-                board.positions = pos
-                bestScore = max(score, bestScore)
-            return bestScore
-
-        else:
-            bestScore = inf
-            for i in possibleMoves:
-                pos = deepcopy(board.positions)
-                board.positions[i[0]][i[1]] = Stone(col=i[0], row=i[1], color="white", boardPad=self.boardPad)
-                board.processStones("white")
-                score = self.minimax(board, depth + 1, True)
-                board.positions = pos
-                bestScore = min(score, bestScore)
-            return bestScore
-
     def placeMove(self, x, y):
         self.container.board.positions[x][y] = Stone(col=x, row=y, color="white", boardPad=self.boardPad)
         self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
-        self.container.board.processStones("white")
         self.container.board.processStones("white")
         self.container.board.archiveBoard()
         self.container.board.passCounter = 0

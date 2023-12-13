@@ -174,19 +174,6 @@ class Board:
                         if not neighbours == 4: spaces.append([col, row]); print("added ", col, row)
             return spaces
 
-    def calcValidMoves(self, colorToMove):
-        validMoves = []
-        board = self.positions
-        for col in range(self.size):
-            for row in range(self.size):
-                pos = board[col][row]
-                if not isinstance(pos, Stone) and pos != 99:
-                    board[col][row] = Stone(col, row, colorToMove, self.boardPad)
-                    if self.processStones(colorToMove, checkMove=[col, row]):
-                        validMoves.append([col, row])
-                    board[col][row] = pos
-        return validMoves
-
     def checkMove(self, col, row, colorToMove):
         board = self.positions
         pos = deepcopy(board[col][row])
@@ -208,19 +195,19 @@ class Board:
         # RESET --------------------------------------------------------------------------------------------------------
         for col in range(self.size):
             for row in range(self.size):
-                pos = self.positions[col][row]
-                if isinstance(pos, Stone) and pos.marked == True:
-                    pos.marked = False
+                pos = deepcopy(self.positions[col][row])
+                if isinstance(pos, Stone) and self.positions[col][row].marked == True:
+                    self.positions[col][row].marked = False
         # PROCESS ------------------------------------------------------------------------------------------------------
         for col in range(self.size):
             for row in range(self.size):
-                pos = self.positions[col][row]
-                if isinstance(pos, Stone) and not pos.marked:
+                pos = deepcopy(self.positions[col][row])
+                if isinstance(pos, Stone) and not self.positions[col][row].marked:
                     # --------------------------------count
-                    group, liberties = self.countLibertiesAndGroups(col, row, pos.color, group=[], liberties=0)
+                    group, liberties = self.countLibertiesAndGroups(col, row, self.positions[col][row].color, group=[], liberties=0)
                     # --------------------------------get liberties
                     liberties = self.getLibertiesFromGroup(group)
-                    groups.append([pos.color, liberties, group])
+                    groups.append([self.positions[col][row].color, liberties, group])
         return groups
 
     def processStones(self, color, checkMove=None):

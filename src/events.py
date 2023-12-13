@@ -75,7 +75,13 @@ class Event:
                             self.container.board.stonesCapturedByWhite += 1
                             self.container.board.archiveBoard()
                             self.container.board.passCounter += 1
-                            self.container.frame.makeMoveAI()
+                            if self.container.board.passCounter == 2:
+                                self.container.board.endgame = True
+                                self.container.board.calcInfluence()
+                                self.container.board.displayTerretories()
+                                self.container.frame.displayEndgame()
+                            else:
+                                self.container.frame.makeMoveAI()
                 elif str(event.widget).split(".")[-1] == "undo-button":
                     self.container.board.undoMove()
                 elif str(event.widget).split(".")[-1] == "resign-button":
@@ -191,7 +197,13 @@ class Event:
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
-                    print(self.container.board.checkPattern("black"))
+                    print("^------------------^")
+                    print("99 - Marker")
+                    for col in range(self.container.board.size):
+                        for row in range(self.container.board.size):
+                            pos = self.container.board.positions[col][row]
+                            if pos == 99:
+                                print(col, row)
 
 
     def onHoverEnter(self, event=None):
