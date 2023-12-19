@@ -40,3 +40,27 @@ class ProgressBar:
         else:
             bar = (length + 1) * "-"
             print("\r", f"{title}: |{bar}| 100%", end="\n")
+
+class Gif:
+    def __init__(self, container, x, y, path, frameCnt, repeats):
+        self.container = container
+        self.repeats = repeats
+        self.frameCnt = frameCnt
+        self.frames = [PhotoImage(file=path + "/frame_%i.gif" % (i)) for i in range(self.frameCnt)]
+        self.label = Label(self.container)
+        self.label.place(x=x, y=y)
+        self.i = 0
+
+        self.container.after(0, self.update, 0)
+
+    def update(self, ind):
+        frame = self.frames[ind]
+        ind += 1
+        if ind == self.frameCnt:
+            if self.i == self.repeats - 1:
+                self.label.destroy()
+                return
+            ind = 0
+            self.i += 1
+        self.label.configure(image=frame)
+        self.container.after(100, self.update, ind)

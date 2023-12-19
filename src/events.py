@@ -8,6 +8,7 @@ from main import *
 from game import Game
 from opt import Opt
 from stone import Stone
+from custom import Gif
 
 import os
 
@@ -197,13 +198,7 @@ class Event:
                 pad = self.container.frame.boardPad / 2 + self.container.frame.pad
                 if event.x <= self.container.winfo_width() - pad and event.y <= self.container.winfo_height() - pad and \
                         event.x >= pad and event.y >= pad:
-                    print("^------------------^")
-                    print("99 - Marker")
-                    for col in range(self.container.board.size):
-                        for row in range(self.container.board.size):
-                            pos = self.container.board.positions[col][row]
-                            if pos == 99:
-                                print(col, row)
+                    Gif(self.container.frame, event.x, event.y, "assets/defeat_gif", 12, 3)
 
 
     def onHoverEnter(self, event=None):
