@@ -157,6 +157,7 @@ class Game(ttk.Frame):
                 self.container.board.displayTerretories()
                 self.container.frame.displayEndgame()
         elif self.container.ai_level == "easy":
+            start = timer()
             """
             Priorities:
             1   -   Place next to random black stone
@@ -164,8 +165,10 @@ class Game(ttk.Frame):
             3   -   Place at random
             """
             self.aiEasy()
+            print(f"Calcualtion-Time: {round(timer() - start, 4)}s\n-------------------------\n")
 
         elif self.container.ai_level == "medium":
+            start = timer()
             """
             Priorities:
             1   -   Take groups with one liberty
@@ -174,6 +177,7 @@ class Game(ttk.Frame):
             4   -   Easy AI
             """
             self.aiMedium()
+            print(f"Calcualtion-Time: {round(timer() - start, 4)}s\n-------------------------\n")
 
         elif self.container.ai_level == "hard":
             start = timer()
