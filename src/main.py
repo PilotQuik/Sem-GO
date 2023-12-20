@@ -34,6 +34,7 @@ class Root(tk.Tk):
         self.event = Event(self)
 
         self.aiFirst = False
+        self.easteregg = False
 
     def refresh(self):
         if isinstance(self.frame, Game):

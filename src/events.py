@@ -93,6 +93,7 @@ class Event:
                         self.container.frame.displayEndgame(winner="BLACK" if
                                                 self.container.board.currentPlayer == "white" else "WHITE")
                 elif str(event.widget).split(".")[-1] == "easteregg-button":
+                    self.container.easteregg = True
                     print("something happened")
                     self.container.frame
                 # player move

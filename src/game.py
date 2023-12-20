@@ -12,7 +12,7 @@ from tkinter import *
 from const import *
 from main import *
 from stone import Stone
-from custom import Button_, ProgressBar, RoundRect
+from custom import Button_, ProgressBar, RoundRect, Gif
 
 
 class Game(ttk.Frame):
@@ -25,6 +25,7 @@ class Game(ttk.Frame):
         self.pad = 50
         self.boardPad = 80
         self.hover = None
+        self.eggPlayed = False
 
         self.container.title("Game")
         self.container.resizable(True, True)
@@ -48,7 +49,7 @@ class Game(ttk.Frame):
                                    bg=self.container.background, fg=self.container.button_col)
         Button_(406, 8, self.canvas, name="resign-button", text="RESIGN", font=(FONT, 20, "bold"),
                                    bg=self.container.background, fg=self.container.button_col)
-        Button_(4150, 250, self.canvas, name="easteregg-button", text="?", font=(FONT, 20, "bold"),
+        Button_(1900, 1000, self.canvas, name="easteregg-button", text="?", font=(FONT, 20, "bold"),
                 bg=self.container.background, fg=self.container.button_col)
 
         self.pack()
@@ -122,6 +123,7 @@ class Game(ttk.Frame):
                         str(white + self.container.board.stonesCapturedByWhite).zfill(3))
         if winner == None:
             winner = "BLACK" if black > white else "WHITE" if white > black else "DRAW"
+        easteregg = winner
 
         RoundRect(self.canvas, len / 7, len / 2.5, len - len / 7, len - len / 2.5, fill="gray80", outline="black",
                   width=3, radius=50)
@@ -129,6 +131,7 @@ class Game(ttk.Frame):
             self.container.frame.canvas.create_text(len / 2, len / 2.125,
                                                 text="VICTORY" if winner == "BLACK" else "DEFEAT",
                                                 font=(FONT, fontsize, "bold"), fill="black")
+            easteregg = "VICTORY" if winner == "BLACK" else "DEFEAT"
         else:
             if winner == "DRAW":
                 self.container.frame.canvas.create_text(len / 2, len / 2.125,
@@ -140,6 +143,14 @@ class Game(ttk.Frame):
         self.container.frame.canvas.create_text(len / 2, len / 1.75,
                                                 text=f"WHITE {white} - {black}  BLACK",
                                                 font=(FONT, fontsize2, "bold"), fill="black")
+        if self.container.easteregg and not self.eggPlayed:
+            if easteregg in ["BLACK", "WHITE", "VICTORY"]:
+                Gif(self.container.frame, len//2 - 240, len - 362, "assets/win_gif", 12, 3)
+            elif easteregg in ["DEFEAT"]:
+                Gif(self.container.frame, len // 2 - 240, len - 360, "assets/defeat_gif", 30, 3)
+            else:
+                Gif(self.container.frame, len // 2 - 250, len - 375, "assets/draw_gif", 12, 3)
+            self.eggPlayed = True
 
     def makeMoveAI(self):
         if len(self.container.board.history) == 0:
