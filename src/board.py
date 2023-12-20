@@ -189,6 +189,14 @@ class Board:
         board[col][row] = pos
         return True
 
+    def getValidMoves(self, colorToMove):
+        validMoves = []
+        for col in range(self.size):
+            for row in range(self.size):
+                if self.checkMove(col, row, colorToMove):
+                    validMoves.append([col, row])
+        return validMoves
+
     def getGroups(self):
         # [color, liberties, [positions]]
         groups = []

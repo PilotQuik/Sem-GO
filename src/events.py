@@ -93,7 +93,8 @@ class Event:
                         self.container.frame.displayEndgame(winner="BLACK" if
                                                 self.container.board.currentPlayer == "white" else "WHITE")
                 elif str(event.widget).split(".")[-1] == "easteregg-button":
-                    print("easteregg")
+                    print("something happened")
+                    self.container.frame
                 # player move
                 if str(event.widget).split(".")[-1] == "!canvas":
                     x, y = self.container.frame.calcSquare(event.x, event.y)
@@ -102,8 +103,14 @@ class Event:
                             event.x >= pad and event.y >= pad:
                         color = self.container.board.currentPlayer
                         pos = self.container.board.positions[x][y]
+                        validMoves = self.container.board.getValidMoves(color)
                         # check move validity
-                        if self.container.board.checkMove(x, y, color):
+                        if validMoves == []:
+                            self.container.board.endgame = True
+                            self.container.board.calcInfluence()
+                            self.container.board.displayTerretories()
+                            self.container.frame.displayEndgame()
+                        elif [x, y] in validMoves:
                             self.container.board.positions[x][y] = Stone(col=x, row=y, color=color, boardPad=boardPad)
                             self.container.board.positions[x][y].draw(self.container.frame.canvas, "Game")
                             self.container.board.processStones(color)
