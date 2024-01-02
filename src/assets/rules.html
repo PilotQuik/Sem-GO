@@ -1,45 +1,55 @@
-<h1 style="font-family:Calibri">Spieleprogrammierung in Python: GO</h1>
+<style>
+p {
+    max-width: 800px
+}
+</style>
+
+<h1 style="font-family:Calibri">GO REGELN</h1>
 <hr style="font-family:Calibri">
-<h2 style="font-family:Calibri">INFO</h2>
-<hr style="font-family:Calibri">
-<p style="font-family:Calibri">lorem impsum</p>
-<h2 style="font-family:Calibri">REGELN</h2>
-<hr style="font-family:Calibri">
-<h3 style="font-family:Calibri">SPIEL</h3>
-<p style="font-family:Calibri">Go ist ein Spiel für zwei Spieler, genannt Schwarz und Weiß.Go ist ein Spiel für zwei Spieler, genannt Schwarz und Weiß.
-Das Spielbrett ist ein Gitter aus 19 horizontalen und 19 vertikalen Linien, die 361 Schnittpunkte bilden. Das ist meist
-ein Gitter schwarzer Linien auf einem Holzbrett. Zur optischen Orientierung, aber ohne Bedeutung für den Spielverlauf,
-sind einige Schnittpunkte durch etwas fettere Punkte markiert (Hoshis). Auf diese werden bei einer Vorgabepartie die
-Vorgabesteine gesetzt. Ein Brett der Größe 19×19 ist der Standard. Es kann jedoch auch auf Brettern anderer Größen
-gespielt werden, zum Beispiel 9×9 oder 13×13. Die Regeln sind für alle Brettgrößen gleich.
-<a href="https://de.wikipedia.org/wiki/Go-Regeln">https://de.wikipedia.org/wiki/Go-Regeln</a> (15.08.23)</p>
-<h3 style="font-family:Calibri">ABLAUF</h3>
-<p style="font-family:Calibri">Auf das zunächst leere Spielfeld legt zuerst Schwarz, dann Weiß und Schwarz abwechselnd jeweils einen Spielstein ihrer
-Farbe auf einen freien Schnittpunkt oder passen.</p>
-<h3 style="font-family:Calibri">GRUPPEN &amp; LIBERTIES</h3>
-<p style="font-family:Calibri">Die Gruppe ist wie folgt definiert:</p>
-<ul style="font-family:Calibri">
-<li style="font-family:Calibri">jeder Stein auf dem Brett gehört zu genau einer Kette</li>
-<li style="font-family:Calibri">zwei Steine mit gleicher Farbe auf benachbarten Schnittpunkten gehören zur selben Kette</li>
-<li style="font-family:Calibri">verschiedenfarbige Steine gehören zu verschiedenen Ketten</li>
-<li style="font-family:Calibri">zwei gleichfarbige Steine, zwischen denen es keine Verbindung über sämtlich von Steinen dieser Farbe besetzte
-Schnittpunkte gibt, gehören zu verschiedenen Ketten
-Die Nachbarschaft der Schnittpunkte wird durch die Linien des Bretts vermittelt, darum können Steine nur horizontal oder
-vertikal benachbart sein, jedoch nicht diagonal.</li>
-</ul>
-<p style="font-family:Calibri">Die Liberties einer Gruppe sind leere Schnittpunkte, die zu einem Stein der Kette benachbart sind. Besteht eine Gruppe
-beispielsweise nur aus einem einzelnen Stein, so kann sie bis zu vier Liberties haben, da in der Brettmitte jeder 
-Schnittpunkt vier Nachbarpunkte hat, während ein Stein am Rand drei und ein Stein in der Ecke nur zwei Nachbarpunkte
-hat.</p>
-<h3 style="font-family:Calibri">SCHLAGEN</h3>
-<p style="font-family:Calibri">Wenn es nach dem Setzen eines Steins gegnerische Gruppen ohne Freiheit gibt, dann werden deren Steine vom Brett
-entfernt. Dieses Entfernen ist Bestandteil des Zugs. Wenn es auch eigene Steine ohne Freiheit gibt, werden diese nicht
-entfernt. Es kann vorkommen, dass es nach dem Setzen eigene Steine ohne Freiheit gibt, während alle gegnerischen Steine
-noch eine Freiheit haben (Stichwort: Selbstmord). Ein solches Setzen nicht erlaubt.</p>
-<h3 style="font-family:Calibri">KŌ &amp; SELBSTMORD</h3>
-<p style="font-family:Calibri">Um endlose Wiederholungen zu unterbinden oder sinnlos zu machen, wird Stellungswiederholung eingeschränkt. Zwei 
-aufeinander folgende Züge (außer Passen) dürfen nicht die ursprüngliche Stellung wiederherstellen(Kō).</p>
-<p style="font-family:Calibri">Ein Zug ist verboten, wenn dadurch eigene Steine geschlagen werden würde.</p>
-<h3 style="font-family:Calibri">BEWERTUNG</h3>
-<p style="font-family:Calibri">Das alternierende Ziehen endet, wenn ein Spieler passt und dann sogleich der andere Spieler auch passt.</p>
+
+<h2 style="font-family:Calibri">Sielprinzip</h2>
+<p style="font-family:Calibri">Das Spielfeld besteht aus Holzbrett mit 19 vertikale und 19 horizontale Linien mit
+    schwarzen und weißen, linsenförmigen Spielsteinen. Es gibt jedoch auch Spielfelder mit 13x13 oder auch 9x9 Linien,
+    die die Komplexität des Spieles verringern. Während des Spieles platzieren die beiden Spieler abwechselnd
+    Spielsteine ihrer Farbe auf die Schnittpunkte der Feldlinien. Dabei versuchen sie sich Gebiete auf dem Spielfeld zu
+    sichern und die Gebiete des Gegners einzunehmen. Es gibt dazu die Möglichkeit gegnerische Steine „gefangen“ zu
+    nehmen. Nach Spielende werden die Gebiete der Spieler und die gefangenen Steine verglichen und daraus der Gewinner
+    bestimmt.</p>
+
+<h2 style="font-family:Calibri">Ziehen</h2>
+<p style="font-family:Calibri">Im Gegensatz zu Schach beginnt Schwarz den ersten Zug. Danach ziehen beide Spieler
+    Abwechselnd und können in ihrem Zug entweder einen Stein auf eine freie Kreuzung der Spielfeldlinien platzieren oder
+    ihren Zug passen. Sollte ein Spieler Passen, muss dieser seinem Gegner einen seiner noch nicht platzierten
+    Spielsteine opfern. Wenn beide Spieler direkt nacheinander passen wird das Spiel beendet und der Sieger bestimmt.
+</p>
+
+<h2 style="font-family:Calibri">Gruppen und Freiheiten</h2>
+<p style="font-family:Calibri">Jeder Stein auf dem Spielfeld gehört zu genau einer Gruppe. Gleichfarbige Steine, die
+    direkt mit einer Spielfeldlinie verbunden sind, gehören zu derselben Gruppe. Gibt es keine direkte Verbindung
+    zwischen zwei gleichfarbigen Steinen, gehören sie zu unterschiedlichen Gruppen.</p>
+<p style="font-family:Calibri">Freiheiten sind freie Kreuzungen, die direkt an eine Gruppe anliegen und mit einer
+    Spielfeldlinie verbunden sind. Ein einzelner Spielstein in der Spielfeldmitte kann also vier Freiheiten haben.
+    Liegt der Stein jedoch am Rand des Brettes, hat er nur noch drei, beziehungsweise in der Ecke zwei Freiheiten.</p>
+
+<h2 style="font-family:Calibri">Schlagen</h2>
+<p style="font-family:Calibri">Wird durch den Zug des Gegners die eigene Gruppe so eingekreist, dass sie keine
+    Freiheiten mehr besitzt, wird sie geschlagen und die Steine werden vom Spielfeld entfernt. Diese sind jetzt
+    Gefangene des Gegners.</p>
+
+<h2 style="font-family:Calibri">Kō & Selbstmord</h2>
+<p style="font-family:Calibri">Um endlose Wiederholungen zu vermeiden, ist es nach der Kō-Regel verboten eine
+    Spielfeldstellung zu wiederholen. Hier wurde eine Variation dieser Regel angewandt, bei der es verboten ist einen
+    Stein auf eine Kreuzung zu stellen, auf der ein eigener Stein im letzten Zug des Gegners geschlagen wurde. </p>
+<p style="font-family:Calibri">Außerdem ist ein Zug verboten, wenn durch diesen eine eigene Gruppe keine Freiheiten mehr
+    besitzt. Sollte jedoch durch diesen Zug eine Gegnerisch Gruppe geschlagen werden, hat nach dem Schlagen die eigene
+    Gruppe mindestens eine Freiheit und der Zug ist somit erlaubt.</p>
+
+<h2 style="font-family:Calibri">Spielende & Bewertung</h2>
+<p style="font-family:Calibri">Das alternierende Ziehen endet entweder wenn beide Spieler nacheinander passen, oder wenn
+    ein Spieler nicht mehr in der Lage ist zu ziehen.</p>
+<p style="font-family:Calibri">Die Punktzahl eines Spielers wird berechnet, indem die Gefangenen eines Spielers mit
+    seinen eingenommenen Gebieten addiert werden. Die Punktzahl eines Gebietes ist die Anzahl an Kreuzungen die von
+    einem Spieler kontrolliert werden. Wem welche Kreuzungen gehören kann oft zu Streit führen, der von Schiedsrichtern
+    geschlichtet werden muss.</p>
+
 <hr style="font-family:Calibri">

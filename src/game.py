@@ -12,7 +12,7 @@ from tkinter import *
 from const import *
 from main import *
 from stone import Stone
-from custom import Button_, ProgressBar, RoundRect, Gif
+from custom import Button_, RoundRect, Gif
 
 
 class Game(ttk.Frame):
@@ -467,6 +467,3 @@ class Game(ttk.Frame):
     def passInformation(self):
         out = tk.messagebox.showwarning('Player-Confirmation',
                                         'The AI has passed its turn and given you one stone.')
-
-    def drawStone(self):
-        pass
