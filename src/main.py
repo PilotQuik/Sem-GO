@@ -66,4 +66,5 @@ if __name__ == "__main__":
     root.bind("<Button-3>", root.event.mouse3)  # rightclick-event
     root.bind("<Button-1>", root.event.mouse1) # leftclick-event
     root.bind("<Configure>", root.event.config)
+    root.protocol("WM_DELETE_WINDOW", root.event.quit)
     root.mainloop()

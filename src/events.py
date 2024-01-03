@@ -29,7 +29,7 @@ class Event:
             elif str(event.widget).split(".")[-1] == "opt-button":
                 self.container.switchFrame(Opt, width=OPT_WIDTH, height=OPT_HEIGHT)
             elif str(event.widget).split(".")[-1] == "quit-button":
-                self.container.board.saveBoard()
+                #self.container.board.saveBoard()
                 self.container.destroy()
             elif str(event.widget).split(".")[-1] == "rules-button":
 
@@ -240,3 +240,7 @@ class Event:
                 if self.container.board.endgame:
                     self.container.board.displayTerretories(False)
                     self.container.frame.displayEndgame()
+
+    def quit(self):
+        self.container.board.saveBoard()
+        self.container.destroy()
