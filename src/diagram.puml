@@ -1,0 +1,113 @@
+@startuml
+
+interface Const{
+menu_size
+game_size
+opt_size
+theme_colors
+font
+patterns
+}
+
+class Main{
+gamemode
+ai_level
+theme
+board
+frame
+event
+refresh()
+findCenter()
+switchFrame()
+}
+
+Main <-- Event
+Main <-- Const
+Main <- Menu
+Main <-- Game
+Main <-- Board
+
+class Event{
+container
+mouse1()
+hover()
+config()
+}
+
+Event <- Main
+Event <- Game
+Event <-- Opt
+Event <- Stone
+
+class Menu{
+container
+width
+height
+displayCanvas()
+displayBoard()
+}
+
+Menu <- Const
+Menu <-- Stone
+
+class Game{
+container
+width
+height
+displayCanvas()
+displayBoard()
+displayEndgame()
+makeMoveAI()
+aiEasy()
+aiMedium()
+aiHard()
+placeMove()
+drawHover()
+}
+
+Game <-- Main
+Game <- Stone
+
+class Board{
+container
+size
+positions
+currentPlayer
+stonesCapturedByBlack
+stonesCapturedByWhite
+history
+influence
+calcInfluence()
+getTerritory()
+checkMove()
+processStones()
+checkPattern()
+countLibertiesAndGroups()
+displayStones()
+displayTerritories()
+evalMove()
+archiveBoard()
+undoMove()
+saveBoard()
+loadBoard()
+}
+
+Board <- Stone
+Board <- Const
+
+class Opt{
+container
+width
+height
+displayCanvas()
+}
+
+class Stone{
+col
+row
+color
+marked
+draw()
+}
+
+@enduml
