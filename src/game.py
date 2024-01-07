@@ -95,15 +95,18 @@ class Game(ttk.Frame):
                                             self.pad + self.boardPad + row * self.boardPad + 3,
                                             fill=board_line, outline=board_line)
         # draw stone counter
-        RoundRect(self.canvas, len, self.pad , len + self.boardPad * 5, self.pad + self.boardPad * 3.25,
-                  radius=self.boardPad / 2, fill="gray75")
+        fontSize = len//30
+        fontWeight = 2.25 if self.container.board.size == 19 else 1.75 if self.container.board.size == 13 else 1.25
+        self.canvas.create_text(len + self.boardPad * 0.5 + self.boardPad * 2, self.pad + self.boardPad * 0.125,
+                                text="CAPTURED STONES", fill=self.container.button_col,
+                                font=(FONT, int(fontSize // fontWeight), "bold"), justify="center")
         self.canvas.create_oval(len + self.boardPad * 0.5, self.pad + self.boardPad * 0.5,
                                 len + self.boardPad * 0.5 + self.boardPad * 1.5,
-                                self.pad + self.boardPad * 2, fill="black")
+                                self.pad + self.boardPad * 2, fill="black", outline="white")
         self.canvas.create_oval(len + self.boardPad * 3, self.pad + self.boardPad * 0.5,
                                 len + self.boardPad * 4.5,
-                                self.pad + self.boardPad * 2, fill="white")
-        fontSize = len//30
+                                self.pad + self.boardPad * 2, fill="white", outline="black")
+
         self.canvas.create_text(len + self.boardPad * 0.5 + self.boardPad * 0.75, self.pad + self.boardPad * 2.5,
                                 text=self.container.board.stonesCapturedByWhite, fill="black",
                                 font=(FONT, fontSize, "bold"), justify="center")
